@@ -31,39 +31,39 @@ const Home = () => {
           <img alt="Restaurant elegant" className="w-full h-full object-cover" src="/images/home/hero-restaurant.jpg" />
           <div className="absolute inset-0 bg-gradient-to-b from-on-background/60 via-on-background/30 to-on-background/70"></div>
         </div>
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-16 text-center">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-16 md:py-24 text-left">
           <AnimatedSection animation="fadeUp" delay={100}>
             <span className="inline-block bg-primary/90 text-on-primary px-4 py-1.5 rounded-full font-label-sm text-label-sm mb-6 backdrop-blur-sm">
               Restaurant & Bar
             </span>
           </AnimatedSection>
           <AnimatedSection animation="fadeUp" delay={200}>
-            <h1 className="font-headline text-display-md-mobile md:text-display-xl text-inverse-on-surface mb-4 leading-tight">
+            <h1 className="font-headline text-[clamp(2.5rem,8vw,6rem)] text-inverse-on-surface mb-2 leading-[0.9]">
               Bienvenue chez
             </h1>
-            <h2 className="font-headline text-display-lg-mobile md:text-display-2xl text-primary font-bold mb-6">
+            <h2 className="font-headline text-[clamp(3.5rem,12vw,10rem)] text-primary font-bold mb-8 leading-[0.85]">
               Mikaly
             </h2>
           </AnimatedSection>
           <AnimatedSection animation="fadeUp" delay={300}>
-            <p className="font-body-lg text-body-lg text-inverse-on-surface/90 max-w-xl mx-auto mb-8 text-center">
+            <p className="font-body-xl text-body-xl text-inverse-on-surface/90 max-w-2xl mb-10 leading-relaxed">
               Une aventure culinaire inoubliable où chaque détail est pensé pour vous ravir.
             </p>
           </AnimatedSection>
           <AnimatedSection animation="fadeUp" delay={400}>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Link to="/reservations" className="bg-primary text-on-primary px-8 py-4 rounded-xl font-label-lg text-label-lg font-bold shadow-lg hover:shadow-xl hover:bg-primary-dark transition-all duration-200 flex items-center justify-center gap-2 active:scale-[0.98]">
-                <span className="material-symbols-outlined text-[22px]">calendar_month</span>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link to="/reservations" className="bg-primary text-on-primary px-10 py-5 rounded-2xl font-label-xl text-label-xl font-bold shadow-2xl hover:shadow-3xl hover:bg-primary-dark transition-all duration-200 flex items-center justify-center gap-3 active:scale-[0.98]">
+                <span className="material-symbols-outlined text-[28px]">calendar_month</span>
                 Réserver une Table
               </Link>
-              <Link to="/menu" className="bg-surface/80 backdrop-blur-md text-on-surface px-8 py-4 rounded-xl font-label-lg text-label-lg font-bold shadow-lg hover:shadow-xl hover:bg-surface transition-all duration-200 flex items-center justify-center gap-2 border border-outline/20 active:scale-[0.98]">
-                <span className="material-symbols-outlined text-[22px]">restaurant_menu</span>
+              <Link to="/menu" className="bg-surface/80 backdrop-blur-md text-on-surface px-10 py-5 rounded-2xl font-label-xl text-label-xl font-bold shadow-xl hover:shadow-2xl hover:bg-surface transition-all duration-200 flex items-center justify-center gap-3 border border-outline/20 active:scale-[0.98]">
+                <span className="material-symbols-outlined text-[28px]">restaurant_menu</span>
                 Voir le Menu
               </Link>
             </div>
           </AnimatedSection>
         </div>
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
+        <div className="absolute bottom-8 left-8 md:left-16 z-10 animate-bounce">
           <span className="material-symbols-outlined text-inverse-on-surface/60 text-3xl">keyboard_arrow_down</span>
         </div>
       </section>
