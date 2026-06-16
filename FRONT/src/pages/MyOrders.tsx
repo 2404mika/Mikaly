@@ -132,14 +132,16 @@ const MyOrders = () => {
           reservations.length === 0 ? (
             <AnimatedSection animation="scaleIn">
               <div className="text-center py-16">
-                <span className="material-symbols-outlined text-8xl text-outline-variant mb-4 block">event_seat</span>
+                <div className="w-24 h-24 rounded-full bg-surface-container mx-auto mb-6 flex items-center justify-center">
+                  <span className="material-symbols-outlined text-5xl text-on-surface-variant">event_seat</span>
+                </div>
                 <h2 className="font-headline text-headline-md text-on-surface mb-2">Aucune réservation</h2>
                 <p className="font-body-md text-body-md text-on-surface-variant mb-6">
                   Vous n'avez pas encore réservé de table.
                 </p>
                 <Link
                   to="/reservations"
-                  className="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-label-md text-label-md shadow-sm hover:bg-primary-dark transition-[background-color] duration-150 ease-out inline-flex items-center gap-2"
+                  className="bg-primary text-on-primary px-6 py-2.5 rounded-xl font-label-md text-label-md shadow-lg hover:shadow-xl hover:bg-primary-dark transition-all duration-150 inline-flex items-center gap-2"
                 >
                   <span className="material-symbols-outlined text-[18px]">calendar_today</span>
                   Réserver une table
@@ -147,46 +149,76 @@ const MyOrders = () => {
               </div>
             </AnimatedSection>
           ) : (
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {reservations.map((res, index) => {
                 const status = reservationStatusConfig[res.status] || { label: res.status, color: 'text-gray-700', bg: 'bg-gray-50', icon: 'help' };
                 const formatDate = (dateStr: string) => {
                   const date = new Date(dateStr);
-                  return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+                  return date.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' });
                 };
+                const isPending = res.status === 'pending';
+                const isConfirmed = res.status === 'confirmed';
+                const isCancelled = res.status === 'cancelled';
+                
                 return (
-                  <AnimatedSection key={res.id} animation="fadeUp" delay={index * 80}>
-                    <div className="bg-surface-container-lowest rounded-2xl overflow-hidden ambient-shadow-sm">
-                      <div className="flex items-center justify-between px-4 py-3 border-b border-outline-variant/20">
+                  <AnimatedSection key={res.id} animation="fadeUp" delay={index * 60}>
+                    <div className={`bg-surface rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all ${isPending ? 'ring-2 ring-amber-400' : ''} ${isConfirmed ? 'ring-2 ring-green-400' : ''} ${isCancelled ? 'opacity-60' : ''}`}>
+                      {/* Header with gradient */}
+                      <div className={`p-4 ${isPending ? 'bg-gradient-to-r from-amber-50 to-amber-100' : isConfirmed ? 'bg-gradient-to-r from-green-50 to-green-100' : 'bg-gradient-to-r from-gray-50 to-gray-100'}`}>
+                        <div className="flex items-start justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className={`w-14 h-14 rounded-xl flex items-center justify-center shadow-lg ${isPending ? 'bg-amber-500' : isConfirmed ? 'bg-green-500' : 'bg-gray-400'}`}>
+                              <span className="material-symbols-outlined text-white text-2xl">event_seat</span>
+                            </div>
+                            <div>
+                              <p className="font-label-xs text-label-xs text-on-surface-variant uppercase tracking-wider">Réservation</p>
+                              <h3 className="font-headline text-headline-sm text-on-surface font-bold">Table {res.table_number}</h3>
+                            </div>
+                          </div>
+                          <span className={`px-3 py-1.5 rounded-xl font-label-sm text-label-sm font-bold ${status.bg} ${status.color}`}>
+                            {status.label}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      {/* Details */}
+                      <div className="p-4 space-y-3">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center flex-shrink-0">
-                            <span className="material-symbols-outlined text-[14px]">event_seat</span>
+                          <div className="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center">
+                            <span className="material-symbols-outlined text-on-surface-variant text-lg">calendar_today</span>
                           </div>
                           <div>
-                            <span className="font-label-sm text-label-sm text-on-surface font-medium">
-                              Table {res.table_number || 'Non assignée'}
-                            </span>
-                            <span className={`ml-2 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-label-sm text-label-sm ${status.bg} ${status.color}`}>
-                              <span className="material-symbols-outlined text-[12px]">{status.icon}</span>
-                              {status.label}
-                            </span>
+                            <p className="font-label-xs text-label-xs text-on-surface-variant">Date</p>
+                            <p className="font-label-md text-label-md text-on-surface font-medium capitalize">{formatDate(res.reservation_date)}</p>
                           </div>
                         </div>
-                        <span className="font-body-sm text-body-sm text-on-surface-variant">{formatDate(res.reservation_date)}</span>
-                      </div>
-                      <div className="px-4 py-3 space-y-2">
-                        <div className="flex items-center gap-2 text-body-sm text-on-surface-variant">
-                          <span className="material-symbols-outlined text-[16px]">schedule</span>
-                          <span>{res.reservation_time}</span>
+                        
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center">
+                            <span className="material-symbols-outlined text-on-surface-variant text-lg">schedule</span>
+                          </div>
+                          <div>
+                            <p className="font-label-xs text-label-xs text-on-surface-variant">Heure</p>
+                            <p className="font-label-md text-label-md text-on-surface font-medium">{res.reservation_time}</p>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-2 text-body-sm text-on-surface-variant">
-                          <span className="material-symbols-outlined text-[16px]">group</span>
-                          <span>{res.number_of_guests} personne{res.number_of_guests > 1 ? 's' : ''}</span>
+                        
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center">
+                            <span className="material-symbols-outlined text-on-surface-variant text-lg">group</span>
+                          </div>
+                          <div>
+                            <p className="font-label-xs text-label-xs text-on-surface-variant">Nombre de personnes</p>
+                            <p className="font-label-md text-label-md text-on-surface font-medium">
+                              {res.number_of_guests} personne{res.number_of_guests > 1 ? 's' : ''}
+                            </p>
+                          </div>
                         </div>
+                        
                         {res.notes && (
-                          <div className="flex items-start gap-2 text-body-sm text-on-surface-variant">
-                            <span className="material-symbols-outlined text-[16px]">info</span>
-                            <span className="italic">{res.notes}</span>
+                          <div className="bg-surface-container rounded-xl p-3 mt-2">
+                            <p className="font-label-xs text-label-xs text-on-surface-variant mb-1">Note</p>
+                            <p className="font-body-sm text-body-sm text-on-surface italic">{res.notes}</p>
                           </div>
                         )}
                       </div>
