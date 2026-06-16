@@ -41,7 +41,12 @@ const Login = () => {
 
     try {
       await login({ email, password });
-      navigate('/');
+      const userData = JSON.parse(localStorage.getItem('user') || '{}');
+      if (userData.role === 'admin') navigate('/admin');
+      else if (userData.role === 'cook') navigate('/kitchen');
+      else if (userData.role === 'delivery') navigate('/delivery');
+      else if (userData.role === 'cashier') navigate('/cashier');
+      else navigate('/');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Erreur de connexion');
     } finally {
