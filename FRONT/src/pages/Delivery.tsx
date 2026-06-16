@@ -100,6 +100,24 @@ const Delivery = () => {
     return `${Math.floor(diffMin / 60)}h${diffMin % 60}`;
   };
 
+  const formatDeliveryTime = (dateStr: string | null) => {
+    if (!dateStr) return null;
+    try {
+      const date = new Date(dateStr);
+      if (isNaN(date.getTime())) {
+        const parts = dateStr.split(/[T:]/);
+        if (parts.length >= 4) {
+          const [year, month, day, hour, minute] = parts;
+          return `${hour}:${minute}`;
+        }
+        return null;
+      }
+      return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    } catch {
+      return null;
+    }
+  };
+
   const handleLogout = () => {
     logout();
     navigate('/login');
@@ -249,7 +267,7 @@ const Delivery = () => {
                         {order.delivery_time && (
                           <p className="font-label-xs text-label-xs text-secondary flex items-center gap-1">
                             <span className="material-symbols-outlined text-[12px]">schedule</span>
-                            Livrer à: {new Date(order.delivery_time).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
+                            Livrer à: {formatDeliveryTime(order.delivery_time)}
                           </p>
                         )}
                         {order.notes && (
