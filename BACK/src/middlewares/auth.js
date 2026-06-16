@@ -23,7 +23,7 @@ const authenticate = async (req, res, next) => {
 
     // Récupération de l'utilisateur depuis la base de données
     const result = await db.execute(
-      'SELECT id, name, email, role, status FROM users WHERE id = :id',
+      'SELECT id, name, email, phone, role, status FROM users WHERE id = :id',
       [decoded.userId]
     );
 
@@ -94,7 +94,7 @@ const optionalAuth = async (req, res, next) => {
     const token = authHeader.split(' ')[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const result = await db.execute(
-      'SELECT id, name, email, role, status FROM users WHERE id = :id',
+      'SELECT id, name, email, phone, role, status FROM users WHERE id = :id',
       [decoded.userId]
     );
     if (result.rows.length > 0 && result.rows[0].status === 'active') {

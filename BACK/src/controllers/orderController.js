@@ -11,6 +11,7 @@ const getAll = async (req, res, next) => {
   try {
     const userRole = req.user ? req.user.role : null;
     const userId = req.user ? req.user.id : null;
+    const userPhone = req.user ? req.user.phone : null;
     const { status, order_type } = req.query;
     
     let sql = `SELECT o.*, u.name as client_name_user, t.table_number 
@@ -21,8 +22,16 @@ const getAll = async (req, res, next) => {
     
     // Les clients ne voient que leurs propres commandes
     if (userRole === 'client') {
-      sql += ' AND o.user_id = :userId';
-      binds.push(userId);
+      // Filtre par user_id si connecté, sinon par client_phone (commandes anonymes)
+      if (userId) {
+        sql += ' AND (o.user_id = :userId OR (o.user_id IS NULL AND o.client_phone = :userPhone))';
+        binds.push(userId, userPhone);
+      } else if (userPhone) {
+        sql += ' AND o.client_phone = :userPhone';
+        binds.push(userPhone);
+      } else {
+        sql += ' AND 1=0';
+      }
     }
     
     if (status) { sql += ' AND o.status = :status'; binds.push(status); }
