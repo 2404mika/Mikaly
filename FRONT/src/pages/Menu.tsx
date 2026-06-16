@@ -109,7 +109,7 @@ const Menu = () => {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-gutter">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
             {Object.entries(groupedMeals).map(([categoryName, categoryMeals], catIndex) => (
               <div key={categoryName} className="contents">
                 <AnimatedSection animation="fadeUp" delay={catIndex * 100} className="col-span-full mt-6 mb-2">
