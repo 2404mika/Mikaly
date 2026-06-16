@@ -102,10 +102,10 @@ const AdminDashboard = () => {
   const todayOnline = todayOrders.filter(o => o.order_type === 'online').length;
   const todayTakeaway = todayOrders.filter(o => o.order_type === 'takeaway').length;
 
-  const mealCounts: Record<string, { name: string; id: number; count: number }> = {};
+  const mealCounts: Record<string, { name: string; count: number }> = {};
   todayOrders.forEach((o: Order) => {
     o.items?.forEach((item: OrderItem) => {
-      if (!mealCounts[item.meal_name]) mealCounts[item.meal_name] = { name: item.meal_name, id: item.id, count: 0 };
+      if (!mealCounts[item.meal_name]) mealCounts[item.meal_name] = { name: item.meal_name, count: 0 };
       mealCounts[item.meal_name].count += item.quantity;
     });
   });
@@ -142,7 +142,7 @@ const AdminDashboard = () => {
               <span className="font-label-sm text-label-sm text-green-700/80">Chiffre d'affaires</span>
               <span className="material-symbols-outlined text-green-600">payments</span>
             </div>
-            <h3 className="font-headline text-green-700 font-bold mt-2 tabular-nums text-3xl">{todayRevenue.toLocaleString()} Ar</h3>
+            <h3 className="font-headline text-black font-bold mt-2 tabular-nums text-3xl">{todayRevenue.toLocaleString()} Ar</h3>
             <p className="font-label-xs text-label-xs text-green-600/70 mt-1">{todayOrders.length} commandes aujourd'hui</p>
           </div>
           <div className="bg-gradient-to-br from-emerald-50 via-green-50 to-lime-50 rounded-2xl border border-emerald-200/50 p-5 shadow-[0_4px_12px_rgba(48,109,41,0.06)] hover:shadow-lg transition-all animate-[fadeUp_0.5s_ease_both] [animation-delay:100ms]">
@@ -150,7 +150,7 @@ const AdminDashboard = () => {
               <span className="font-label-sm text-label-sm text-emerald-700/80">Sur table</span>
               <span className="material-symbols-outlined text-emerald-600">table_restaurant</span>
             </div>
-            <h3 className="font-headline text-emerald-700 font-bold mt-2 tabular-nums text-3xl">{todayDineIn}</h3>
+            <h3 className="font-headline text-black font-bold mt-2 tabular-nums text-3xl">{todayDineIn}</h3>
             <p className="font-label-xs text-label-xs text-emerald-600/70 mt-1">commandes</p>
           </div>
           <div className="bg-gradient-to-br from-lime-50 via-green-50 to-emerald-50 rounded-2xl border border-lime-200/50 p-5 shadow-[0_4px_12px_rgba(48,109,41,0.06)] hover:shadow-lg transition-all animate-[fadeUp_0.5s_ease_both] [animation-delay:200ms]">
@@ -158,7 +158,7 @@ const AdminDashboard = () => {
               <span className="font-label-sm text-label-sm text-lime-700/80">En ligne</span>
               <span className="material-symbols-outlined text-lime-600">shopping_cart</span>
             </div>
-            <h3 className="font-headline text-lime-700 font-bold mt-2 tabular-nums text-3xl">{todayOnline}</h3>
+            <h3 className="font-headline text-black font-bold mt-2 tabular-nums text-3xl">{todayOnline}</h3>
             <p className="font-label-xs text-label-xs text-lime-600/70 mt-1">à livrer</p>
           </div>
           <div className="bg-gradient-to-br from-teal-50 via-cyan-50 to-emerald-50 rounded-2xl border border-teal-200/50 p-5 shadow-[0_4px_12px_rgba(48,109,41,0.06)] hover:shadow-lg transition-all animate-[fadeUp_0.5s_ease_both] [animation-delay:300ms]">
@@ -166,7 +166,7 @@ const AdminDashboard = () => {
               <span className="font-label-sm text-label-sm text-teal-700/80">À récupérer</span>
               <span className="material-symbols-outlined text-teal-600">takeout_dining</span>
             </div>
-            <h3 className="font-headline text-teal-700 font-bold mt-2 tabular-nums text-3xl">{todayTakeaway}</h3>
+            <h3 className="font-headline text-black font-bold mt-2 tabular-nums text-3xl">{todayTakeaway}</h3>
             <p className="font-label-xs text-label-xs text-teal-600/70 mt-1">commandes</p>
           </div>
         </div>
@@ -177,7 +177,6 @@ const AdminDashboard = () => {
             <div className="flex justify-between items-center mb-4">
               <div>
                 <h3 className="font-headline text-headline-sm text-on-surface">Revenus horaires (aujourd'hui)</h3>
-                <p className="font-body-sm text-body-sm text-on-surface-variant">Dynamique</p>
               </div>
               <span className="font-label-md text-label-md text-primary font-bold">{todayRevenue.toLocaleString()} Ar</span>
             </div>
@@ -211,13 +210,7 @@ const AdminDashboard = () => {
             <h3 className="font-headline text-headline-sm text-amber-800 mb-4">Plat populaire du jour</h3>
             {todayPopularMeal ? (
               <div className="flex items-center gap-4">
-                <img
-                  src={`/api/images/${todayPopularMeal.id}`}
-                  alt={todayPopularMeal.name}
-                  className="w-16 h-16 rounded-xl object-cover bg-amber-100"
-                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden'); }}
-                />
-                <div className="w-16 h-16 rounded-xl bg-amber-100 hidden items-center justify-center">
+                <div className="w-16 h-16 rounded-xl bg-amber-100 flex items-center justify-center">
                   <span className="material-symbols-outlined text-amber-600 text-3xl">restaurant</span>
                 </div>
                 <div>
