@@ -36,7 +36,7 @@ const AdminUsers = () => {
 
   useEffect(() => { fetchUsers(); }, []);
 
-  const openCreate = () => { setEditUser(null); setForm({ name: '', email: '', password: '', phone: '', role: 'client' }); setShowModal(true); };
+  const openCreate = () => { setEditUser(null); setForm({ name: '', email: '', password: '', phone: '', role: 'cook' }); setShowModal(true); };
   const openEdit = (u: User) => { setEditUser(u); setForm({ name: u.name, email: u.email, password: '', phone: u.phone || '', role: u.role }); setShowModal(true); };
 
   const handleSave = async () => {

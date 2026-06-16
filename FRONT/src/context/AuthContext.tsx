@@ -15,7 +15,10 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(() => {
+    const cached = localStorage.getItem('user');
+    return cached ? JSON.parse(cached) : null;
+  });
   const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
   const [isLoading, setIsLoading] = useState(true);
 
@@ -25,9 +28,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         try {
           const userData = await getProfile();
           setUser(userData);
+          localStorage.setItem('user', JSON.stringify(userData));
         } catch {
-          localStorage.removeItem('token');
-          setToken(null);
+          const cached = localStorage.getItem('user');
+          if (cached) {
+            setUser(JSON.parse(cached));
+          } else {
+            localStorage.removeItem('token');
+            setToken(null);
+          }
         }
       }
       setIsLoading(false);
