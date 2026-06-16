@@ -122,7 +122,7 @@ const Checkout = () => {
         <span className="material-symbols-outlined text-[20px]">arrow_back</span>
       </Link>
 
-      <div className="w-full max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-6 md:py-8 grid grid-cols-1 md:grid-cols-12 gap-6">
+      <div className="w-full max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-6 md:py-8 pb-24 md:pb-8 grid grid-cols-1 md:grid-cols-12 gap-6">
         {/* Left Column: Checkout Form */}
         <div className="md:col-span-7 space-y-6">
           <AnimatedSection animation="fadeUp" delay={100}>

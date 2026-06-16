@@ -197,7 +197,7 @@ const OrderTracking = () => {
         <span className="material-symbols-outlined text-[20px]">arrow_back</span>
       </Link>
 
-      <div className="w-full max-w-2xl mx-auto px-margin-mobile md:px-margin-desktop py-8">
+      <div className="w-full max-w-2xl mx-auto px-margin-mobile md:px-margin-desktop py-8 pb-24 md:pb-8">
         <AnimatedSection animation="fadeUp">
           <div className="text-center mb-8">
             <h1 className="font-headline text-headline-lg text-on-surface mb-2">
