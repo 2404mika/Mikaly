@@ -63,6 +63,11 @@ function App() {
               <Route path="kitchen" element={<Kitchen />} />
             </Route>
 
+            {/* Staff pages without nav header */}
+            <Route path="/kitchen" element={<Kitchen />} />
+            <Route path="/delivery" element={<Delivery />} />
+            <Route path="/cashier" element={<Cashier />} />
+
             {/* Public pages */}
             <Route path="*" element={
               <div className="min-h-screen flex flex-col bg-background text-on-background">
@@ -77,9 +82,6 @@ function App() {
                     <Route path="/reservations" element={<><Reservations /><Footer /></>} />
                     <Route path="/about" element={<><About /><Footer /></>} />
                     <Route path="/login" element={<Login />} />
-                    <Route path="/kitchen" element={<Kitchen />} />
-                    <Route path="/delivery" element={<Delivery />} />
-                    <Route path="/cashier" element={<Cashier />} />
                   </Routes>
                 </PageTransition>
                 <BottomNavBar />
