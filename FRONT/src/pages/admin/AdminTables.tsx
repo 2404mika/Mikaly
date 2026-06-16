@@ -165,19 +165,20 @@ const AdminTables = () => {
   };
 
   const handleConfirmReservation = async () => {
-    if (!selectedReservation || !selectedTableForReservation) return;
+    if (!selectedReservation) return;
     setIsSaving(true);
     try {
       await api.patch(`/reservations/${selectedReservation.id}/status`, {
         status: 'confirmed',
-        table_id: selectedTableForReservation
+        table_id: selectedReservation.table_id
       });
-      await api.patch(`/tables/${selectedTableForReservation}/status`, { status: 'reserved' });
+      if (selectedReservation.table_id) {
+        await api.patch(`/tables/${selectedReservation.table_id}/status`, { status: 'reserved' });
+      }
       fetchTables();
       fetchReservations();
       setConfirmReservation(false);
       setSelectedReservation(null);
-      setSelectedTableForReservation(null);
     } catch (err: any) { alert(err.response?.data?.message || 'Erreur'); }
     finally { setIsSaving(false); }
   };
@@ -504,30 +505,16 @@ const AdminTables = () => {
                 <span className="font-label-sm text-label-sm text-on-surface-variant">Personnes</span>
                 <span className="font-label-sm text-label-sm text-on-surface">{selectedReservation.number_of_guests}</span>
               </div>
-            </div>
-            <div className="mb-4">
-              <label className="font-label-md text-label-md text-on-surface-variant mb-2 block">Assigner une table</label>
-              <div className="grid grid-cols-3 gap-2 max-h-40 overflow-y-auto">
-                {availableTables.filter(t => t.status === 'free').map((table) => (
-                  <button
-                    key={table.id}
-                    onClick={() => setSelectedTableForReservation(table.id)}
-                    className={`p-3 rounded-lg border text-center transition-all ${selectedTableForReservation === table.id ? 'bg-primary text-on-primary border-primary' : 'bg-surface border-outline-variant hover:border-primary'}`}
-                  >
-                    <span className="font-headline text-headline-sm">{table.table_number}</span>
-                    <span className="font-label-xs text-label-xs block opacity-70">{table.capacity} pers.</span>
-                  </button>
-                ))}
-                {availableTables.filter(t => t.status === 'free').length === 0 && (
-                  <p className="col-span-3 text-center py-4 font-label-sm text-label-sm text-on-surface-variant">Aucune table disponible</p>
-                )}
+              <div className="flex justify-between">
+                <span className="font-label-sm text-label-sm text-on-surface-variant">Table choisie</span>
+                <span className="font-label-sm text-label-sm text-on-surface font-medium">{selectedReservation.table_number || `Table #${selectedReservation.table_id}`}</span>
               </div>
             </div>
             <div className="flex justify-end gap-3">
               <button onClick={() => setConfirmReservation(false)} className="px-4 py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container transition-colors">Annuler</button>
-              <button onClick={handleConfirmReservation} disabled={isSaving || !selectedTableForReservation} className="px-4 py-2 bg-green-600 text-white rounded-lg font-label-md text-label-md hover:bg-green-700 transition-colors disabled:opacity-50 flex items-center gap-1">
+              <button onClick={handleConfirmReservation} disabled={isSaving} className="px-4 py-2 bg-green-600 text-white rounded-lg font-label-md text-label-md hover:bg-green-700 transition-colors disabled:opacity-50 flex items-center gap-1">
                 <span className="material-symbols-outlined text-[18px]">check_circle</span>
-                Confirmer
+                Confirmer la réservation
               </button>
             </div>
           </div>
