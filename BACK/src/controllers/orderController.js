@@ -195,7 +195,7 @@ const getKitchenOrders = async (req, res, next) => {
     for (const order of result.rows) {
       const orderId = Number(order.id || order.ID);
       const itemsResult = await db.execute(
-        `SELECT oi.quantity, oi.notes, m.name as meal_name
+        `SELECT oi.quantity, oi.notes, m.name as meal_name, m.image as meal_image
          FROM order_items oi
          JOIN meals m ON oi.meal_id = m.id
          WHERE oi.order_id = :order_id
