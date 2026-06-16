@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 
@@ -13,6 +14,13 @@ const navItems = [
 const AdminLayout = () => {
   const { admin, adminLogout } = useAdminAuth();
   const navigate = useNavigate();
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   const handleLogout = () => { adminLogout(); navigate('/admin/login'); };
 
   return (
@@ -22,6 +30,10 @@ const AdminLayout = () => {
           <div className="p-6 border-b border-outline-variant/20">
             <h1 className="font-headline text-xl font-bold text-primary">Mikaly</h1>
             <p className="text-sm text-on-surface-variant mt-1">Suite de Gestion</p>
+            <div className="flex items-center gap-1.5 mt-2 text-primary">
+              <span className="material-symbols-outlined text-base">schedule</span>
+              <span className="font-label-sm font-bold tabular-nums">{currentTime.toLocaleTimeString('fr-FR')}</span>
+            </div>
           </div>
           <nav className="p-4 space-y-1">
             {navItems.map((item) => (

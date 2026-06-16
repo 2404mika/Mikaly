@@ -18,6 +18,12 @@ const Cashier = () => {
   const [amountReceived, setAmountReceived] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const fetchData = async () => {
     try {
@@ -97,6 +103,10 @@ const Cashier = () => {
           <span className="px-2.5 py-1 bg-surface-container-high rounded-md text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">Terminal de PDV 1</span>
         </div>
         <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5 bg-primary/10 text-primary px-3 py-1.5 rounded-xl">
+            <span className="material-symbols-outlined text-lg">schedule</span>
+            <span className="font-label-md text-label-md font-bold tabular-nums">{currentTime.toLocaleTimeString('fr-FR')}</span>
+          </div>
           <div className="w-9 h-9 rounded-full bg-surface-variant overflow-hidden border border-outline-variant/30 cursor-pointer hover:ring-2 hover:ring-primary/20 transition-all" onClick={handleLogout} title="Déconnexion">
             <span className="material-symbols-outlined text-on-surface-variant text-[22px] flex items-center justify-center h-full">person</span>
           </div>

@@ -23,6 +23,12 @@ const Kitchen = () => {
   const [orders, setOrders] = useState<KitchenOrder[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'table' | 'online'>('table');
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const fetchOrders = async () => {
     try {
@@ -94,6 +100,10 @@ const Kitchen = () => {
             </div>
           </div>
           <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1.5 bg-primary/10 text-primary px-3 py-1.5 rounded-xl">
+              <span className="material-symbols-outlined text-lg">schedule</span>
+              <span className="font-label-md text-label-md font-bold tabular-nums">{currentTime.toLocaleTimeString('fr-FR')}</span>
+            </div>
             {urgentCount > 0 && (
               <div className="flex items-center gap-1.5 px-3 py-1.5 bg-error/10 text-error rounded-full">
                 <span className="material-symbols-outlined text-[16px] animate-pulse">warning</span>

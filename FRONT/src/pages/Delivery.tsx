@@ -29,6 +29,12 @@ const Delivery = () => {
   const [deliveredOrders, setDeliveredOrders] = useState<DeliveryOrder[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'available' | 'active' | 'delivered'>('available');
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const fetchOrders = async () => {
     try {
@@ -141,13 +147,19 @@ const Delivery = () => {
               </p>
             </div>
           </div>
-          <button
-            onClick={handleLogout}
-            className="w-10 h-10 rounded-xl bg-surface-container-high flex items-center justify-center text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface transition-colors"
-            title="Déconnexion"
-          >
-            <span className="material-symbols-outlined text-[20px]">logout</span>
-          </button>
+<div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 bg-secondary/10 text-secondary px-3 py-1.5 rounded-xl">
+              <span className="material-symbols-outlined text-lg">schedule</span>
+              <span className="font-label-md text-label-md font-bold tabular-nums">{currentTime.toLocaleTimeString('fr-FR')}</span>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="w-10 h-10 rounded-xl bg-surface-container-high flex items-center justify-center text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface transition-colors"
+              title="Déconnexion"
+            >
+              <span className="material-symbols-outlined text-[20px]">logout</span>
+            </button>
+          </div>
         </div>
       </header>
 
