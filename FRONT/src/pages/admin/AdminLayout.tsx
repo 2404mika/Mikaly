@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { useAdminAuth } from '../../context/AdminAuthContext';
 
 const navItems = [
   { name: 'Tableau de bord', path: '/admin', icon: 'dashboard', end: true },
@@ -10,9 +10,9 @@ const navItems = [
 ];
 
 const AdminLayout = () => {
-  const { user, logout } = useAuth();
+  const { admin, adminLogout } = useAdminAuth();
   const navigate = useNavigate();
-  const handleLogout = () => { logout(); navigate('/admin/login'); };
+  const handleLogout = () => { adminLogout(); navigate('/admin/login'); };
 
   return (
     <div className="min-h-screen bg-background flex">
@@ -45,7 +45,7 @@ const AdminLayout = () => {
         <div className="p-4 border-t border-outline-variant/20 space-y-3">
           <div className="flex items-center gap-3 px-4 py-2">
             <span className="material-symbols-outlined text-[24px] text-primary">person</span>
-            <span className="text-base font-medium text-on-surface">{user?.name || 'Administrateur'}</span>
+            <span className="text-base font-medium text-on-surface">{admin?.name || 'Administrateur'}</span>
           </div>
           <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-base font-medium text-red-600 hover:bg-red-50 transition-colors">
             <span className="material-symbols-outlined text-[24px]">logout</span>
