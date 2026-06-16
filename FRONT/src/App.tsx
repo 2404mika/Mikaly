@@ -27,6 +27,7 @@ import AdminCategories from './pages/admin/AdminCategories';
 import AdminMeals from './pages/admin/AdminMeals';
 import AdminUsers from './pages/admin/AdminUsers';
 import AdminTables from './pages/admin/AdminTables';
+import AdminOrders from './pages/admin/AdminOrders';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -60,7 +61,7 @@ function App() {
               <Route path="meals" element={<AdminMeals />} />
               <Route path="users" element={<AdminUsers />} />
               <Route path="tables" element={<AdminTables />} />
-              <Route path="orders" element={<AdminDashboard />} />
+              <Route path="orders" element={<AdminOrders />} />
               <Route path="kitchen" element={<Kitchen />} />
             </Route>
 

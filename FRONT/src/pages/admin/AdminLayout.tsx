@@ -3,6 +3,7 @@ import { useAdminAuth } from '../../context/AdminAuthContext';
 
 const navItems = [
   { name: 'Tableau de bord', path: '/admin', icon: 'dashboard', end: true },
+  { name: 'Commandes', path: '/admin/orders', icon: 'receipt_long' },
   { name: 'Tables', path: '/admin/tables', icon: 'table_restaurant' },
   { name: 'Catégories', path: '/admin/categories', icon: 'category' },
   { name: 'Repas', path: '/admin/meals', icon: 'lunch_dining' },

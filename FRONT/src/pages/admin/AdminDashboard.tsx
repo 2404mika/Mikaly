@@ -1,6 +1,36 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import api from '../../services/apiAdmin';
+import apiAdmin from '../../services/apiAdmin';
+
+interface OrderItem {
+  id: number;
+  meal_name: string;
+  quantity: number;
+  unit_price: number;
+  total_price: number;
+  notes: string;
+}
+
+interface Order {
+  id: number;
+  order_type: string;
+  status: string;
+  created_at: string;
+  client_name: string;
+  client_phone: string;
+  delivery_address: string;
+  delivery_fee: number;
+  total: number;
+  table_number: string;
+  items: OrderItem[];
+}
+
+interface HourlyStats {
+  hour: number;
+  revenue: number;
+  orders: number;
+  height?: number;
+}
 
 interface DashboardStats {
   revenue: { total_revenue: number; total_orders: number; dine_in_orders: number; online_orders: number; takeaway_orders: number };
@@ -12,14 +42,49 @@ interface DashboardStats {
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [hourlyData, setHourlyData] = useState<HourlyStats[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
-    const fetchStats = async () => {
-      try { const res = await api.get('/dashboard/stats'); setStats(res.data.data || res.data); }
-      catch {} finally { setIsLoading(false); }
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [statsRes, ordersRes] = await Promise.all([
+          apiAdmin.get('/dashboard/stats'),
+          apiAdmin.get('/orders/')
+        ]);
+        setStats(statsRes.data.data || statsRes.data);
+        const allOrders = ordersRes.data.data || [];
+        setOrders(allOrders);
+
+        const today = new Date().toISOString().split('T')[0];
+        const todayOrders = allOrders.filter((o: Order) => o.created_at?.startsWith(today));
+
+        const hourly: Record<number, HourlyStats> = {};
+        for (let h = 0; h < 24; h++) {
+          hourly[h] = { hour: h, revenue: 0, orders: 0 };
+        }
+        todayOrders.forEach((o: Order) => {
+          const h = new Date(o.created_at).getHours();
+          if (hourly[h]) {
+            hourly[h].revenue += Number(o.total || 0);
+            hourly[h].orders += 1;
+          }
+        });
+        const hourlyArray = Object.values(hourly);
+        const maxRevenue = Math.max(...hourlyArray.map(h => h.revenue), 1);
+        setHourlyData(hourlyArray.map(h => ({ ...h, height: (h.revenue / maxRevenue) * 100 })));
+      } catch {} finally { setIsLoading(false); }
     };
-    fetchStats();
+    fetchData();
+    const interval = setInterval(fetchData, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   const getTimeSince = (dateStr: string) => {
@@ -29,6 +94,25 @@ const AdminDashboard = () => {
     if (diffMin < 60) return `il y a ${diffMin} min`;
     return `il y a ${Math.floor(diffMin / 60)}h${diffMin % 60}`;
   };
+
+  const today = new Date().toISOString().split('T')[0];
+  const todayOrders = orders.filter(o => o.created_at?.startsWith(today));
+  const todayRevenue = todayOrders.reduce((sum, o) => sum + Number(o.total || 0), 0);
+  const todayDineIn = todayOrders.filter(o => o.order_type === 'dine_in').length;
+  const todayOnline = todayOrders.filter(o => o.order_type === 'online').length;
+  const todayTakeaway = todayOrders.filter(o => o.order_type === 'takeaway').length;
+
+  const mealCounts: Record<string, { name: string; count: number }> = {};
+  todayOrders.forEach((o: Order) => {
+    o.items?.forEach((item: OrderItem) => {
+      if (!mealCounts[item.meal_name]) mealCounts[item.meal_name] = { name: item.meal_name, count: 0 };
+      mealCounts[item.meal_name].count += item.quantity;
+    });
+  });
+  const todayPopularMeal = Object.values(mealCounts).sort((a, b) => b.count - a.count)[0];
+
+  const activeTables = stats?.activeTables || { occupied: 0, total: 0 };
+  const recentOrders = (stats?.recentOrders || []).slice(0, 5);
 
   if (isLoading) {
     return (
@@ -40,112 +124,124 @@ const AdminDashboard = () => {
     );
   }
 
-  const revenue = stats?.revenue?.total_revenue || 0;
-  const totalOrders = stats?.revenue?.total_orders || 0;
-  const popularMeal = stats?.popularMeals?.[0];
-  const activeTables = stats?.activeTables || { occupied: 0, total: 0 };
-  const recentOrders = stats?.recentOrders || [];
-  const categoryStats = stats?.categoryStats || [];
-  const totalCategoryRevenue = categoryStats.reduce((sum, c) => sum + Number(c.revenue || 0), 0);
-
   return (
     <div className="min-h-screen bg-background">
       <header className="bg-surface/80 backdrop-blur-md border-b border-outline-variant/30 px-8 h-16 flex items-center justify-between sticky top-0 z-20">
         <h1 className="font-headline text-2xl text-on-surface font-bold">Tableau de bord</h1>
-        <div className="flex bg-surface-container rounded-lg p-1">
-          <button className="px-4 py-1.5 rounded-md bg-surface-container-lowest shadow-sm font-label-md text-label-md text-primary font-bold">Aujourd'hui</button>
-          <button className="px-4 py-1.5 rounded-md font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high transition-colors">Semaine</button>
-          <button className="px-4 py-1.5 rounded-md font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high transition-colors">Mois</button>
+        <div className="bg-primary/10 text-primary px-4 py-2 rounded-xl font-label-lg text-label-lg font-bold tabular-nums">
+          <span className="material-symbols-outlined text-xl mr-2">schedule</span>
+          {currentTime.toLocaleTimeString('fr-FR')}
         </div>
       </header>
 
       <div className="p-6 md:p-8 space-y-6">
-        {/* KPI Cards */}
+        {/* Today's Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-surface rounded-xl border border-outline-variant/30 p-5 flex flex-col gap-2 shadow-[0_4px_12px_rgba(48,109,41,0.04)] hover:shadow-md transition-shadow animate-[fadeUp_0.5s_ease_both]">
+          <div className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-xl border border-primary/20 p-5 flex flex-col gap-2 shadow-[0_4px_12px_rgba(48,109,41,0.04)] hover:shadow-md transition-shadow animate-[fadeUp_0.5s_ease_both]">
             <div className="flex justify-between items-start">
-              <span className="font-label-md text-label-md text-on-surface-variant">Chiffre d'affaires</span>
+              <span className="font-label-md text-label-md text-on-surface-variant">Chiffre d'affaires (aujourd'hui)</span>
               <span className="material-symbols-outlined text-primary">payments</span>
             </div>
-            <h3 className="font-headline text-primary font-bold mt-2 tabular-nums text-3xl">{Number(revenue).toLocaleString()} Ar</h3>
+            <h3 className="font-headline text-primary font-bold mt-2 tabular-nums text-3xl">{todayRevenue.toLocaleString()} Ar</h3>
+            <p className="font-label-sm text-label-sm text-on-surface-variant">{todayOrders.length} commandes</p>
           </div>
           <div className="bg-surface rounded-xl border border-outline-variant/30 p-5 flex flex-col gap-2 shadow-[0_4px_12px_rgba(48,109,41,0.04)] hover:shadow-md transition-shadow animate-[fadeUp_0.5s_ease_both] [animation-delay:100ms]">
             <div className="flex justify-between items-start">
-              <span className="font-label-md text-label-md text-on-surface-variant">Commandes totales</span>
-              <span className="material-symbols-outlined text-primary">receipt_long</span>
+              <span className="font-label-md text-label-md text-on-surface-variant">Sur table</span>
+              <span className="material-symbols-outlined text-secondary">table_restaurant</span>
             </div>
-            <h3 className="font-headline text-primary font-bold mt-2 tabular-nums text-3xl">{totalOrders}</h3>
+            <h3 className="font-headline text-primary font-bold mt-2 tabular-nums text-3xl">{todayDineIn}</h3>
+            <p className="font-label-sm text-label-sm text-on-surface-variant">commandes</p>
           </div>
           <div className="bg-surface rounded-xl border border-outline-variant/30 p-5 flex flex-col gap-2 shadow-[0_4px_12px_rgba(48,109,41,0.04)] hover:shadow-md transition-shadow animate-[fadeUp_0.5s_ease_both] [animation-delay:200ms]">
             <div className="flex justify-between items-start">
-              <span className="font-label-md text-label-md text-on-surface-variant">Plat populaire</span>
-              <span className="material-symbols-outlined text-tertiary-container">star</span>
+              <span className="font-label-md text-label-md text-on-surface-variant">En ligne / À livrer</span>
+              <span className="material-symbols-outlined text-secondary">shopping_cart</span>
             </div>
-            {popularMeal && (
-              <div className="mt-2 flex items-center gap-3">
-                <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-surface-container">
-                  <img alt={popularMeal.name} className="w-full h-full object-cover" src={`/api/meals/${popularMeal.id}/image`} onError={(e) => { (e.target as HTMLImageElement).src = '/images/home/scallops-menu.jpg'; }} />
-                </div>
-                <div>
-                  <h3 className="font-headline text-headline-sm text-primary font-bold truncate">{popularMeal.name}</h3>
-                  <p className="font-body-sm text-body-sm text-on-surface-variant">{popularMeal.total_sold} commandes</p>
-                </div>
-              </div>
-            )}
+            <h3 className="font-headline text-primary font-bold mt-2 tabular-nums text-3xl">{todayOnline}</h3>
+            <p className="font-label-sm text-label-sm text-on-surface-variant">commandes</p>
           </div>
           <div className="bg-surface rounded-xl border border-outline-variant/30 p-5 flex flex-col gap-2 shadow-[0_4px_12px_rgba(48,109,41,0.04)] hover:shadow-md transition-shadow animate-[fadeUp_0.5s_ease_both] [animation-delay:300ms]">
             <div className="flex justify-between items-start">
-              <span className="font-label-md text-label-md text-on-surface-variant">Tables actives</span>
-              <span className="material-symbols-outlined text-primary">table_restaurant</span>
+              <span className="font-label-md text-label-md text-on-surface-variant">À récupérer</span>
+              <span className="material-symbols-outlined text-secondary">takeout_dining</span>
             </div>
-            <div className="mt-2 flex items-baseline gap-2">
-              <h3 className="font-headline text-primary font-bold tabular-nums text-3xl">{activeTables.occupied}</h3>
-              <span className="font-body-lg text-on-surface-variant">/ {activeTables.total}</span>
-            </div>
-            <div className="mt-auto pt-2 flex gap-1">
-              {[...Array(5)].map((_, i) => (
-                <div key={i} className={`flex-1 h-2 rounded-sm ${i < Math.round((activeTables.occupied / (activeTables.total || 1)) * 5) ? 'bg-primary' : 'bg-surface-container-high'}`} />
-              ))}
-            </div>
+            <h3 className="font-headline text-primary font-bold mt-2 tabular-nums text-3xl">{todayTakeaway}</h3>
+            <p className="font-label-sm text-label-sm text-on-surface-variant">commandes</p>
           </div>
         </div>
 
-        {/* Charts Row */}
+        {/* Second Row: Graph + Popular Meal */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <div className="lg:col-span-8 bg-surface rounded-xl border border-outline-variant/30 p-6 shadow-[0_4px_12px_rgba(48,109,41,0.04)]">
-            <h3 className="font-headline text-headline-sm text-on-surface mb-1">Tendances des revenus</h3>
-            <p className="font-body-sm text-body-sm text-on-surface-variant mb-4">Répartition horaire</p>
-            <div className="relative min-h-[200px] flex items-end justify-between gap-2 pt-8">
-              <div className="absolute inset-0 flex flex-col justify-between pointer-events-none">
-                {[...Array(4)].map((_, i) => <div key={i} className="border-t border-outline-variant/20 w-full" />)}
+            <div className="flex justify-between items-center mb-4">
+              <div>
+                <h3 className="font-headline text-headline-sm text-on-surface">Revenus horaires (aujourd'hui)</h3>
+                <p className="font-body-sm text-body-sm text-on-surface-variant">Dynamique</p>
               </div>
-              {[30, 45, 60, 85, 75, 95, 65, 40].map((h, i) => (
-                <div key={i} className="w-full bg-primary/20 hover:bg-primary/40 rounded-t-sm transition-all duration-300" style={{ height: `${h}%` }} />
-              ))}
+              <span className="font-label-md text-label-md text-primary font-bold">{todayRevenue.toLocaleString()} Ar</span>
             </div>
-            <div className="flex justify-between mt-3 text-on-surface-variant font-label-sm text-label-sm">
-              <span>11h</span><span>13h</span><span>15h</span><span>17h</span><span>19h</span><span>21h</span><span>23h</span>
+            <div className="relative min-h-[180px] flex items-end justify-between gap-1">
+              <div className="absolute left-0 top-0 bottom-0 flex flex-col justify-between text-right pr-2 pointer-events-none">
+                <span className="font-label-xs text-label-xs text-on-surface-variant">{Math.max(...hourlyData.map(h => h.revenue), 1).toLocaleString()}</span>
+                <span className="font-label-xs text-label-xs text-on-surface-variant">{Math.round(Math.max(...hourlyData.map(h => h.revenue), 1) / 2).toLocaleString()}</span>
+                <span className="font-label-xs text-label-xs text-on-surface-variant">0</span>
+              </div>
+              <div className="flex-1 flex items-end justify-between gap-1 pl-10">
+                {hourlyData.map((h, i) => {
+                  const currentHour = new Date().getHours();
+                  const isCurrentHour = h.hour === currentHour;
+                  const hasOrders = h.orders > 0;
+                  return (
+                    <div key={i} className="flex-1 flex flex-col items-center gap-1">
+                      <div
+                        className={`w-full rounded-t-sm transition-all duration-500 ${hasOrders ? (isCurrentHour ? 'bg-primary' : 'bg-primary/50 hover:bg-primary/70') : 'bg-surface-container'}`}
+                        style={{ height: `${Math.max(h.height || 0, h.orders > 0 ? 8 : 2)}%` }}
+                        title={`${h.hour}h: ${h.revenue.toLocaleString()} Ar (${h.orders} cmd)`}
+                      />
+                      {i % 3 === 0 && <span className="font-label-xs text-label-xs text-on-surface-variant">{h.hour}h</span>}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
           <div className="lg:col-span-4 bg-surface rounded-xl border border-outline-variant/30 p-6 shadow-[0_4px_12px_rgba(48,109,41,0.04)]">
-            <h3 className="font-headline text-headline-sm text-on-surface mb-4">Répartition par catégorie</h3>
-            <div className="flex flex-col gap-4">
-              {categoryStats.map((cat, i) => {
-                const pct = totalCategoryRevenue > 0 ? Math.round((Number(cat.revenue) / totalCategoryRevenue) * 100) : 0;
-                const colors = ['bg-tertiary-container', 'bg-tertiary-container/80', 'bg-tertiary-container/60', 'bg-tertiary-container/40'];
-                return (
-                  <div key={i}>
-                    <div className="flex justify-between mb-1.5">
-                      <span className="font-label-md text-label-md text-on-surface">{cat.name}</span>
-                      <span className="font-label-md text-label-md text-on-surface-variant">{pct}%</span>
-                    </div>
-                    <div className="w-full bg-surface-container rounded-full h-2">
-                      <div className={`${colors[i] || colors[0]} h-2 rounded-full transition-all duration-500`} style={{ width: `${pct}%` }} />
-                    </div>
+            <h3 className="font-headline text-headline-sm text-on-surface mb-4">Plat populaire du jour</h3>
+            {todayPopularMeal ? (
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 rounded-xl bg-tertiary-container flex items-center justify-center">
+                  <span className="material-symbols-outlined text-tertiary text-3xl">restaurant</span>
+                </div>
+                <div>
+                  <h4 className="font-headline text-headline-sm text-primary font-bold">{todayPopularMeal.name}</h4>
+                  <p className="font-label-md text-label-md text-on-surface-variant">{todayPopularMeal.count} ventes</p>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <span className="material-symbols-outlined text-5xl text-outline-variant mb-2 block">restaurant_menu</span>
+                <p className="font-body-sm text-body-sm text-on-surface-variant">Aucune commande aujourd'hui</p>
+              </div>
+            )}
+
+            <div className="mt-6 pt-4 border-t border-outline-variant/20">
+              <h4 className="font-label-md text-label-md text-on-surface mb-3">Statut tables</h4>
+              <div className="flex items-center gap-4">
+                <div className="flex-1">
+                  <div className="flex justify-between mb-1">
+                    <span className="font-label-sm text-label-sm text-on-surface-variant">Occupées</span>
+                    <span className="font-label-sm text-label-sm text-on-surface font-bold">{activeTables.occupied}/{activeTables.total}</span>
                   </div>
-                );
-              })}
+                  <div className="w-full bg-surface-container rounded-full h-2">
+                    <div
+                      className="h-2 rounded-full bg-primary transition-all duration-500"
+                      style={{ width: `${activeTables.total > 0 ? (activeTables.occupied / activeTables.total) * 100 : 0}%` }}
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -154,18 +250,25 @@ const AdminDashboard = () => {
         <div className="bg-surface rounded-xl border border-outline-variant/30 shadow-[0_4px_12px_rgba(48,109,41,0.04)] overflow-hidden">
           <div className="p-4 border-b border-outline-variant/20 flex justify-between items-center bg-surface-bright">
             <h3 className="font-headline text-headline-sm text-on-surface">Commandes récentes</h3>
-            <Link to="/admin/orders" className="font-label-sm text-label-sm text-primary hover:text-primary/80">Voir tout</Link>
+            <Link to="/admin/orders" className="font-label-sm text-label-sm text-primary hover:text-primary/80 flex items-center gap-1">
+              Voir tout <span className="material-symbols-outlined text-base">arrow_forward</span>
+            </Link>
           </div>
           <div className="flex flex-col max-h-[300px] overflow-y-auto">
-            {recentOrders.slice(0, 5).map((order) => (
+            {recentOrders.length === 0 ? (
+              <div className="text-center py-12">
+                <span className="material-symbols-outlined text-5xl text-outline-variant mb-2 block">receipt_long</span>
+                <p className="font-body-sm text-body-sm text-on-surface-variant">Aucune commande récente</p>
+              </div>
+            ) : recentOrders.map((order) => (
               <div key={order.id} className="p-4 border-b border-outline-variant/10 flex items-center justify-between hover:bg-surface-container-lowest transition-colors">
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant">
-                    <span className="font-label-md text-label-md">{order.table_number || '—'}</span>
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-label-md text-label-md font-bold">
+                    #{order.id}
                   </div>
                   <div>
-                    <h4 className="font-label-md text-label-md text-on-surface">Commande #{order.id}</h4>
-                    <p className="font-body-sm text-body-sm text-on-surface-variant">{order.order_type} • {getTimeSince(order.created_at)}</p>
+                    <h4 className="font-label-md text-label-md text-on-surface capitalize">{order.order_type.replace('_', ' ')}</h4>
+                    <p className="font-body-sm text-body-sm text-on-surface-variant">{getTimeSince(order.created_at)}</p>
                   </div>
                 </div>
                 <span className="font-label-md text-label-md text-primary tabular-nums font-bold">{Number(order.total).toLocaleString()} Ar</span>
