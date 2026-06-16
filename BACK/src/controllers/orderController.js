@@ -216,7 +216,7 @@ const getDeliveryOrders = async (req, res, next) => {
   try {
     const result = await db.execute(
       `SELECT o.id, o.order_type, o.status, o.created_at, o.client_name, o.client_phone,
-              o.delivery_address, o.delivery_fee, o.total, o.delivery_id
+              o.delivery_address, o.delivery_fee, o.total, o.delivery_id, o.delivery_time, o.notes
        FROM orders o
        WHERE o.order_type = 'online' AND o.status IN ('ready', 'en_route') AND o.delivery_id IS NULL
        ORDER BY o.created_at ASC`

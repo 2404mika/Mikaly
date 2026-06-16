@@ -16,6 +16,8 @@ interface DeliveryOrder {
   total: number;
   delivery_id: number | null;
   delivered_at: string;
+  delivery_time: string;
+  notes: string;
   items: { quantity: number; notes: string; meal_name: string }[];
 }
 
@@ -244,6 +246,18 @@ const Delivery = () => {
                           <span className="material-symbols-outlined text-[12px]">location_on</span>
                           {order.delivery_address}
                         </p>
+                        {order.delivery_time && (
+                          <p className="font-label-xs text-label-xs text-secondary flex items-center gap-1">
+                            <span className="material-symbols-outlined text-[12px]">schedule</span>
+                            Livrer à: {new Date(order.delivery_time).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
+                          </p>
+                        )}
+                        {order.notes && (
+                          <p className="font-label-xs text-label-xs text-on-surface-variant flex items-start gap-1">
+                            <span className="material-symbols-outlined text-[12px]">info</span>
+                            <span className="italic">Instruction: {order.notes}</span>
+                          </p>
+                        )}
                       </div>
                     </div>
                     <div className="p-4 space-y-2">
@@ -270,7 +284,7 @@ const Delivery = () => {
                     <div className="p-4 pt-2">
                       <button
                         onClick={() => handleAccept(order.id)}
-                        className="w-full py-3.5 bg-secondary text-on-secondary-container rounded-xl font-label-md text-label-md font-bold shadow-lg shadow-secondary/25 hover:bg-secondary/90 transition-all duration-150 flex items-center justify-center gap-2 active:scale-[0.98]"
+                        className="w-full py-3.5 bg-secondary text-white rounded-xl font-label-md text-label-md font-bold shadow-lg shadow-secondary/25 hover:bg-secondary/90 transition-all duration-150 flex items-center justify-center gap-2 active:scale-[0.98]"
                       >
                         <span className="material-symbols-outlined text-[20px]">local_shipping</span>
                         Accepter la livraison
