@@ -256,7 +256,7 @@ const Menu = () => {
 
         {/* Cart Footer */}
         {items.length > 0 && (
-          <div className="p-4 bg-surface-container-lowest border-t border-outline-variant/20 animate-[fadeUp_0.3s_ease_both]">
+          <div className="p-4 pb-24 md:pb-4 bg-surface-container-lowest border-t border-outline-variant/20 animate-[fadeUp_0.3s_ease_both]">
             <div className="space-y-2 mb-4 font-body-sm text-body-sm">
               <div className="flex justify-between font-headline-sm text-headline-sm text-on-surface pt-2">
                 <span>Total</span>
@@ -277,7 +277,7 @@ const Menu = () => {
       {/* Mobile Cart Toggle Button */}
       <button
         onClick={() => setCartOpen(!cartOpen)}
-        className="md:hidden fixed bottom-20 right-4 z-50 w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center transition-[transform,box-shadow] duration-150 ease-out hover:scale-110 active:scale-95 hover:shadow-xl"
+        className="md:hidden fixed bottom-24 right-4 z-50 w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center transition-[transform,box-shadow] duration-150 ease-out hover:scale-110 active:scale-95 hover:shadow-xl"
       >
         <span className="material-symbols-outlined">shopping_cart</span>
         {totalItems > 0 && (
