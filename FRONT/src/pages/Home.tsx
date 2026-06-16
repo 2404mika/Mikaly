@@ -26,12 +26,12 @@ const Home = () => {
   return (
     <main className="flex-grow flex flex-col">
       {/* Hero Section */}
-      <section className="relative min-h-[600px] md:min-h-[700px] lg:min-h-[819px] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img alt="Restaurant elegant" className="w-full h-full object-cover" src="/images/home/hero-restaurant.jpg" />
           <div className="absolute inset-0 bg-gradient-to-b from-on-background/60 via-on-background/30 to-on-background/70"></div>
         </div>
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-16 md:pt-32 md:pb-24 text-left">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop pt-8 md:pt-12 pb-16 text-left">
           <AnimatedSection animation="fadeUp" delay={100}>
             <span className="inline-block bg-primary/90 text-on-primary px-4 py-1.5 rounded-full font-label-sm text-label-sm mb-4 backdrop-blur-sm">
               Restaurant & Bar
