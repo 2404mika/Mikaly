@@ -160,7 +160,7 @@ const AdminTables = () => {
 
   const openConfirmReservation = (reservation: Reservation) => {
     setSelectedReservation(reservation);
-    fetchAvailableTablesForDate(reservation.reservation_date, reservation.reservation_time.split('T')[0]);
+    setAvailableTables(tables.filter(t => t.status === 'free'));
     setConfirmReservation(true);
   };
 
