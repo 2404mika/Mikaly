@@ -17,7 +17,6 @@ const statusStepsPickup = [
   { key: 'received', label: 'Commande reçue', icon: 'receipt_long', description: 'Votre commande a été reçue' },
   { key: 'preparing', label: 'En préparation', icon: 'restaurant', description: 'Le chef prépare votre repas' },
   { key: 'ready', label: 'Prête', icon: 'check_circle', description: 'Votre commande est prête à récupérer' },
-  { key: 'served', label: 'Récupérée', icon: 'where_to_vote', description: 'Commande récupérée' },
 ];
 
 const OrderTracking = () => {
