@@ -102,10 +102,10 @@ const AdminDashboard = () => {
   const todayOnline = todayOrders.filter(o => o.order_type === 'online').length;
   const todayTakeaway = todayOrders.filter(o => o.order_type === 'takeaway').length;
 
-  const mealCounts: Record<string, { name: string; count: number }> = {};
+  const mealCounts: Record<string, { name: string; id: number; count: number }> = {};
   todayOrders.forEach((o: Order) => {
     o.items?.forEach((item: OrderItem) => {
-      if (!mealCounts[item.meal_name]) mealCounts[item.meal_name] = { name: item.meal_name, count: 0 };
+      if (!mealCounts[item.meal_name]) mealCounts[item.meal_name] = { name: item.meal_name, id: item.id, count: 0 };
       mealCounts[item.meal_name].count += item.quantity;
     });
   });
@@ -128,46 +128,46 @@ const AdminDashboard = () => {
     <div className="min-h-screen bg-background">
       <header className="bg-surface/80 backdrop-blur-md border-b border-outline-variant/30 px-8 h-16 flex items-center justify-between sticky top-0 z-20">
         <h1 className="font-headline text-2xl text-on-surface font-bold">Tableau de bord</h1>
-        <div className="bg-primary/10 text-primary px-4 py-2 rounded-xl font-label-lg text-label-lg font-bold tabular-nums">
-          <span className="material-symbols-outlined text-xl mr-2">schedule</span>
-          {currentTime.toLocaleTimeString('fr-FR')}
+        <div className="flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-xl">
+          <span className="material-symbols-outlined text-xl">schedule</span>
+          <span className="font-label-lg text-label-lg font-bold tabular-nums">{currentTime.toLocaleTimeString('fr-FR')}</span>
         </div>
       </header>
 
       <div className="p-6 md:p-8 space-y-6">
         {/* Today's Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-xl border border-primary/20 p-5 flex flex-col gap-2 shadow-[0_4px_12px_rgba(48,109,41,0.04)] hover:shadow-md transition-shadow animate-[fadeUp_0.5s_ease_both]">
+          <div className="bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 rounded-2xl border border-green-200/50 p-5 shadow-[0_4px_12px_rgba(48,109,41,0.06)] hover:shadow-lg transition-all animate-[fadeUp_0.5s_ease_both]">
             <div className="flex justify-between items-start">
-              <span className="font-label-md text-label-md text-on-surface-variant">Chiffre d'affaires (aujourd'hui)</span>
-              <span className="material-symbols-outlined text-primary">payments</span>
+              <span className="font-label-sm text-label-sm text-green-700/80">Chiffre d'affaires</span>
+              <span className="material-symbols-outlined text-green-600">payments</span>
             </div>
-            <h3 className="font-headline text-primary font-bold mt-2 tabular-nums text-3xl">{todayRevenue.toLocaleString()} Ar</h3>
-            <p className="font-label-sm text-label-sm text-on-surface-variant">{todayOrders.length} commandes</p>
+            <h3 className="font-headline text-green-700 font-bold mt-2 tabular-nums text-3xl">{todayRevenue.toLocaleString()} Ar</h3>
+            <p className="font-label-xs text-label-xs text-green-600/70 mt-1">{todayOrders.length} commandes aujourd'hui</p>
           </div>
-          <div className="bg-surface rounded-xl border border-outline-variant/30 p-5 flex flex-col gap-2 shadow-[0_4px_12px_rgba(48,109,41,0.04)] hover:shadow-md transition-shadow animate-[fadeUp_0.5s_ease_both] [animation-delay:100ms]">
+          <div className="bg-gradient-to-br from-emerald-50 via-green-50 to-lime-50 rounded-2xl border border-emerald-200/50 p-5 shadow-[0_4px_12px_rgba(48,109,41,0.06)] hover:shadow-lg transition-all animate-[fadeUp_0.5s_ease_both] [animation-delay:100ms]">
             <div className="flex justify-between items-start">
-              <span className="font-label-md text-label-md text-on-surface-variant">Sur table</span>
-              <span className="material-symbols-outlined text-secondary">table_restaurant</span>
+              <span className="font-label-sm text-label-sm text-emerald-700/80">Sur table</span>
+              <span className="material-symbols-outlined text-emerald-600">table_restaurant</span>
             </div>
-            <h3 className="font-headline text-primary font-bold mt-2 tabular-nums text-3xl">{todayDineIn}</h3>
-            <p className="font-label-sm text-label-sm text-on-surface-variant">commandes</p>
+            <h3 className="font-headline text-emerald-700 font-bold mt-2 tabular-nums text-3xl">{todayDineIn}</h3>
+            <p className="font-label-xs text-label-xs text-emerald-600/70 mt-1">commandes</p>
           </div>
-          <div className="bg-surface rounded-xl border border-outline-variant/30 p-5 flex flex-col gap-2 shadow-[0_4px_12px_rgba(48,109,41,0.04)] hover:shadow-md transition-shadow animate-[fadeUp_0.5s_ease_both] [animation-delay:200ms]">
+          <div className="bg-gradient-to-br from-lime-50 via-green-50 to-emerald-50 rounded-2xl border border-lime-200/50 p-5 shadow-[0_4px_12px_rgba(48,109,41,0.06)] hover:shadow-lg transition-all animate-[fadeUp_0.5s_ease_both] [animation-delay:200ms]">
             <div className="flex justify-between items-start">
-              <span className="font-label-md text-label-md text-on-surface-variant">En ligne / À livrer</span>
-              <span className="material-symbols-outlined text-secondary">shopping_cart</span>
+              <span className="font-label-sm text-label-sm text-lime-700/80">En ligne</span>
+              <span className="material-symbols-outlined text-lime-600">shopping_cart</span>
             </div>
-            <h3 className="font-headline text-primary font-bold mt-2 tabular-nums text-3xl">{todayOnline}</h3>
-            <p className="font-label-sm text-label-sm text-on-surface-variant">commandes</p>
+            <h3 className="font-headline text-lime-700 font-bold mt-2 tabular-nums text-3xl">{todayOnline}</h3>
+            <p className="font-label-xs text-label-xs text-lime-600/70 mt-1">à livrer</p>
           </div>
-          <div className="bg-surface rounded-xl border border-outline-variant/30 p-5 flex flex-col gap-2 shadow-[0_4px_12px_rgba(48,109,41,0.04)] hover:shadow-md transition-shadow animate-[fadeUp_0.5s_ease_both] [animation-delay:300ms]">
+          <div className="bg-gradient-to-br from-teal-50 via-cyan-50 to-emerald-50 rounded-2xl border border-teal-200/50 p-5 shadow-[0_4px_12px_rgba(48,109,41,0.06)] hover:shadow-lg transition-all animate-[fadeUp_0.5s_ease_both] [animation-delay:300ms]">
             <div className="flex justify-between items-start">
-              <span className="font-label-md text-label-md text-on-surface-variant">À récupérer</span>
-              <span className="material-symbols-outlined text-secondary">takeout_dining</span>
+              <span className="font-label-sm text-label-sm text-teal-700/80">À récupérer</span>
+              <span className="material-symbols-outlined text-teal-600">takeout_dining</span>
             </div>
-            <h3 className="font-headline text-primary font-bold mt-2 tabular-nums text-3xl">{todayTakeaway}</h3>
-            <p className="font-label-sm text-label-sm text-on-surface-variant">commandes</p>
+            <h3 className="font-headline text-teal-700 font-bold mt-2 tabular-nums text-3xl">{todayTakeaway}</h3>
+            <p className="font-label-xs text-label-xs text-teal-600/70 mt-1">commandes</p>
           </div>
         </div>
 
@@ -207,22 +207,28 @@ const AdminDashboard = () => {
             </div>
           </div>
 
-          <div className="lg:col-span-4 bg-surface rounded-xl border border-outline-variant/30 p-6 shadow-[0_4px_12px_rgba(48,109,41,0.04)]">
-            <h3 className="font-headline text-headline-sm text-on-surface mb-4">Plat populaire du jour</h3>
+          <div className="lg:col-span-4 bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 rounded-2xl border border-amber-200/50 p-6 shadow-[0_4px_12px_rgba(48,109,41,0.06)]">
+            <h3 className="font-headline text-headline-sm text-amber-800 mb-4">Plat populaire du jour</h3>
             {todayPopularMeal ? (
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-xl bg-tertiary-container flex items-center justify-center">
-                  <span className="material-symbols-outlined text-tertiary text-3xl">restaurant</span>
+                <img
+                  src={`/api/images/${todayPopularMeal.id}`}
+                  alt={todayPopularMeal.name}
+                  className="w-16 h-16 rounded-xl object-cover bg-amber-100"
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden'); }}
+                />
+                <div className="w-16 h-16 rounded-xl bg-amber-100 hidden items-center justify-center">
+                  <span className="material-symbols-outlined text-amber-600 text-3xl">restaurant</span>
                 </div>
                 <div>
-                  <h4 className="font-headline text-headline-sm text-primary font-bold">{todayPopularMeal.name}</h4>
-                  <p className="font-label-md text-label-md text-on-surface-variant">{todayPopularMeal.count} ventes</p>
+                  <h4 className="font-headline text-headline-sm text-amber-900 font-bold">{todayPopularMeal.name}</h4>
+                  <p className="font-label-md text-label-md text-amber-700">{todayPopularMeal.count} ventes</p>
                 </div>
               </div>
             ) : (
               <div className="text-center py-8">
-                <span className="material-symbols-outlined text-5xl text-outline-variant mb-2 block">restaurant_menu</span>
-                <p className="font-body-sm text-body-sm text-on-surface-variant">Aucune commande aujourd'hui</p>
+                <span className="material-symbols-outlined text-5xl text-amber-300 mb-2 block">restaurant_menu</span>
+                <p className="font-body-sm text-body-sm text-amber-700/70">Aucune commande aujourd'hui</p>
               </div>
             )}
 

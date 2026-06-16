@@ -115,7 +115,7 @@ const AdminOrders = () => {
             <p className="font-body-lg text-body-lg text-on-surface-variant">Aucune commande</p>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {sortedOrders.map((order) => {
               const st = statusConfig[order.status] || { label: order.status, bg: 'bg-gray-50', text: 'text-gray-700', icon: 'help' };
               const tp = typeConfig[order.order_type] || { label: order.order_type, bg: 'bg-gray-50', text: 'text-gray-700', icon: 'restaurant' };
@@ -123,47 +123,37 @@ const AdminOrders = () => {
                 <div
                   key={order.id}
                   onClick={() => setSelectedOrder(order)}
-                  className="bg-surface-container-lowest rounded-xl border border-outline-variant/20 p-4 hover:shadow-md transition-all cursor-pointer"
+                  className="bg-surface-container-lowest rounded-2xl border border-outline-variant/20 overflow-hidden hover:shadow-lg transition-all cursor-pointer"
                 >
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-lg ${tp.bg} flex items-center justify-center`}>
-                        <span className={`material-symbols-outlined ${tp.text} text-xl`}>{tp.icon}</span>
+                  <div className={`h-2 ${tp.bg}`} />
+                  <div className="p-4">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex items-center gap-2">
+                        <div className={`w-8 h-8 rounded-lg ${tp.bg} flex items-center justify-center`}>
+                          <span className={`material-symbols-outlined ${tp.text} text-lg`}>{tp.icon}</span>
+                        </div>
+                        <span className="font-label-sm text-label-sm text-on-surface-variant">{tp.label}</span>
                       </div>
-                      <div>
-                        <p className="font-label-md text-label-md text-on-surface font-medium">#{order.id} — {tp.label}</p>
-                        <p className="font-label-sm text-label-sm text-on-surface-variant">{order.client_name || 'Anonyme'}</p>
-                      </div>
-                    </div>
-                    <div className="flex flex-col items-end gap-1">
                       <span className={`px-2 py-0.5 rounded-full font-label-xs text-label-xs ${st.bg} ${st.text}`}>
                         {st.label}
                       </span>
+                    </div>
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="font-headline text-headline-md text-on-surface font-bold">#{order.id}</span>
                       <span className="font-label-sm text-label-sm text-on-surface-variant">{formatTime(order.created_at)}</span>
                     </div>
-                  </div>
-                  <div className="flex items-center justify-between pl-13">
-                    <div className="flex items-center gap-4 text-on-surface-variant">
-                      <span className="flex items-center gap-1">
-                        <span className="material-symbols-outlined text-[16px]">restaurant</span>
-                        <span className="font-label-sm text-label-sm">{order.items?.length || 0} plat(s)</span>
+                    <p className="font-label-md text-label-md text-on-surface mb-1">{order.client_name || 'Anonyme'}</p>
+                    <p className="font-label-xs text-label-xs text-on-surface-variant mb-3 flex items-center gap-1">
+                      <span className="material-symbols-outlined text-[12px]">restaurant</span>
+                      {order.items?.length || 0} plat(s)
+                      {order.table_number && <> · {order.table_number}</>}
+                      {order.delivery_address && <> · {order.delivery_address.substring(0, 20)}...</>}
+                    </p>
+                    <div className="pt-3 border-t border-outline-variant/20 flex items-center justify-between">
+                      <span className="font-headline text-headline-sm text-primary font-bold">
+                        {Number(order.total).toLocaleString()} Ar
                       </span>
-                      {order.table_number && (
-                        <span className="flex items-center gap-1">
-                          <span className="material-symbols-outlined text-[16px]">table_restaurant</span>
-                          <span className="font-label-sm text-label-sm">{order.table_number}</span>
-                        </span>
-                      )}
-                      {order.delivery_address && (
-                        <span className="flex items-center gap-1">
-                          <span className="material-symbols-outlined text-[16px]">location_on</span>
-                          <span className="font-label-sm text-label-sm truncate max-w-[150px]">{order.delivery_address}</span>
-                        </span>
-                      )}
                     </div>
-                    <span className="font-headline text-headline-sm text-primary font-bold">
-                      {Number(order.total).toLocaleString()} Ar
-                    </span>
                   </div>
                 </div>
               );
