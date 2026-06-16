@@ -33,7 +33,8 @@ const Delivery = () => {
   const fetchOrders = async () => {
     try {
       const response = await api.get('/orders/delivery');
-      setOrders(response.data.data || []);
+      const data = response.data.data || [];
+      setOrders(data.sort((a: DeliveryOrder, b: DeliveryOrder) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()));
     } catch {
       console.error('Erreur lors du chargement des commandes');
     } finally {
@@ -44,7 +45,8 @@ const Delivery = () => {
   const fetchMyActiveOrders = async () => {
     try {
       const response = await api.get('/orders/my-active-deliveries');
-      setMyActiveOrders(response.data.data || []);
+      const data = response.data.data || [];
+      setMyActiveOrders(data.sort((a: DeliveryOrder, b: DeliveryOrder) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()));
     } catch {
       console.error('Erreur lors du chargement des commandes en cours');
     }
@@ -53,7 +55,8 @@ const Delivery = () => {
   const fetchDeliveredOrders = async () => {
     try {
       const response = await api.get('/orders/my-deliveries');
-      setDeliveredOrders(response.data.data || []);
+      const data = response.data.data || [];
+      setDeliveredOrders(data.sort((a: DeliveryOrder, b: DeliveryOrder) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()));
     } catch {
       console.error('Erreur lors du chargement des commandes livrées');
     }

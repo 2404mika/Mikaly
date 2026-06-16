@@ -58,8 +58,8 @@ const Kitchen = () => {
     return `${Math.floor(diffMin / 60)}h${diffMin % 60}`;
   };
 
-  const tableOrders = orders.filter((o) => o.order_type === 'dine_in');
-  const onlineOrders = orders.filter((o) => o.order_type === 'online' || o.order_type === 'takeaway');
+  const tableOrders = orders.filter((o) => o.order_type === 'dine_in').sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+  const onlineOrders = orders.filter((o) => o.order_type === 'online' || o.order_type === 'takeaway').sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
   const currentOrders = activeTab === 'table' ? tableOrders : onlineOrders;
 
   const urgentCount = orders.filter((o) => {
