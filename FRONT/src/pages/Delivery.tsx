@@ -136,14 +136,14 @@ const Delivery = () => {
             onClick={() => setActiveTab('available')}
             className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-label-md text-label-md font-medium transition-all ${
               activeTab === 'available'
-                ? 'bg-secondary text-on-secondary-container shadow-lg shadow-secondary/20'
+                ? 'bg-secondary text-white shadow-lg shadow-secondary/20'
                 : 'bg-surface text-on-surface-variant hover:bg-surface-container'
             }`}
           >
             <span className="material-symbols-outlined text-[20px]">inventory_2</span>
             À livrer
             {orders.length > 0 && (
-              <span className={`px-2 py-0.5 rounded-full text-[11px] font-bold ${activeTab === 'available' ? 'bg-secondary-container/50 text-on-secondary-container' : 'bg-surface-container'}`}>
+              <span className={`px-2 py-0.5 rounded-full text-[11px] font-bold ${activeTab === 'available' ? 'bg-white/25' : 'bg-surface-container'}`}>
                 {orders.length}
               </span>
             )}
@@ -152,14 +152,14 @@ const Delivery = () => {
             onClick={() => setActiveTab('active')}
             className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-label-md text-label-md font-medium transition-all ${
               activeTab === 'active'
-                ? 'bg-secondary text-on-secondary-container shadow-lg shadow-secondary/20'
+                ? 'bg-secondary text-white shadow-lg shadow-secondary/20'
                 : 'bg-surface text-on-surface-variant hover:bg-surface-container'
             }`}
           >
             <span className="material-symbols-outlined text-[20px]">directions_bike</span>
             En cours
             {myActiveOrders.length > 0 && (
-              <span className={`px-2 py-0.5 rounded-full text-[11px] font-bold ${activeTab === 'active' ? 'bg-secondary-container/50 text-on-secondary-container' : 'bg-surface-container'}`}>
+              <span className={`px-2 py-0.5 rounded-full text-[11px] font-bold ${activeTab === 'active' ? 'bg-white/25' : 'bg-surface-container'}`}>
                 {myActiveOrders.length}
               </span>
             )}
@@ -168,14 +168,14 @@ const Delivery = () => {
             onClick={() => setActiveTab('delivered')}
             className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-label-md text-label-md font-medium transition-all ${
               activeTab === 'delivered'
-                ? 'bg-secondary text-on-secondary-container shadow-lg shadow-secondary/20'
+                ? 'bg-secondary text-white shadow-lg shadow-secondary/20'
                 : 'bg-surface text-on-surface-variant hover:bg-surface-container'
             }`}
           >
             <span className="material-symbols-outlined text-[20px]">check_circle</span>
             Livrées
             {deliveredOrders.length > 0 && (
-              <span className={`px-2 py-0.5 rounded-full text-[11px] font-bold ${activeTab === 'delivered' ? 'bg-secondary-container/50 text-on-secondary-container' : 'bg-surface-container'}`}>
+              <span className={`px-2 py-0.5 rounded-full text-[11px] font-bold ${activeTab === 'delivered' ? 'bg-white/25' : 'bg-surface-container'}`}>
                 {deliveredOrders.length}
               </span>
             )}
