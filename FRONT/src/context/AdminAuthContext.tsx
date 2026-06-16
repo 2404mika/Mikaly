@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
-import api from '../services/api';
+import apiAdmin from '../services/apiAdmin';
 import type { User, LoginData } from '../services/auth';
 
 interface AdminAuthContextType {
@@ -25,9 +25,7 @@ export const AdminAuthProvider = ({ children }: { children: ReactNode }) => {
     const loadAdmin = async () => {
       if (adminToken) {
         try {
-          const response = await api.get('/auth/profile', {
-            headers: { Authorization: `Bearer ${adminToken}` }
-          });
+          const response = await apiAdmin.get('/auth/profile');
           const userData = response.data.data;
           if (userData.role !== 'admin') {
             localStorage.removeItem('admin_token');
@@ -62,7 +60,7 @@ export const AdminAuthProvider = ({ children }: { children: ReactNode }) => {
   }, [adminToken]);
 
   const adminLogin = async (data: LoginData) => {
-    const response = await api.post('/auth/login', data);
+    const response = await apiAdmin.post('/auth/login', data);
     const { token, user } = response.data.data;
     if (user.role !== 'admin') {
       throw new Error('Accès réservé aux administrateurs');

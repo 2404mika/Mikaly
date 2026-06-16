@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import api from '../../services/api';
+import api from '../../services/apiAdmin';
 import AnimatedSection from '../../components/ui/AnimatedSection';
 import ConfirmDialog from '../../components/ui/ConfirmDialog';
 

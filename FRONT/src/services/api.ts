@@ -6,11 +6,8 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const adminToken = localStorage.getItem('admin_token');
   const token = localStorage.getItem('token');
-  if (adminToken) {
-    config.headers.Authorization = `Bearer ${adminToken}`;
-  } else if (token) {
+  if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
@@ -20,9 +17,8 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      const adminToken = localStorage.getItem('admin_token');
       const cachedUser = localStorage.getItem('user');
-      if (!adminToken && !cachedUser) {
+      if (!cachedUser) {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         window.location.href = '/login';

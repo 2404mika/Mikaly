@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import api from '../../services/api';
+import api from '../../services/apiAdmin';
 
 interface DashboardStats {
   revenue: { total_revenue: number; total_orders: number; dine_in_orders: number; online_orders: number; takeaway_orders: number };

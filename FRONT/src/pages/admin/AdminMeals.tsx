@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import api from '../../services/api';
+import api from '../../services/apiAdmin';
 import ConfirmDialog from '../../components/ui/ConfirmDialog';
 
 interface Meal { id: number; name: string; description: string; price: number; image: string; category_id: number; category_name: string; status: string; is_featured: number; }
