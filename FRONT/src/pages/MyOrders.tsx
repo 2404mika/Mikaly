@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getMyOrders } from '../services/orders';
+import { getMyReservations } from '../services/reservations';
 import AnimatedSection from '../components/ui/AnimatedSection';
 import type { Order } from '../services/orders';
+import type { Reservation } from '../services/reservations';
 
 const statusConfig: Record<string, { label: string; color: string; bg: string; icon: string }> = {
   received: { label: 'Reçue', color: 'text-blue-700', bg: 'bg-blue-50', icon: 'receipt_long' },
@@ -15,23 +17,36 @@ const statusConfig: Record<string, { label: string; color: string; bg: string; i
   cancelled: { label: 'Annulée', color: 'text-red-700', bg: 'bg-red-50', icon: 'cancel' },
 };
 
+const reservationStatusConfig: Record<string, { label: string; color: string; bg: string; icon: string }> = {
+  pending: { label: 'En attente', color: 'text-amber-700', bg: 'bg-amber-50', icon: 'schedule' },
+  confirmed: { label: 'Confirmée', color: 'text-green-700', bg: 'bg-green-50', icon: 'check_circle' },
+  cancelled: { label: 'Annulée', color: 'text-red-700', bg: 'bg-red-50', icon: 'cancel' },
+  completed: { label: 'Terminée', color: 'text-gray-700', bg: 'bg-gray-50', icon: 'done_all' },
+};
+
 const MyOrders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
+  const [reservations, setReservations] = useState<Reservation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const [activeTab, setActiveTab] = useState<'orders' | 'reservations'>('orders');
 
   useEffect(() => {
-    const fetchOrders = async () => {
+    const fetchData = async () => {
       try {
-        const data = await getMyOrders();
-        setOrders(data);
+        const [ordersData, reservationsData] = await Promise.all([
+          getMyOrders(),
+          getMyReservations()
+        ]);
+        setOrders(ordersData);
+        setReservations(reservationsData);
       } catch (err: any) {
         setError(err.response?.data?.message || 'Erreur lors du chargement');
       } finally {
         setIsLoading(false);
       }
     };
-    fetchOrders();
+    fetchData();
   }, []);
 
   const formatDate = (dateStr: string) => {
@@ -54,10 +69,42 @@ const MyOrders = () => {
     <main className="min-h-screen bg-background">
       <div className="w-full max-w-4xl mx-auto px-margin-mobile md:px-margin-desktop py-8">
         <AnimatedSection animation="fadeUp">
-          <h1 className="font-headline text-headline-lg-mobile md:text-headline-lg text-on-surface mb-8">
-            Mes commandes
+          <h1 className="font-headline text-headline-lg-mobile md:text-headline-lg text-on-surface mb-6">
+            Mon historique
           </h1>
         </AnimatedSection>
+
+        {/* Tabs */}
+        <div className="flex gap-2 mb-6">
+          <button
+            onClick={() => setActiveTab('orders')}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-label-md text-label-md transition-all ${
+              activeTab === 'orders'
+                ? 'bg-primary text-on-primary shadow-sm font-bold'
+                : 'bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant hover:bg-surface-container'
+            }`}
+          >
+            <span className="material-symbols-outlined text-[18px]">receipt_long</span>
+            Commandes
+            {orders.length > 0 && (
+              <span className="bg-white/20 px-2 py-0.5 rounded-full text-[11px] font-bold tabular-nums">{orders.length}</span>
+            )}
+          </button>
+          <button
+            onClick={() => setActiveTab('reservations')}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-label-md text-label-md transition-all ${
+              activeTab === 'reservations'
+                ? 'bg-primary text-on-primary shadow-sm font-bold'
+                : 'bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant hover:bg-surface-container'
+            }`}
+          >
+            <span className="material-symbols-outlined text-[18px]">event_seat</span>
+            Réservations
+            {reservations.length > 0 && (
+              <span className="bg-white/20 px-2 py-0.5 rounded-full text-[11px] font-bold tabular-nums">{reservations.length}</span>
+            )}
+          </button>
+        </div>
 
         {isLoading ? (
           <div className="space-y-4">
@@ -81,6 +128,74 @@ const MyOrders = () => {
               <p className="font-body-md text-body-md text-on-surface-variant">{error}</p>
             </div>
           </AnimatedSection>
+        ) : activeTab === 'reservations' ? (
+          reservations.length === 0 ? (
+            <AnimatedSection animation="scaleIn">
+              <div className="text-center py-16">
+                <span className="material-symbols-outlined text-8xl text-outline-variant mb-4 block">event_seat</span>
+                <h2 className="font-headline text-headline-md text-on-surface mb-2">Aucune réservation</h2>
+                <p className="font-body-md text-body-md text-on-surface-variant mb-6">
+                  Vous n'avez pas encore réservé de table.
+                </p>
+                <Link
+                  to="/reservations"
+                  className="bg-primary text-on-primary px-6 py-2.5 rounded-lg font-label-md text-label-md shadow-sm hover:bg-primary-dark transition-[background-color] duration-150 ease-out inline-flex items-center gap-2"
+                >
+                  <span className="material-symbols-outlined text-[18px]">calendar_today</span>
+                  Réserver une table
+                </Link>
+              </div>
+            </AnimatedSection>
+          ) : (
+            <div className="space-y-4">
+              {reservations.map((res, index) => {
+                const status = reservationStatusConfig[res.status] || { label: res.status, color: 'text-gray-700', bg: 'bg-gray-50', icon: 'help' };
+                const formatDate = (dateStr: string) => {
+                  const date = new Date(dateStr);
+                  return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+                };
+                return (
+                  <AnimatedSection key={res.id} animation="fadeUp" delay={index * 80}>
+                    <div className="bg-surface-container-lowest rounded-2xl overflow-hidden ambient-shadow-sm">
+                      <div className="flex items-center justify-between px-4 py-3 border-b border-outline-variant/20">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center flex-shrink-0">
+                            <span className="material-symbols-outlined text-[14px]">event_seat</span>
+                          </div>
+                          <div>
+                            <span className="font-label-sm text-label-sm text-on-surface font-medium">
+                              Table {res.table_number || 'Non assignée'}
+                            </span>
+                            <span className={`ml-2 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-label-sm text-label-sm ${status.bg} ${status.color}`}>
+                              <span className="material-symbols-outlined text-[12px]">{status.icon}</span>
+                              {status.label}
+                            </span>
+                          </div>
+                        </div>
+                        <span className="font-body-sm text-body-sm text-on-surface-variant">{formatDate(res.reservation_date)}</span>
+                      </div>
+                      <div className="px-4 py-3 space-y-2">
+                        <div className="flex items-center gap-2 text-body-sm text-on-surface-variant">
+                          <span className="material-symbols-outlined text-[16px]">schedule</span>
+                          <span>{res.reservation_time}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-body-sm text-on-surface-variant">
+                          <span className="material-symbols-outlined text-[16px]">group</span>
+                          <span>{res.number_of_guests} personne{res.number_of_guests > 1 ? 's' : ''}</span>
+                        </div>
+                        {res.notes && (
+                          <div className="flex items-start gap-2 text-body-sm text-on-surface-variant">
+                            <span className="material-symbols-outlined text-[16px]">info</span>
+                            <span className="italic">{res.notes}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </AnimatedSection>
+                );
+              })}
+            </div>
+          )
         ) : orders.length === 0 ? (
           <AnimatedSection animation="scaleIn">
             <div className="text-center py-16">

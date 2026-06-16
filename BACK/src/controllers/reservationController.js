@@ -61,4 +61,39 @@ const updateStatus = async (req, res, next) => {
   }
 };
 
-module.exports = { getAll, create, updateStatus };
+// Récupération des réservations du client connecté
+const getMyReservations = async (req, res, next) => {
+  try {
+    const userId = req.user ? req.user.id : null;
+    const userName = req.user ? req.user.name : null;
+    const userPhone = req.user ? req.user.phone : null;
+
+    let sql = `SELECT r.*, t.table_number 
+               FROM reservations r 
+               LEFT JOIN tables t ON r.table_id = t.id 
+               WHERE 1=1`;
+    const binds = [];
+
+    if (userId) {
+      sql += ' AND (r.user_id = :userId OR r.client_phone = :userPhone)';
+      binds.push(userId, userPhone);
+    } else if (userPhone) {
+      sql += ' AND r.client_phone = :userPhone';
+      binds.push(userPhone);
+    } else if (userName) {
+      sql += ' AND r.client_name = :userName';
+      binds.push(userName);
+    } else {
+      sql += ' AND 1=0';
+    }
+
+    sql += ' ORDER BY r.reservation_date DESC, r.reservation_time DESC';
+
+    const result = await db.execute(sql, binds);
+    res.status(200).json({ success: true, data: result.rows });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { getAll, create, updateStatus, getMyReservations };

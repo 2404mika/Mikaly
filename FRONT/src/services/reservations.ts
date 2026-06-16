@@ -43,6 +43,6 @@ export const createReservation = async (data: {
 };
 
 export const getMyReservations = async (): Promise<Reservation[]> => {
-  const response = await api.get('/reservations');
+  const response = await api.get('/reservations/my-reservations');
   return response.data.data || [];
 };
