@@ -349,7 +349,7 @@ const Delivery = () => {
                     <div className="p-4 pt-2">
                       <button
                         onClick={() => handleDelivered(order.id)}
-                        className="w-full py-3.5 bg-green-600 text-white rounded-xl font-label-md text-label-md font-bold shadow-lg shadow-green-600/25 hover:bg-green-700 transition-all duration-150 flex items-center justify-center gap-2 active:scale-[0.98]"
+                        className="w-full py-3.5 bg-green-600 text-white rounded-xl font-label-md text-label-md font-bold shadow-lg shadow-green-600/30 hover:bg-green-700 transition-all duration-150 flex items-center justify-center gap-2 active:scale-[0.98]"
                       >
                         <span className="material-symbols-outlined text-[20px]">where_to_vote</span>
                         Marquer comme livrée
@@ -375,7 +375,7 @@ const Delivery = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {deliveredOrders.map((order, index) => (
                 <AnimatedSection key={order.id} animation="fadeUp" delay={index * 40}>
-                  <div className="bg-surface rounded-2xl overflow-hidden shadow-lg opacity-75 hover:opacity-100 transition-opacity">
+                  <div className="bg-surface rounded-2xl overflow-hidden shadow-lg">
                     <div className="p-4 border-b border-outline-variant/10">
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center gap-3">
