@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SmartRestaurant Admin - Gestion des Utilisateurs</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&amp;family=Work+Sans:ital,wght@0,100..900;1,100..900&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        /* Custom scrollbar for a cleaner SaaS look */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e0e4da; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #c1c9ba; }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "secondary-fixed-dim": "#91d883",
+                "tertiary-fixed": "#ffd9e4",
+                "on-secondary-fixed": "#002201",
+                "on-primary-fixed-variant": "#135211",
+                "outline-variant": "#c1c9ba",
+                "on-background": "#191d17",
+                "primary-fixed": "#b0f49f",
+                "outline": "#717a6c",
+                "on-error-container": "#93000a",
+                "on-primary-fixed": "#002201",
+                "on-tertiary-fixed": "#3e0020",
+                "inverse-on-surface": "#eff2e8",
+                "on-surface-variant": "#41493d",
+                "on-secondary-fixed-variant": "#0c530e",
+                "on-error": "#ffffff",
+                "surface-container-low": "#f2f5eb",
+                "error-container": "#ffdad6",
+                "secondary": "#2a6c25",
+                "surface-dim": "#d8dbd2",
+                "surface-tint": "#2e6b27",
+                "surface-container-lowest": "#ffffff",
+                "error": "#ba1a1a",
+                "background": "#f7fbf1",
+                "surface-container": "#ecefe5",
+                "surface": "#f7fbf1",
+                "primary": "#165413",
+                "on-primary-container": "#a9ed99",
+                "on-secondary": "#ffffff",
+                "secondary-fixed": "#acf59d",
+                "tertiary-fixed-dim": "#ffb0cc",
+                "primary-container": "#306d29",
+                "tertiary": "#7c2a4f",
+                "surface-bright": "#f7fbf1",
+                "surface-container-high": "#e6e9e0",
+                "surface-variant": "#e0e4da",
+                "surface-container-highest": "#e0e4da",
+                "on-surface": "#191d17",
+                "tertiary-container": "#994267",
+                "inverse-primary": "#94d786",
+                "on-secondary-container": "#30722a",
+                "on-tertiary-container": "#ffcedd",
+                "primary-fixed-dim": "#94d786",
+                "on-primary": "#ffffff",
+                "secondary-container": "#acf59d",
+                "inverse-surface": "#2d322b",
+                "on-tertiary": "#ffffff",
+                "on-tertiary-fixed-variant": "#7a294d"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "gutter": "24px",
+                "margin-desktop": "40px",
+                "md": "16px",
+                "lg": "24px",
+                "xs": "4px",
+                "xl": "32px",
+                "2xl": "48px",
+                "base": "4px",
+                "3xl": "64px",
+                "margin-mobile": "16px",
+                "sm": "8px"
+            },
+            "fontFamily": {
+                "body-md": ["Work Sans"],
+                "body-lg": ["Work Sans"],
+                "headline-lg-mobile": ["Source Serif 4"],
+                "display-lg": ["Source Serif 4"],
+                "body-sm": ["Work Sans"],
+                "headline-sm": ["Source Serif 4"],
+                "headline-md": ["Source Serif 4"],
+                "headline-lg": ["Source Serif 4"],
+                "label-md": ["Work Sans"],
+                "label-sm": ["Work Sans"]
+            },
+            "fontSize": {
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+</head>
+<body class="bg-surface font-body-md text-on-surface">
+<!-- Sidebar (Shared Component JSON logic) -->
+<aside class="fixed left-0 top-0 h-full w-64 bg-surface border-r border-outline-variant/30 shadow-[4px_0_12px_rgba(48,109,41,0.02)] flex flex-col p-md gap-sm z-40 hidden md:flex" id="sidebar">
+<!-- Logo -->
+<div class="px-4 py-6">
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">SmartRestaurant</h1>
+<p class="text-on-surface-variant font-label-md text-[11px] uppercase tracking-wider">Restaurant Manager</p>
+</div>
+<!-- Main Nav -->
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg px-4 py-3 transition-all active:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg px-4 py-3 transition-all active:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="category">category</span>
+<span class="font-label-md text-label-md">Categories</span>
+</a>
+<!-- Active Tab: Users -->
+<a class="flex items-center gap-3 bg-secondary-container text-on-secondary-container rounded-lg px-4 py-3 font-medium transition-all active:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="group" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-label-md text-label-md">Users</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg px-4 py-3 transition-all active:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="rate_review">rate_review</span>
+<span class="font-label-md text-label-md">Reviews</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg px-4 py-3 transition-all active:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<!-- CTA -->
+<div class="px-2 mt-4">
+<button class="w-full bg-primary-container text-on-primary-container hover:bg-primary py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all hover:shadow-lg font-label-md text-label-md">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                New Reservation
+            </button>
+</div>
+<!-- Footer Nav -->
+<div class="pt-4 border-t border-outline-variant/30 mt-auto space-y-1">
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg px-4 py-3 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-label-md text-label-md">Help</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg px-4 py-3 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label-md text-label-md">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Top AppBar (Mobile/Desktop Hybrid) -->
+<header class="fixed top-0 w-full z-50 md:pl-64 h-20 bg-surface/80 backdrop-blur-xl shadow-[0_4px_12px_rgba(48,109,41,0.04)] flex items-center justify-between px-margin-mobile md:px-margin-desktop">
+<div class="flex items-center gap-4">
+<button class="md:hidden p-2 text-primary" onclick="document.getElementById('sidebar').classList.toggle('hidden')">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h2 class="font-headline-md text-headline-md text-primary font-bold">Gestion des Utilisateurs</h2>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden sm:flex items-center bg-surface-container-low border border-outline-variant/30 px-3 py-1.5 rounded-full">
+<span class="material-symbols-outlined text-on-surface-variant mr-2" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-sm w-48 placeholder-on-surface-variant/50" placeholder="Rechercher..." type="text"/>
+</div>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full relative transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<img alt="Admin profile" class="w-10 h-10 rounded-full border border-primary/20 object-cover" data-alt="A professional headshot of a restaurant manager in a minimalist white and green corporate uniform, looking confident and smiling softly. The lighting is bright and high-key with a soft bokeh background representing a modern, clean kitchen environment. The aesthetic is clean, professional, and reflects the brand's sophisticated hospitality theme." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2ZrDYWZbLacLzaWqbvqo392XnQ465x0IYwhsEHs1mbSYTHYwYlFiux2XBYavJywO-DHkPT8KBM2FUwscTCJYkxbI4567ht_kvVcCniBITTejbG07_k2UhslEQknLgZckkdv-F8KOv28fpEE5k2mnVl9SB7kEzB5PgWmPL5TdH9ZFDoCTQwPvZ8ykuHjhPrfRTwrNJiEXYWy4am2FRNP3tHvRXRK7oSILYC7sVyPhivKn-5HC74VnKjx_YzGuMbAHYCe-Xdt1Rx9vX"/>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="md:pl-64 pt-20 min-h-screen">
+<div class="p-margin-mobile md:p-margin-desktop">
+<!-- Filters & Stats Row -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-lg">
+<div class="col-span-1 md:col-span-3 flex flex-wrap items-center gap-sm">
+<button class="bg-primary text-on-primary px-lg py-sm rounded-lg flex items-center gap-2 shadow-sm hover:opacity-90 transition-all font-label-md">
+<span class="material-symbols-outlined" data-icon="person_add">person_add</span>
+                        Ajouter un Utilisateur
+                    </button>
+<div class="flex bg-surface-container rounded-lg p-1">
+<button class="px-4 py-1.5 rounded-md bg-white shadow-sm font-label-md text-primary">Tous</button>
+<button class="px-4 py-1.5 rounded-md hover:bg-white/50 font-label-md text-on-surface-variant">Clients</button>
+<button class="px-4 py-1.5 rounded-md hover:bg-white/50 font-label-md text-on-surface-variant">Staff</button>
+</div>
+<select class="bg-surface border border-outline-variant/30 rounded-lg px-4 py-2 text-body-sm font-label-md focus:border-primary focus:ring-primary/10">
+<option>Tous les rôles</option>
+<option>Cuisinier</option>
+<option>Livreur</option>
+<option>Caissier</option>
+<option>Client</option>
+</select>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-xl border border-outline-variant/30 flex items-center justify-between shadow-[0_4px_12px_rgba(48,109,41,0.04)]">
+<div>
+<p class="text-on-surface-variant text-label-sm font-label-sm uppercase tracking-wider">Total Utilisateurs</p>
+<h3 class="font-headline-sm text-headline-sm text-primary font-bold">1,284</h3>
+</div>
+<div class="w-10 h-10 bg-secondary-container/30 rounded-full flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+</div>
+</div>
+</div>
+<!-- Bento Styled User Table -->
+<div class="bg-white rounded-2xl border border-outline-variant/30 shadow-[0_4px_12px_rgba(48,109,41,0.04)] overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/50">
+<th class="px-lg py-md text-label-md font-label-md text-on-surface-variant border-b border-outline-variant/20">Nom / Profil</th>
+<th class="px-lg py-md text-label-md font-label-md text-on-surface-variant border-b border-outline-variant/20">Rôle</th>
+<th class="px-lg py-md text-label-md font-label-md text-on-surface-variant border-b border-outline-variant/20">Email</th>
+<th class="px-lg py-md text-label-md font-label-md text-on-surface-variant border-b border-outline-variant/20">Statut</th>
+<th class="px-lg py-md text-label-md font-label-md text-on-surface-variant border-b border-outline-variant/20 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<!-- User 1: Cuisinier -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="px-lg py-md">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container/10 flex items-center justify-center text-primary font-bold">JD</div>
+<div>
+<p class="font-label-md text-on-surface font-bold">Jean Dupont</p>
+<p class="text-body-sm text-on-surface-variant">ID: #CUI-928</p>
+</div>
+</div>
+</td>
+<td class="px-lg py-md">
+<span class="px-3 py-1 rounded-full bg-secondary-container/20 text-on-secondary-container text-label-sm font-medium border border-secondary/10">
+                                        Cuisinier
+                                    </span>
+</td>
+<td class="px-lg py-md text-body-sm text-on-surface-variant">j.dupont@smartrestau.fr</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-1.5 text-secondary">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="text-label-sm font-medium">Actif</span>
+</div>
+</td>
+<td class="px-lg py-md text-right">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-on-surface-variant hover:text-primary hover:bg-primary/5 rounded-lg transition-colors" title="Modifier">
+<span class="material-symbols-outlined text-[20px]" data-icon="edit">edit</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-tertiary hover:bg-tertiary/5 rounded-lg transition-colors" title="Permissions">
+<span class="material-symbols-outlined text-[20px]" data-icon="lock_open">lock_open</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-error hover:bg-error/5 rounded-lg transition-colors" title="Supprimer">
+<span class="material-symbols-outlined text-[20px]" data-icon="delete">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- User 2: Client -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="px-lg py-md">
+<div class="flex items-center gap-3">
+<img alt="Client profile" class="w-10 h-10 rounded-full object-cover" data-alt="A portrait of a cheerful female customer in a lifestyle setting, with natural sunlight and a warm, inviting atmosphere. She represents the target audience of a high-end restaurant service, with an elegant but casual look. The image depth is shallow, focusing on her friendly expression while blurring the modern cafe background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgOwn-8d4OCBQ4icV7Iz-fRaroFNpXqCwT8RHhPTwCavF__dI31ZyuGwgYt7B0G9kJtFGXeKOr6INrFuVvzrHfPdcuLaGg-58uWqnrjMSxRWH9bZA-i4efHIttKxsU_tPxoT2G48EWhY3qzauiHJaJXeyIKKABmLHlqtphcxxOvGpfLoajUq2C2ubYnvKNyUcuXGIjiQAskWE5SoPy-1BDiPX2kJ2pE9ORf5bX2F5UyDc1ZO4AazT30hgZI0_ZeLWZUHf-AsduPyCY"/>
+<div>
+<p class="font-label-md text-on-surface font-bold">Marie Laurent</p>
+<p class="text-body-sm text-on-surface-variant">VIP Member</p>
+</div>
+</div>
+</td>
+<td class="px-lg py-md">
+<span class="px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant text-label-sm font-medium border border-outline-variant/20">
+                                        Client
+                                    </span>
+</td>
+<td class="px-lg py-md text-body-sm text-on-surface-variant">marie.l@gmail.com</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-1.5 text-secondary">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="text-label-sm font-medium">Actif</span>
+</div>
+</td>
+<td class="px-lg py-md text-right">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg"><span class="material-symbols-outlined text-[20px]" data-icon="more_vert">more_vert</span></button>
+</div>
+</td>
+</tr>
+<!-- User 3: Livreurs -->
+<tr class="hover:bg-surface-container-lowest transition-colors group border-l-4 border-error/40">
+<td class="px-lg py-md">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-tertiary-container/10 flex items-center justify-center text-tertiary font-bold">PK</div>
+<div>
+<p class="font-label-md text-on-surface font-bold">Pierre Koffi</p>
+<p class="text-body-sm text-on-surface-variant">ID: #LIV-004</p>
+</div>
+</div>
+</td>
+<td class="px-lg py-md">
+<span class="px-3 py-1 rounded-full bg-tertiary-fixed-dim/20 text-on-tertiary-fixed-variant text-label-sm font-medium border border-tertiary/10">
+                                        Livreur
+                                    </span>
+</td>
+<td class="px-lg py-md text-body-sm text-on-surface-variant">p.koffi@smartrestau.fr</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-1.5 text-on-surface-variant/60">
+<span class="w-2 h-2 rounded-full bg-outline"></span>
+<span class="text-label-sm font-medium">Suspendu</span>
+</div>
+</td>
+<td class="px-lg py-md text-right">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg"><span class="material-symbols-outlined text-[20px]" data-icon="refresh">refresh</span></button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg"><span class="material-symbols-outlined text-[20px]" data-icon="more_vert">more_vert</span></button>
+</div>
+</td>
+</tr>
+<!-- User 4: Caissier -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="px-lg py-md">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container/10 flex items-center justify-center text-secondary font-bold">SB</div>
+<div>
+<p class="font-label-md text-on-surface font-bold">Sophie Bernard</p>
+<p class="text-body-sm text-on-surface-variant">ID: #CAI-112</p>
+</div>
+</div>
+</td>
+<td class="px-lg py-md">
+<span class="px-3 py-1 rounded-full bg-primary-container/10 text-primary text-label-sm font-medium border border-primary/10">
+                                        Caissier
+                                    </span>
+</td>
+<td class="px-lg py-md text-body-sm text-on-surface-variant">s.bernard@smartrestau.fr</td>
+<td class="px-lg py-md">
+<div class="flex items-center gap-1.5 text-secondary">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="text-label-sm font-medium">Actif</span>
+</div>
+</td>
+<td class="px-lg py-md text-right">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg"><span class="material-symbols-outlined text-[20px]" data-icon="more_vert">more_vert</span></button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-lg py-md border-t border-outline-variant/10 flex items-center justify-between bg-surface-container-low/30">
+<p class="text-body-sm text-on-surface-variant">Affichage de 1-4 sur 1,284 utilisateurs</p>
+<div class="flex gap-2">
+<button class="p-2 rounded-lg border border-outline-variant/30 hover:bg-white transition-colors disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="p-2 rounded-lg border border-outline-variant/30 bg-white shadow-sm text-primary font-bold px-4">1</button>
+<button class="p-2 rounded-lg border border-outline-variant/30 hover:bg-white px-4">2</button>
+<button class="p-2 rounded-lg border border-outline-variant/30 hover:bg-white px-4">3</button>
+<button class="p-2 rounded-lg border border-outline-variant/30 hover:bg-white transition-colors">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Permission Management Context Card (Asymmetric Layout) -->
+<div class="mt-lg grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="md:col-span-2 bg-gradient-to-br from-primary-container to-[#1b4317] rounded-2xl p-xl text-on-primary-container relative overflow-hidden shadow-lg">
+<div class="relative z-10">
+<h4 class="font-headline-sm text-headline-sm mb-2">Audit de Sécurité des Rôles</h4>
+<p class="text-body-md opacity-90 max-w-lg mb-lg">
+                            Dernière mise à jour des permissions : il y a 3 jours. Assurez-vous que chaque membre du staff dispose uniquement des accès nécessaires à ses fonctions opérationnelles.
+                        </p>
+<button class="bg-white text-primary px-lg py-2 rounded-lg font-label-md hover:bg-secondary-container transition-colors">
+                            Gérer les Permissions Globales
+                        </button>
+</div>
+<!-- Abstract Background Shape -->
+<div class="absolute -right-20 -bottom-20 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
+</div>
+<div class="bg-surface-container-highest/30 rounded-2xl p-xl border border-dashed border-outline-variant/50 flex flex-col items-center justify-center text-center">
+<div class="w-16 h-16 bg-surface rounded-full flex items-center justify-center mb-md border border-outline-variant/20 shadow-sm">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="security">security</span>
+</div>
+<h5 class="font-label-md text-on-surface font-bold">Besoin d'aide ?</h5>
+<p class="text-body-sm text-on-surface-variant mt-2 mb-md">Consultez notre guide sur les niveaux d'accès hiérarchiques.</p>
+<a class="text-primary font-label-md flex items-center gap-1 hover:underline" href="#">
+                        Ouvrir le guide <span class="material-symbols-outlined text-[18px]" data-icon="open_in_new">open_in_new</span>
+</a>
+</div>
+</div>
+</div>
+</main>
+<!-- FAB for quick addition (Mobile Only) -->
+<button class="md:hidden fixed bottom-margin-mobile right-margin-mobile w-14 h-14 bg-primary text-on-primary rounded-full shadow-2xl flex items-center justify-center z-50 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-3xl" data-icon="add">add</span>
+</button>
+<script>
+        // Simple Interaction logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const tableRows = document.querySelectorAll('tbody tr');
+            tableRows.forEach(row => {
+                row.addEventListener('mouseenter', () => {
+                    // Optional extra hover logic
+                });
+            });
+            
+            // Toggle Sidebar for mobile simulation
+            window.toggleSidebar = function() {
+                const sidebar = document.getElementById('sidebar');
+                sidebar.classList.toggle('hidden');
+                sidebar.classList.toggle('fixed');
+                sidebar.classList.toggle('z-50');
+            }
+        });
+    </script>
+</body></html>

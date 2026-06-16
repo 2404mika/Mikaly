@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SmartRestaurant Admin - Gestion des Catégories</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&amp;family=Source+Serif+4:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed-dim": "#91d883",
+                    "tertiary-fixed": "#ffd9e4",
+                    "on-secondary-fixed": "#002201",
+                    "on-primary-fixed-variant": "#135211",
+                    "outline-variant": "#c1c9ba",
+                    "on-background": "#191d17",
+                    "primary-fixed": "#b0f49f",
+                    "outline": "#717a6c",
+                    "on-error-container": "#93000a",
+                    "on-primary-fixed": "#002201",
+                    "on-tertiary-fixed": "#3e0020",
+                    "inverse-on-surface": "#eff2e8",
+                    "on-surface-variant": "#41493d",
+                    "on-secondary-fixed-variant": "#0c530e",
+                    "on-error": "#ffffff",
+                    "surface-container-low": "#f2f5eb",
+                    "error-container": "#ffdad6",
+                    "secondary": "#2a6c25",
+                    "surface-dim": "#d8dbd2",
+                    "surface-tint": "#2e6b27",
+                    "surface-container-lowest": "#ffffff",
+                    "error": "#ba1a1a",
+                    "background": "#f7fbf1",
+                    "surface-container": "#ecefe5",
+                    "surface": "#f7fbf1",
+                    "primary": "#165413",
+                    "on-primary-container": "#a9ed99",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed": "#acf59d",
+                    "tertiary-fixed-dim": "#ffb0cc",
+                    "primary-container": "#306d29",
+                    "tertiary": "#7c2a4f",
+                    "surface-bright": "#f7fbf1",
+                    "surface-container-high": "#e6e9e0",
+                    "surface-variant": "#e0e4da",
+                    "surface-container-highest": "#e0e4da",
+                    "on-surface": "#191d17",
+                    "tertiary-container": "#994267",
+                    "inverse-primary": "#94d786",
+                    "on-secondary-container": "#30722a",
+                    "on-tertiary-container": "#ffcedd",
+                    "primary-fixed-dim": "#94d786",
+                    "on-primary": "#ffffff",
+                    "secondary-container": "#acf59d",
+                    "inverse-surface": "#2d322b",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#7a294d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "margin-desktop": "40px",
+                    "md": "16px",
+                    "lg": "24px",
+                    "xs": "4px",
+                    "xl": "32px",
+                    "2xl": "48px",
+                    "base": "4px",
+                    "3xl": "64px",
+                    "margin-mobile": "16px",
+                    "sm": "8px"
+            },
+            "fontFamily": {
+                    "body-md": ["Work Sans"],
+                    "body-lg": ["Work Sans"],
+                    "headline-lg-mobile": ["Source Serif 4"],
+                    "display-lg": ["Source Serif 4"],
+                    "body-sm": ["Work Sans"],
+                    "headline-sm": ["Source Serif 4"],
+                    "headline-md": ["Source Serif 4"],
+                    "headline-lg": ["Source Serif 4"],
+                    "label-md": ["Work Sans"],
+                    "label-sm": ["Work Sans"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-sidebar {
+            backdrop-filter: blur(12px);
+            background-color: rgba(247, 251, 241, 0.8);
+        }
+        .category-card:hover .action-overlay {
+            opacity: 1;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c1c9ba;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen">
+<!-- Side Navigation Bar -->
+<aside class="fixed left-0 top-0 h-full w-64 bg-surface border-r border-outline-variant/30 flex flex-col p-md gap-sm z-40 hidden md:flex">
+<div class="px-4 py-6">
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">Admin Panel</h1>
+<p class="text-on-surface-variant text-label-sm">Restaurant Manager</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg px-4 py-3 transition-all active:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md">Dashboard</span>
+</a>
+<!-- Active State for Categories -->
+<a class="flex items-center gap-3 bg-secondary-container text-on-secondary-container rounded-lg px-4 py-3 font-medium transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="category" style="font-variation-settings: 'FILL' 1;">category</span>
+<span class="font-label-md">Categories</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg px-4 py-3 transition-all active:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-md">Users</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg px-4 py-3 transition-all active:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="rate_review">rate_review</span>
+<span class="font-label-md">Reviews</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg px-4 py-3 transition-all active:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto space-y-4">
+<button class="w-full bg-primary-container text-on-primary text-label-md py-3 rounded-lg font-bold shadow-[0_4px_12px_rgba(48,109,41,0.1)] active:scale-95 transition-all">
+                New Reservation
+            </button>
+<div class="border-t border-outline-variant/20 pt-4">
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg px-4 py-3 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-label-md">Help</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg px-4 py-3 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label-md">Logout</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="md:ml-64 min-h-screen">
+<!-- Header -->
+<header class="h-20 bg-surface/80 backdrop-blur-xl sticky top-0 z-30 px-margin-desktop flex items-center justify-between shadow-[0_4px_12px_rgba(48,109,41,0.04)]">
+<div>
+<h2 class="font-headline-md text-headline-md font-bold text-primary">Gestion des Catégories</h2>
+<nav class="flex items-center gap-2 text-label-sm text-on-surface-variant">
+<span>Menu</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="chevron_right">chevron_right</span>
+<span class="text-primary font-medium">Catégories de Repas</span>
+</nav>
+</div>
+<div class="flex items-center gap-lg">
+<div class="hidden lg:flex items-center bg-surface-container rounded-full px-4 py-2 border border-outline-variant/30">
+<span class="material-symbols-outlined text-outline" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-sm w-64 placeholder-on-surface-variant/50" placeholder="Rechercher une catégorie..." type="text"/>
+</div>
+<div class="flex items-center gap-md">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-tertiary rounded-full"></span>
+</button>
+<div class="flex items-center gap-sm pl-4 border-l border-outline-variant/30">
+<img alt="Admin profile" class="w-10 h-10 rounded-full object-cover border-2 border-primary-fixed" data-alt="A professional portrait of a senior restaurant manager in a clean white chef coat and black apron, standing confidently in a bright, modern professional kitchen environment. High-key natural lighting, soft focus background of stainless steel equipment, and a sophisticated editorial aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCH1c3c3TymTLlPrce24dM5HZGhpOpddeKC7OfwUDHaFOtJ1KllVPEAGU4stB1b_7t8xaZOsnrHOCf1BvtoB7wes9KdCoQg7EA1-zig98ngaBGCKGy9xHxrF97uqaaUsFXeO5Invv7fx7sIyKGr70LQwLcOC7Bf3RRokrtspNenbfVkGwhxPGSqqysIqtuhtt3MCo0eUbRFaxpHoaIqQ2osjGsJi3jgu16vSj46e5qvWXwbLh2AdMcpXIXTGz0HStiLZfZiERS4pbNa"/>
+<div class="hidden sm:block">
+<p class="text-label-md font-bold leading-none">Admin Chef</p>
+<p class="text-label-sm text-on-surface-variant">Super Administrateur</p>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<div class="p-margin-desktop space-y-xl">
+<!-- Dashboard Stats Row (Subtle) -->
+<section class="grid grid-cols-1 md:grid-cols-4 gap-lg">
+<div class="bg-surface rounded-xl p-md border border-outline-variant/30 shadow-[0_4px_12px_rgba(48,109,41,0.04)] flex flex-col justify-center gap-xs">
+<p class="text-label-sm text-on-surface-variant uppercase tracking-wider">Total Catégories</p>
+<div class="flex items-baseline gap-sm">
+<span class="font-display-lg text-headline-lg text-primary">04</span>
+<span class="text-label-md text-secondary">+1 ce mois</span>
+</div>
+</div>
+<div class="bg-surface rounded-xl p-md border border-outline-variant/30 shadow-[0_4px_12px_rgba(48,109,41,0.04)] flex flex-col justify-center gap-xs">
+<p class="text-label-sm text-on-surface-variant uppercase tracking-wider">Total Articles</p>
+<div class="flex items-baseline gap-sm">
+<span class="font-display-lg text-headline-lg text-primary">124</span>
+<span class="text-label-md text-secondary">Répartis</span>
+</div>
+</div>
+<div class="bg-surface rounded-xl p-md border border-outline-variant/30 shadow-[0_4px_12px_rgba(48,109,41,0.04)] flex flex-col justify-center gap-xs">
+<p class="text-label-sm text-on-surface-variant uppercase tracking-wider">Popularité</p>
+<div class="flex items-baseline gap-sm">
+<span class="font-display-lg text-headline-lg text-tertiary">82%</span>
+<span class="text-label-md text-on-surface-variant">Plats Principaux</span>
+</div>
+</div>
+<div class="bg-surface rounded-xl p-md border border-outline-variant/30 shadow-[0_4px_12px_rgba(48,109,41,0.04)] flex flex-col items-center justify-center border-dashed border-2 hover:bg-surface-container transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform" data-icon="add_circle">add_circle</span>
+<p class="text-label-md font-bold mt-1">Nouvelle Catégorie</p>
+</div>
+</section>
+<!-- Categories Grid -->
+<section>
+<div class="flex items-center justify-between mb-lg">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Liste des Catégories</h3>
+<div class="flex gap-sm">
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg border border-outline-variant text-label-md hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined text-[18px]" data-icon="filter_list">filter_list</span>
+                            Filtrer
+                        </button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-on-primary text-label-md hover:shadow-lg transition-all active:scale-95">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+                            Ajouter une catégorie
+                        </button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-lg">
+<!-- Entrées -->
+<div class="group relative bg-surface rounded-[16px] overflow-hidden border border-outline-variant shadow-[0_4px_12px_rgba(48,109,41,0.04)] transition-all hover:shadow-[0_12px_24px_rgba(48,109,41,0.08)]">
+<div class="relative h-40">
+<img alt="Entrées" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A gourmet salad appetizer presented with artistic precision on a minimalist white ceramic plate. The scene features fresh vibrant greens, edible flowers, and droplets of olive oil, captured in soft morning light within a high-end modern restaurant setting. Clean aesthetic with high-key lighting and natural textures." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAobs3b3ZCUiiZ8CE4MbeA-qrLrcEUeChurMX1RhlshnVLFy84n0CG5I_mLKehJQITtonKg8J4nIBsMw_USZ9t4sVXZCCbaZ1ytk8PDOefAyX28HdlQ6pGd4IQZgawu5H2oe71RbuiE1N9jvNP4yQcqtOCnhhqYETYiSZRD68SuB0xD-ejcRklSxLeyubKsHhQx1xMLbG9r528Oujj_YpqT_TdEh2QeG_pM1c7lv2iSDFC-mAyAAZkKS_P7KGaEGem5yCLXP22MpEi6"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<span class="absolute bottom-4 left-4 bg-primary/20 backdrop-blur-md text-white px-3 py-1 rounded-full text-label-sm border border-white/30">ID: CAT-001</span>
+</div>
+<div class="p-lg space-y-md">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-headline-sm text-headline-sm font-bold text-on-surface">Entrées</h4>
+<p class="text-body-sm text-on-surface-variant">Légères et savoureuses pour débuter.</p>
+</div>
+<div class="bg-secondary-container text-on-secondary-container px-2 py-1 rounded-md text-label-sm font-bold">
+                                    24 Plats
+                                </div>
+</div>
+<div class="flex gap-2 pt-2 border-t border-outline-variant/30">
+<button class="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg border border-outline text-label-sm hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined text-[16px]" data-icon="edit">edit</span>
+                                    Modifier
+                                </button>
+<button class="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg border border-error/30 text-error text-label-sm hover:bg-error-container/20 transition-all">
+<span class="material-symbols-outlined text-[16px]" data-icon="delete">delete</span>
+                                    Supprimer
+                                </button>
+</div>
+</div>
+</div>
+<!-- Plats principaux -->
+<div class="group relative bg-surface rounded-[16px] overflow-hidden border border-outline-variant shadow-[0_4px_12px_rgba(48,109,41,0.04)] transition-all hover:shadow-[0_12px_24px_rgba(48,109,41,0.08)]">
+<div class="relative h-40">
+<img alt="Plats principaux" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A perfectly seared cut of premium beef steak resting on a minimalist stoneware plate, accompanied by roasted seasonal vegetables. The setting is a sophisticated dark-toned restaurant table with dramatic, focused spotlighting emphasizing the textures of the food. Professional food photography style with rich colors and deep shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAy8CcSmz4V1iBQGb799D1PycJasxtG62nsMFGCAk-oKkkrjiGLz47UQaZzJVZp8SnB45UW89hn40p9eVOUdiU-2zGJu4SAYiiVmN87ntvTv-4O6VHhONKDY7hW_kB85IXjG4Gxjy_kmtz4tvXoXr6mN0jndWblFsKTYMJCLzhIazpECO8L2IEAAUnRqKZwvshw29DW6TNnWPp3YEwHw3nY1YXAIanbP2S63qcItVRL2XT1b1jZMYbVUnEog_7B__oiIGM0PGCxsCZl"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<span class="absolute bottom-4 left-4 bg-primary/20 backdrop-blur-md text-white px-3 py-1 rounded-full text-label-sm border border-white/30">ID: CAT-002</span>
+</div>
+<div class="p-lg space-y-md">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-headline-sm text-headline-sm font-bold text-on-surface">Plats principaux</h4>
+<p class="text-body-sm text-on-surface-variant">Le cœur de notre menu culinaire.</p>
+</div>
+<div class="bg-secondary-container text-on-secondary-container px-2 py-1 rounded-md text-label-sm font-bold">
+                                    48 Plats
+                                </div>
+</div>
+<div class="flex gap-2 pt-2 border-t border-outline-variant/30">
+<button class="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg border border-outline text-label-sm hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined text-[16px]" data-icon="edit">edit</span>
+                                    Modifier
+                                </button>
+<button class="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg border border-error/30 text-error text-label-sm hover:bg-error-container/20 transition-all">
+<span class="material-symbols-outlined text-[16px]" data-icon="delete">delete</span>
+                                    Supprimer
+                                </button>
+</div>
+</div>
+</div>
+<!-- Desserts -->
+<div class="group relative bg-surface rounded-[16px] overflow-hidden border border-outline-variant shadow-[0_4px_12px_rgba(48,109,41,0.04)] transition-all hover:shadow-[0_12px_24px_rgba(48,109,41,0.08)]">
+<div class="relative h-40">
+<img alt="Desserts" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="An elegant French pastry dessert featuring layers of cream and delicate chocolate garnish, served on a frosted glass plate. The background is a dreamy, high-end cafe atmosphere with soft bokeh lights and a bright, airy color palette dominated by whites and soft pinks. Minimalist, sophisticated editorial food photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQ5RtAv6i104b9oIESo3LP4sMlgfL8apiCYi9hlRbX9eqXujDAaD241oDt43VS0JJZZMGW6NeXNq4xr6uIUVVH4YI91silAIQxYJMxrtszuA4xbcRwbzoGx3mqUd6egVd3pHno7AV3wZRrkxHk0WwQMuqqeZd2bVXQvFNxG8_zCoervXpn5l_ayEvhtmKHhfbkltGxWpm6l0anLpxk-ZGTXHwJg8V912sqUwE20kh3XnGV84GnjzaJmO5t38JheHQyRflpvt_hV2MB"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<span class="absolute bottom-4 left-4 bg-primary/20 backdrop-blur-md text-white px-3 py-1 rounded-full text-label-sm border border-white/30">ID: CAT-003</span>
+</div>
+<div class="p-lg space-y-md">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-headline-sm text-headline-sm font-bold text-on-surface">Desserts</h4>
+<p class="text-body-sm text-on-surface-variant">Une note sucrée pour conclure.</p>
+</div>
+<div class="bg-secondary-container text-on-secondary-container px-2 py-1 rounded-md text-label-sm font-bold">
+                                    32 Plats
+                                </div>
+</div>
+<div class="flex gap-2 pt-2 border-t border-outline-variant/30">
+<button class="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg border border-outline text-label-sm hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined text-[16px]" data-icon="edit">edit</span>
+                                    Modifier
+                                </button>
+<button class="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg border border-error/30 text-error text-label-sm hover:bg-error-container/20 transition-all">
+<span class="material-symbols-outlined text-[16px]" data-icon="delete">delete</span>
+                                    Supprimer
+                                </button>
+</div>
+</div>
+</div>
+<!-- Boissons -->
+<div class="group relative bg-surface rounded-[16px] overflow-hidden border border-outline-variant shadow-[0_4px_12px_rgba(48,109,41,0.04)] transition-all hover:shadow-[0_12px_24px_rgba(48,109,41,0.08)]">
+<div class="relative h-40">
+<img alt="Boissons" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A collection of artisanal cocktails and fresh beverages in crystal glassware, garnished with botanicals and fresh fruit. The scene is a modern bar counter made of polished dark wood, illuminated by warm, ambient copper lighting. The mood is sophisticated and refreshing, with a clear focus on the textures and colors of the drinks." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCeW6_PoD1QnPK0O4wD36zCBlQkPFOXin2-qLEjJBWvZAyZqle6CdHxu09YdF2bVFz0Fn7dUGZLWENqu-IAqkWmAfFbjkK3EeuQnwTfbx0-fs3RC7oiZ75uSRXB66uyb5FUhzg7MJfJKjwj1sEAkMW7jcXeTl7WnDG3MUFKTg00trIlTyd9dSi6jupAaXqLOISR99-L2CGm_D_sdzdOhjzElWwIZXUXtfUFDdd1kUvQzngBBx1yA6R5IqLz8Zec-z2vK6qkSmAWlv12"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<span class="absolute bottom-4 left-4 bg-primary/20 backdrop-blur-md text-white px-3 py-1 rounded-full text-label-sm border border-white/30">ID: CAT-004</span>
+</div>
+<div class="p-lg space-y-md">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-headline-sm text-headline-sm font-bold text-on-surface">Boissons</h4>
+<p class="text-body-sm text-on-surface-variant">Vins, cocktails et rafraîchissements.</p>
+</div>
+<div class="bg-secondary-container text-on-secondary-container px-2 py-1 rounded-md text-label-sm font-bold">
+                                    20 Plats
+                                </div>
+</div>
+<div class="flex gap-2 pt-2 border-t border-outline-variant/30">
+<button class="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg border border-outline text-label-sm hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined text-[16px]" data-icon="edit">edit</span>
+                                    Modifier
+                                </button>
+<button class="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg border border-error/30 text-error text-label-sm hover:bg-error-container/20 transition-all">
+<span class="material-symbols-outlined text-[16px]" data-icon="delete">delete</span>
+                                    Supprimer
+                                </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Table View for Detailed Management -->
+<section class="bg-surface rounded-xl border border-outline-variant shadow-[0_4px_12px_rgba(48,109,41,0.04)] overflow-hidden">
+<div class="p-lg border-b border-outline-variant/30 flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm">Détails Statistiques</h3>
+<div class="flex gap-2">
+<button class="p-2 hover:bg-surface-container rounded-lg transition-colors">
+<span class="material-symbols-outlined text-outline" data-icon="download">download</span>
+</button>
+<button class="p-2 hover:bg-surface-container rounded-lg transition-colors">
+<span class="material-symbols-outlined text-outline" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low">
+<th class="px-lg py-4 text-label-sm font-bold text-on-surface-variant uppercase">Nom de la Catégorie</th>
+<th class="px-lg py-4 text-label-sm font-bold text-on-surface-variant uppercase">Statut</th>
+<th class="px-lg py-4 text-label-sm font-bold text-on-surface-variant uppercase">Articles</th>
+<th class="px-lg py-4 text-label-sm font-bold text-on-surface-variant uppercase">Ventes (30j)</th>
+<th class="px-lg py-4 text-label-sm font-bold text-on-surface-variant uppercase text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/20">
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-lg py-4 font-label-md">Entrées</td>
+<td class="px-lg py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-container/30 text-on-secondary-container text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> Actif
+                                    </span>
+</td>
+<td class="px-lg py-4 text-body-sm">24 items</td>
+<td class="px-lg py-4 text-body-sm">1,240 €</td>
+<td class="px-lg py-4 text-right">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-lg py-4 font-label-md">Plats principaux</td>
+<td class="px-lg py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-container/30 text-on-secondary-container text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> Actif
+                                    </span>
+</td>
+<td class="px-lg py-4 text-body-sm">48 items</td>
+<td class="px-lg py-4 text-body-sm">5,890 €</td>
+<td class="px-lg py-4 text-right">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-lg py-4 font-label-md">Desserts</td>
+<td class="px-lg py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-container/30 text-on-secondary-container text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> Actif
+                                    </span>
+</td>
+<td class="px-lg py-4 text-body-sm">32 items</td>
+<td class="px-lg py-4 text-body-sm">2,150 €</td>
+<td class="px-lg py-4 text-right">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-md bg-surface-container-low/50 flex justify-between items-center text-label-sm text-on-surface-variant">
+<p>Affichage de 1-4 sur 4 catégories</p>
+<div class="flex gap-2">
+<button class="px-3 py-1 rounded border border-outline-variant disabled:opacity-50" disabled="">Précédent</button>
+<button class="px-3 py-1 rounded bg-primary text-on-primary">1</button>
+<button class="px-3 py-1 rounded border border-outline-variant disabled:opacity-50" disabled="">Suivant</button>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Floating Action Button (FAB) -->
+<button class="fixed bottom-margin-desktop right-margin-desktop bg-primary text-on-primary w-14 h-14 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50 md:hidden">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+<!-- Simple Add Category Modal (Hidden by Default) -->
+<div class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300" id="modal-backdrop">
+<div class="bg-surface w-full max-w-md m-4 rounded-[16px] shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300">
+<div class="p-lg bg-primary-container text-on-primary-container flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm">Nouvelle Catégorie</h3>
+<button class="p-1 hover:bg-white/10 rounded-full transition-colors" onclick="closeModal()">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<form class="p-lg space-y-lg">
+<div class="space-y-sm">
+<label class="text-label-md font-bold text-on-surface">Nom de la catégorie</label>
+<input class="w-full bg-white border border-outline/30 rounded-lg px-4 py-3 focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all" placeholder="ex: Petit-déjeuner" type="text"/>
+</div>
+<div class="space-y-sm">
+<label class="text-label-md font-bold text-on-surface">Description</label>
+<textarea class="w-full bg-white border border-outline/30 rounded-lg px-4 py-3 focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all" placeholder="Brève description de la catégorie..." rows="3"></textarea>
+</div>
+<div class="space-y-sm">
+<label class="text-label-md font-bold text-on-surface">Image de couverture</label>
+<div class="border-2 border-dashed border-outline-variant/50 rounded-lg p-lg text-center hover:bg-surface-container transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors" data-icon="upload_file">upload_file</span>
+<p class="text-label-sm text-on-surface-variant mt-2">Cliquez ou glissez une image ici</p>
+</div>
+</div>
+<div class="flex gap-md pt-4">
+<button class="flex-1 py-3 rounded-lg border border-outline font-bold text-on-surface hover:bg-surface-container transition-all" onclick="closeModal()" type="button">Annuler</button>
+<button class="flex-1 py-3 rounded-lg bg-primary text-on-primary font-bold shadow-lg active:scale-95 transition-all" type="submit">Créer</button>
+</div>
+</form>
+</div>
+</div>
+<script>
+        // Modal Interaction Logic
+        function openModal() {
+            const modal = document.getElementById('modal-backdrop');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.querySelector('div').classList.remove('scale-95');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal-backdrop');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modal.querySelector('div').classList.add('scale-95');
+        }
+
+        // Attach to "Ajouter une catégorie" buttons
+        document.querySelectorAll('button').forEach(btn => {
+            if (btn.innerText.includes('Ajouter') || btn.innerText.includes('Nouvelle')) {
+                btn.addEventListener('click', openModal);
+            }
+        });
+    </script>
+</body></html>

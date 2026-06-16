@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SmartRestaurant POS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&amp;family=Work+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-container": "#a9ed99",
+                      "on-secondary-fixed-variant": "#0c530e",
+                      "inverse-on-surface": "#eff2e8",
+                      "on-secondary-fixed": "#002201",
+                      "on-primary": "#ffffff",
+                      "outline": "#717a6c",
+                      "inverse-surface": "#2d322b",
+                      "primary-container": "#306d29",
+                      "background": "#f7fbf1",
+                      "surface-dim": "#d8dbd2",
+                      "on-tertiary-container": "#ffcedd",
+                      "on-background": "#191d17",
+                      "on-primary-fixed-variant": "#135211",
+                      "on-primary-fixed": "#002201",
+                      "on-error-container": "#93000a",
+                      "secondary": "#2a6c25",
+                      "surface-container-highest": "#e0e4da",
+                      "surface-tint": "#2e6b27",
+                      "surface-container-low": "#f2f5eb",
+                      "surface-container-high": "#e6e9e0",
+                      "outline-variant": "#c1c9ba",
+                      "primary-fixed-dim": "#94d786",
+                      "error-container": "#ffdad6",
+                      "on-surface": "#191d17",
+                      "secondary-fixed-dim": "#91d883",
+                      "tertiary-fixed-dim": "#ffb0cc",
+                      "secondary-fixed": "#acf59d",
+                      "on-tertiary-fixed": "#3e0020",
+                      "on-error": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "primary-fixed": "#b0f49f",
+                      "inverse-primary": "#94d786",
+                      "tertiary-container": "#994267",
+                      "on-tertiary-fixed-variant": "#7a294d",
+                      "surface-bright": "#f7fbf1",
+                      "error": "#ba1a1a",
+                      "on-secondary": "#ffffff",
+                      "secondary-container": "#acf59d",
+                      "surface-container": "#ecefe5",
+                      "on-surface-variant": "#41493d",
+                      "surface-variant": "#e0e4da",
+                      "tertiary-fixed": "#ffd9e4",
+                      "tertiary": "#7c2a4f",
+                      "primary": "#165413",
+                      "surface": "#f7fbf1",
+                      "on-secondary-container": "#30722a",
+                      "surface-container-lowest": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "lg": "24px",
+                      "2xl": "48px",
+                      "gutter": "24px",
+                      "margin-desktop": "40px",
+                      "3xl": "64px",
+                      "xl": "32px",
+                      "margin-mobile": "16px",
+                      "xs": "4px",
+                      "base": "4px",
+                      "sm": "8px",
+                      "md": "16px"
+              },
+              "fontFamily": {
+                      "headline-sm": [
+                              "Source Serif 4"
+                      ],
+                      "headline-md": [
+                              "Source Serif 4"
+                      ],
+                      "body-sm": [
+                              "Work Sans"
+                      ],
+                      "headline-lg-mobile": [
+                              "Source Serif 4"
+                      ],
+                      "body-lg": [
+                              "Work Sans"
+                      ],
+                      "display-lg": [
+                              "Source Serif 4"
+                      ],
+                      "body-md": [
+                              "Work Sans"
+                      ],
+                      "label-sm": [
+                              "Work Sans"
+                      ],
+                      "headline-lg": [
+                              "Source Serif 4"
+                      ],
+                      "label-md": [
+                              "Work Sans"
+                      ]
+              },
+              "fontSize": {
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.04em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Hide scrollbar for clean POS look */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c1c9ba;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background h-screen overflow-hidden flex flex-col font-body-md text-body-md">
+<!-- TopNavBar -->
+<header class="sticky top-0 z-50 flex justify-between items-center w-full px-margin-desktop h-16 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-md border-b border-outline-variant/30 shadow-sm">
+<div class="flex items-center gap-4">
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim">SmartRestaurant</h1>
+<span class="px-2 py-1 bg-surface-container-high rounded text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">Terminal de PDV 1</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden border border-outline-variant/30">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="A close-up headshot of a smiling restaurant staff member wearing a dark green apron against a softly blurred, brightly lit modern restaurant interior. The lighting is soft and natural, emphasizing a welcoming and professional atmosphere fitting for a modern corporate hospitality platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDo0dunNS3607HMRTjgJfAHF0e-d_3M5qNzkldtbVZ0lVT6aVSZJGgWJZ_t_saYJ99nHjAx1ImBiexdnBOxYnT4vbUw47TNBmdcO5xa268iuAGj3xelwkC00ofmSPDj4OLHUoOdrj4e8LlAJse0ZRQqCCVcSKIJvx7pcH3gzdDfN7gPQkos6-PYl0_Xeurp5iv9Rt36-VX4nCoZWjHNzESdJl08kCtD3-4k58keNvOY-mkk_gZLub_XHmdxo-Ds4S99YzkB35ZQSdr7"/>
+</div>
+</div>
+</header>
+<!-- Main Workspace Grid -->
+<main class="flex-1 flex overflow-hidden">
+<!-- Left Panel: Tables List -->
+<aside class="w-80 border-r border-outline-variant/30 bg-surface flex flex-col h-full shadow-[4px_0_12px_rgba(48,109,41,0.02)] z-10 relative">
+<div class="p-md border-b border-outline-variant/20">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-lowest border border-outline-variant/50 rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all font-body-sm text-body-sm" placeholder="Rechercher une table..." type="text"/>
+</div>
+<div class="flex gap-2 mt-sm overflow-x-auto pb-1 hide-scrollbar">
+<button class="px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full font-label-sm text-label-sm whitespace-nowrap">Actif (8)</button>
+<button class="px-3 py-1 border border-outline-variant text-on-surface-variant rounded-full font-label-sm text-label-sm whitespace-nowrap hover:bg-surface-container-low transition-colors">Disponible (12)</button>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-sm space-y-sm">
+<!-- Table Items -->
+<button class="w-full text-left p-md rounded-lg border border-outline-variant/30 bg-surface-container-lowest hover:bg-surface-container-low transition-colors flex justify-between items-center group">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Table 04</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">2 Invités • 45 min</p>
+</div>
+<div class="text-right">
+<span class="font-label-md text-label-md text-on-surface font-semibold">45 500 Ar</span>
+</div>
+</button>
+<button class="w-full text-left p-md rounded-lg border-2 border-primary bg-primary/5 transition-all flex justify-between items-center shadow-[0_4px_12px_rgba(48,109,41,0.04)] scale-[0.99]">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary font-bold">Table 12</h3>
+<p class="font-body-sm text-body-sm text-primary/80 mt-1">4 Invités • 1h 15m</p>
+</div>
+<div class="text-right flex flex-col items-end">
+<span class="font-label-md text-label-md text-primary font-bold">124 000 Ar</span>
+<span class="px-2 py-0.5 mt-1 bg-tertiary-container/10 text-tertiary rounded text-[10px] font-bold uppercase tracking-wider">Prêt</span>
+</div>
+</button>
+<button class="w-full text-left p-md rounded-lg border border-outline-variant/30 bg-surface-container-lowest hover:bg-surface-container-low transition-colors flex justify-between items-center group">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Table 18</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">6 Invités • 2h 05m</p>
+</div>
+<div class="text-right">
+<span class="font-label-md text-label-md text-on-surface font-semibold">210 750 Ar</span>
+</div>
+</button>
+<button class="w-full text-left p-md rounded-lg border border-outline-variant/30 bg-surface-container-lowest hover:bg-surface-container-low transition-colors flex justify-between items-center group">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Bar 02</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">1 Invité • 15 min</p>
+</div>
+<div class="text-right">
+<span class="font-label-md text-label-md text-on-surface font-semibold">18 000 Ar</span>
+</div>
+</button>
+</div>
+</aside>
+<!-- Center Panel: Order Details -->
+<section class="flex-1 flex flex-col bg-surface-container-lowest border-r border-outline-variant/30 relative">
+<!-- Header -->
+<div class="px-lg py-md border-b border-outline-variant/20 flex justify-between items-center bg-surface">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Table 12</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">person</span> Serveur : Sarah M.
+                        <span class="text-outline-variant">•</span>
+<span class="material-symbols-outlined text-[16px]">schedule</span> 19:45
+                    </p>
+</div>
+<div class="flex gap-2">
+<button class="p-2 border border-outline-variant/50 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" title="Diviser l'addition">
+<span class="material-symbols-outlined">call_split</span>
+</button>
+<button class="p-2 border border-outline-variant/50 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors" title="Ajouter une remise">
+<span class="material-symbols-outlined">local_offer</span>
+</button>
+</div>
+</div>
+<!-- Items List -->
+<div class="flex-1 overflow-y-auto p-lg">
+<div class="space-y-1">
+<!-- Item -->
+<div class="grid grid-cols-12 gap-4 py-3 border-b border-outline-variant/10 items-start group hover:bg-surface-container-lowest transition-colors -mx-4 px-4 rounded-lg">
+<div class="col-span-1 text-on-surface-variant font-label-md text-label-md pt-1">2x</div>
+<div class="col-span-7">
+<h4 class="font-label-md text-label-md text-on-surface font-semibold">Risotto aux truffes</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Sans champignons, supplément parmesan</p>
+</div>
+<div class="col-span-2 text-right text-on-surface-variant font-body-sm text-body-sm pt-1">24 000 Ar</div>
+<div class="col-span-2 text-right font-label-md text-label-md text-on-surface font-semibold pt-1">48 000 Ar</div>
+</div>
+<!-- Item -->
+<div class="grid grid-cols-12 gap-4 py-3 border-b border-outline-variant/10 items-start group hover:bg-surface-container-lowest transition-colors -mx-4 px-4 rounded-lg">
+<div class="col-span-1 text-on-surface-variant font-label-md text-label-md pt-1">1x</div>
+<div class="col-span-7">
+<h4 class="font-label-md text-label-md text-on-surface font-semibold">Burger Wagyu</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Saignant, salade d'accompagnement</p>
+</div>
+<div class="col-span-2 text-right text-on-surface-variant font-body-sm text-body-sm pt-1">32 000 Ar</div>
+<div class="col-span-2 text-right font-label-md text-label-md text-on-surface font-semibold pt-1">32 000 Ar</div>
+</div>
+<!-- Item -->
+<div class="grid grid-cols-12 gap-4 py-3 border-b border-outline-variant/10 items-start group hover:bg-surface-container-lowest transition-colors -mx-4 px-4 rounded-lg">
+<div class="col-span-1 text-on-surface-variant font-label-md text-label-md pt-1">3x</div>
+<div class="col-span-7">
+<h4 class="font-label-md text-label-md text-on-surface font-semibold">IPA Artisanale</h4>
+</div>
+<div class="col-span-2 text-right text-on-surface-variant font-body-sm text-body-sm pt-1">8 000 Ar</div>
+<div class="col-span-2 text-right font-label-md text-label-md text-on-surface font-semibold pt-1">24 000 Ar</div>
+</div>
+<!-- Item -->
+<div class="grid grid-cols-12 gap-4 py-3 border-b border-outline-variant/10 items-start group hover:bg-surface-container-lowest transition-colors -mx-4 px-4 rounded-lg">
+<div class="col-span-1 text-on-surface-variant font-label-md text-label-md pt-1">1x</div>
+<div class="col-span-7">
+<h4 class="font-label-md text-label-md text-on-surface font-semibold">Eau pétillante</h4>
+</div>
+<div class="col-span-2 text-right text-on-surface-variant font-body-sm text-body-sm pt-1">5 000 Ar</div>
+<div class="col-span-2 text-right font-label-md text-label-md text-on-surface font-semibold pt-1">5 000 Ar</div>
+</div>
+</div>
+</div>
+<!-- Totals Area -->
+<div class="bg-surface p-lg border-t border-outline-variant/20 shadow-[0_-4px_24px_rgba(48,109,41,0.03)] z-10">
+<div class="space-y-2 mb-4">
+<div class="flex justify-between text-on-surface-variant font-body-md text-body-md">
+<span>Sous-total</span>
+<span>109 000 Ar</span>
+</div>
+<div class="flex justify-between text-on-surface-variant font-body-md text-body-md">
+<span>TVA (8.5%)</span>
+<span>9 270 Ar</span>
+</div>
+<div class="flex justify-between text-on-surface-variant font-body-md text-body-md text-tertiary">
+<span>Remise (Promo)</span>
+<span>-5 000 Ar</span>
+</div>
+</div>
+<div class="flex justify-between items-end border-t border-outline-variant/20 pt-4">
+<span class="font-headline-md text-headline-md text-on-surface">Total à payer</span>
+<span class="font-display-lg text-display-lg text-primary leading-none">113 270 Ar</span>
+</div>
+</div>
+</section>
+<!-- Right Panel: Payment Actions -->
+<aside class="w-96 bg-surface-container-low flex flex-col p-lg gap-6 overflow-y-auto">
+<h3 class="font-headline-sm text-headline-sm text-on-surface border-b border-outline-variant/20 pb-2">Paiement</h3>
+<!-- Quick Cash Amounts -->
+<div class="grid grid-cols-3 gap-2">
+<button class="py-3 bg-surface border border-outline-variant/30 rounded-lg text-on-surface font-label-md text-label-md hover:bg-secondary-container hover:text-on-secondary-container hover:border-transparent transition-all shadow-sm">115 000 Ar</button>
+<button class="py-3 bg-surface border border-outline-variant/30 rounded-lg text-on-surface font-label-md text-label-md hover:bg-secondary-container hover:text-on-secondary-container hover:border-transparent transition-all shadow-sm">120 000 Ar</button>
+<button class="py-3 bg-surface border border-outline-variant/30 rounded-lg text-on-surface font-label-md text-label-md hover:bg-secondary-container hover:text-on-secondary-container hover:border-transparent transition-all shadow-sm">Montant exact</button>
+</div>
+<!-- Cash Input -->
+<div class="bg-surface p-4 rounded-xl border border-outline-variant/20 shadow-[0_4px_12px_rgba(48,109,41,0.04)] space-y-4">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1 uppercase tracking-wider">Espèces reçues</label>
+<div class="relative">
+<input class="w-full pl-4 pr-12 py-3 bg-surface-container-lowest border border-outline-variant/50 rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all font-headline-md text-headline-md text-on-surface text-right" type="number" value="120000"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 font-body-lg text-body-lg text-on-surface-variant">Ar</span>
+</div>
+</div>
+<div class="flex justify-between items-center pt-2 border-t border-outline-variant/10">
+<span class="font-label-md text-label-md text-on-surface-variant">Monnaie à rendre</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">6 730 Ar</span>
+</div>
+<button class="w-full py-4 bg-primary text-on-primary rounded-lg font-headline-sm text-headline-sm shadow-[0_4px_12px_rgba(48,109,41,0.2)] hover:bg-primary/90 transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+<span class="material-symbols-outlined icon-fill">payments</span> Valider le paiement
+                </button>
+</div>
+<div class="relative flex items-center py-2">
+<div class="flex-grow border-t border-outline-variant/30"></div>
+<span class="flex-shrink-0 mx-4 text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">Ou</span>
+<div class="flex-grow border-t border-outline-variant/30"></div>
+</div>
+<!-- Other Methods -->
+<div class="grid grid-cols-2 gap-3">
+<button class="py-4 bg-surface border border-outline-variant/30 rounded-xl text-on-surface hover:bg-surface-container-highest transition-all shadow-sm flex flex-col items-center justify-center gap-2 active:scale-[0.98]">
+<span class="material-symbols-outlined text-[28px] text-primary">credit_card</span>
+<span class="font-label-md text-label-md">Terminal de carte</span>
+</button>
+<button class="py-4 bg-surface border border-outline-variant/30 rounded-xl text-on-surface hover:bg-surface-container-highest transition-all shadow-sm flex flex-col items-center justify-center gap-2 active:scale-[0.98]">
+<span class="material-symbols-outlined text-[28px] text-secondary">phone_iphone</span>
+<span class="font-label-md text-label-md">Paiement mobile</span>
+</button>
+</div>
+<div class="mt-auto pt-6">
+<button class="w-full py-3 border-2 border-outline-variant/50 text-on-surface rounded-lg font-label-md text-label-md hover:bg-surface-container transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">receipt_long</span> Générer un reçu
+                </button>
+</div>
+</aside>
+</main>
+</body></html>

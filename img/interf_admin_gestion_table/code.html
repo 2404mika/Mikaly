@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gestion des tables - SmartRestaurant</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;600;700&amp;family=Work+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-container": "#a9ed99",
+                        "on-secondary-fixed-variant": "#0c530e",
+                        "inverse-on-surface": "#eff2e8",
+                        "on-secondary-fixed": "#002201",
+                        "on-primary": "#ffffff",
+                        "outline": "#717a6c",
+                        "inverse-surface": "#2d322b",
+                        "primary-container": "#306d29",
+                        "background": "#f7fbf1",
+                        "surface-dim": "#d8dbd2",
+                        "on-tertiary-container": "#ffcedd",
+                        "on-background": "#191d17",
+                        "on-primary-fixed-variant": "#135211",
+                        "on-primary-fixed": "#002201",
+                        "on-error-container": "#93000a",
+                        "secondary": "#2a6c25",
+                        "surface-container-highest": "#e0e4da",
+                        "surface-tint": "#2e6b27",
+                        "surface-container-low": "#f2f5eb",
+                        "surface-container-high": "#e6e9e0",
+                        "outline-variant": "#c1c9ba",
+                        "primary-fixed-dim": "#94d786",
+                        "error-container": "#ffdad6",
+                        "on-surface": "#191d17",
+                        "secondary-fixed-dim": "#91d883",
+                        "tertiary-fixed-dim": "#ffb0cc",
+                        "secondary-fixed": "#acf59d",
+                        "on-tertiary-fixed": "#3e0020",
+                        "on-error": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#b0f49f",
+                        "inverse-primary": "#94d786",
+                        "tertiary-container": "#994267",
+                        "on-tertiary-fixed-variant": "#7a294d",
+                        "surface-bright": "#f7fbf1",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#acf59d",
+                        "surface-container": "#ecefe5",
+                        "on-surface-variant": "#41493d",
+                        "surface-variant": "#e0e4da",
+                        "tertiary-fixed": "#ffd9e4",
+                        "tertiary": "#7c2a4f",
+                        "primary": "#165413",
+                        "surface": "#f7fbf1",
+                        "on-secondary-container": "#30722a",
+                        "surface-container-lowest": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "2xl": "48px",
+                        "gutter": "24px",
+                        "margin-desktop": "40px",
+                        "3xl": "64px",
+                        "xl": "32px",
+                        "margin-mobile": "16px",
+                        "xs": "4px",
+                        "base": "4px",
+                        "sm": "8px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Source Serif 4"],
+                        "headline-md": ["Source Serif 4"],
+                        "body-sm": ["Work Sans"],
+                        "headline-lg-mobile": ["Source Serif 4"],
+                        "body-lg": ["Work Sans"],
+                        "display-lg": ["Source Serif 4"],
+                        "body-md": ["Work Sans"],
+                        "label-sm": ["Work Sans"],
+                        "headline-lg": ["Source Serif 4"],
+                        "label-md": ["Work Sans"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #F7F7F5; }
+        .glass-panel { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); }
+    </style>
+</head>
+<body class="h-full flex overflow-hidden font-body-md text-on-surface bg-background">
+<!-- SideNavBar (Desktop) -->
+<nav class="hidden md:flex flex-col h-screen w-64 bg-surface-container-low border-r border-outline-variant/30 shadow-md py-lg px-md space-y-sm z-40 fixed left-0 top-0">
+<div class="mb-xl px-sm">
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">SmartRestaurant</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Suite de Gestion</p>
+</div>
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-sm px-md rounded-lg shadow-sm hover:bg-surface-tint transition-colors mb-md flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">add</span>
+            Nouvelle Commande
+        </button>
+<div class="flex-1 space-y-xs overflow-y-auto">
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Tableau de bord</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-label-md text-label-md">Commandes</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg bg-secondary-container text-on-secondary-container font-semibold translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">restaurant</span>
+<span class="font-label-md text-label-md">Tables</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined">kitchen</span>
+<span class="font-label-md text-label-md">Cuisine</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-md text-label-md">Inventaire</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Personnel</span>
+</a>
+</div>
+<div class="mt-auto pt-md border-t border-outline-variant/30 space-y-xs">
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined">support_agent</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md text-label-md">Déconnexion</span>
+</a>
+</div>
+</nav>
+<!-- TopNavBar (Mobile) -->
+<header class="md:hidden sticky top-0 z-50 flex justify-between items-center w-full px-margin-mobile h-16 bg-surface/80 backdrop-blur-md border-b border-outline-variant/30 shadow-sm fixed w-full">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">SmartRestaurant</h1>
+<div class="flex items-center gap-sm text-primary">
+<button class="p-xs rounded-full hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined">notifications</span></button>
+<button class="p-xs rounded-full hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined">menu</span></button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-64 pt-16 md:pt-0 h-screen overflow-y-auto overflow-x-hidden bg-background relative">
+<!-- Header Section -->
+<div class="sticky top-0 z-30 glass-panel border-b border-outline-variant/20 px-margin-mobile md:px-margin-desktop py-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-md">
+<div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Gestion des Tables</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-xs">Salle Principale</p>
+</div>
+<div class="flex flex-wrap items-center gap-sm">
+<button class="flex items-center gap-xs px-md py-sm bg-primary text-on-primary font-label-md text-label-md rounded-lg shadow-sm hover:bg-surface-tint transition-colors">
+<span class="material-symbols-outlined text-[18px]">qr_code_2</span>
+                    Générer tous les QR Codes
+                </button>
+</div>
+</div>
+<div class="p-margin-mobile md:p-margin-desktop grid grid-cols-1 lg:grid-cols-3 gap-lg">
+<!-- Form to add table -->
+<div class="lg:col-span-1 bg-surface-container-lowest rounded-xl border border-outline-variant/20 shadow-sm p-lg h-fit">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-md">Ajouter une Table</h3>
+<form class="space-y-md">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Numéro</label>
+<input class="w-full rounded-lg border-outline-variant bg-surface px-md py-sm focus:ring-primary focus:border-primary text-body-md" placeholder="Ex: T7" type="text"/>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Capacité</label>
+<input class="w-full rounded-lg border-outline-variant bg-surface px-md py-sm focus:ring-primary focus:border-primary text-body-md" placeholder="Ex: 4" type="number"/>
+</div>
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-sm rounded-lg hover:bg-surface-tint transition-colors" type="button">
+                    Ajouter la Table
+                </button>
+</form>
+</div>
+<!-- List of tables -->
+<div class="lg:col-span-2 bg-surface-container-lowest rounded-xl border border-outline-variant/20 shadow-sm p-lg">
+<div class="flex justify-between items-center mb-md pb-sm border-b border-outline-variant/20">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Liste des Tables</h3>
+<!-- Legend -->
+<div class="flex gap-md items-center overflow-x-auto">
+<div class="flex items-center gap-xs">
+<div class="w-3 h-3 rounded-full bg-surface-variant border border-outline-variant"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Libre</span>
+</div>
+<div class="flex items-center gap-xs">
+<div class="w-3 h-3 rounded-full bg-primary-container border border-primary"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Occupée</span>
+</div>
+<div class="flex items-center gap-xs">
+<div class="w-3 h-3 rounded-full bg-tertiary-container border border-tertiary"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Réservée</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-md">
+<!-- T1 Libre -->
+<div class="bg-surface-variant/30 border border-outline-variant/50 rounded-lg p-md flex flex-col cursor-pointer hover:shadow-md transition-shadow" onclick="openDetails('Table 1', 'Libre', '4/4')">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-headline-md text-headline-md text-on-surface">T1</span>
+<div class="w-3 h-3 rounded-full bg-surface-variant border border-outline-variant"></div>
+</div>
+<div class="flex items-center gap-1 opacity-70">
+<span class="material-symbols-outlined text-[16px]">person</span>
+<span class="font-label-md text-label-md">4 places</span>
+</div>
+</div>
+<!-- T2 Occupied -->
+<div class="bg-primary-container/20 border border-primary/50 rounded-lg p-md flex flex-col cursor-pointer hover:shadow-md transition-shadow" onclick="openDetails('Table 2', 'Occupée', '2/2')">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-headline-md text-headline-md text-on-surface">T2</span>
+<div class="w-3 h-3 rounded-full bg-primary-container border border-primary"></div>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]">person</span>
+<span class="font-label-md text-label-md">2/2 occupées</span>
+</div>
+</div>
+<!-- T3 Reserved -->
+<div class="bg-tertiary-container/10 border border-tertiary/50 rounded-lg p-md flex flex-col cursor-pointer hover:shadow-md transition-shadow" onclick="openDetails('Table 3', 'Réservée', '0/6')">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-headline-md text-headline-md text-on-surface">T3</span>
+<div class="w-3 h-3 rounded-full bg-tertiary-container border border-tertiary"></div>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant mb-1">
+<span class="material-symbols-outlined text-[16px]">person</span>
+<span class="font-label-md text-label-md">6 places</span>
+</div>
+<span class="font-label-sm text-label-sm text-tertiary px-2 py-0.5 bg-tertiary/10 rounded-full w-fit">19:00</span>
+</div>
+<!-- T4 Libre -->
+<div class="bg-surface-variant/30 border border-outline-variant/50 rounded-lg p-md flex flex-col cursor-pointer hover:shadow-md transition-shadow" onclick="openDetails('Table 4', 'Libre', '8/8')">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-headline-md text-headline-md text-on-surface">T4</span>
+<div class="w-3 h-3 rounded-full bg-surface-variant border border-outline-variant"></div>
+</div>
+<div class="flex items-center gap-1 opacity-70">
+<span class="material-symbols-outlined text-[16px]">person</span>
+<span class="font-label-md text-label-md">8 places</span>
+</div>
+</div>
+<!-- T5 Occupied -->
+<div class="bg-primary-container/20 border border-primary/50 rounded-lg p-md flex flex-col cursor-pointer hover:shadow-md transition-shadow relative" onclick="openDetails('Table 5', 'Occupée', '3/6')">
+<div class="absolute -top-2 -right-2 w-5 h-5 bg-error text-on-error rounded-full text-xs flex items-center justify-center font-bold shadow-sm">!</div>
+<div class="flex justify-between items-start mb-sm">
+<span class="font-headline-md text-headline-md text-on-surface">T5</span>
+<div class="w-3 h-3 rounded-full bg-primary-container border border-primary"></div>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]">person</span>
+<span class="font-label-md text-label-md">3/6 occupées</span>
+</div>
+</div>
+<!-- T6 Occupied -->
+<div class="bg-primary-container/20 border border-primary/50 rounded-lg p-md flex flex-col cursor-pointer hover:shadow-md transition-shadow" onclick="openDetails('Table 6', 'Occupée', '2/2')">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-headline-md text-headline-md text-on-surface">T6</span>
+<div class="w-3 h-3 rounded-full bg-primary-container border border-primary"></div>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]">person</span>
+<span class="font-label-md text-label-md">2/2 occupées</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Side Panel for Table Details (Hidden by default, simulated toggle via JS) -->
+<aside class="fixed right-0 top-0 h-screen w-80 bg-surface border-l border-outline-variant/20 shadow-[-12px_0_24px_rgba(48,109,41,0.05)] transform translate-x-full transition-transform duration-300 z-50 flex flex-col" id="details-panel">
+<div class="flex justify-between items-center p-lg border-b border-outline-variant/20">
+<h3 class="font-headline-md text-headline-md text-on-surface" id="panel-title">Détails de la Table</h3>
+<button class="p-xs rounded-full hover:bg-surface-container-high transition-colors text-on-surface-variant" onclick="closeDetails()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="p-lg flex-1 overflow-y-auto">
+<div class="flex items-center gap-sm mb-lg">
+<div class="w-4 h-4 rounded-full bg-surface-variant border border-outline-variant" id="panel-status-indicator"></div>
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider" id="panel-status-text">Libre</span>
+</div>
+<div class="bg-surface-container-low rounded-xl p-md mb-lg border border-outline-variant/20">
+<div class="flex justify-between items-center mb-sm">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Capacité</span>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-on-surface text-[18px]">person</span>
+<span class="font-label-md text-label-md font-bold text-on-surface" id="panel-capacity">4/4</span>
+</div>
+</div>
+<div class="w-full bg-surface-variant rounded-full h-1.5 mt-2">
+<div class="bg-primary h-1.5 rounded-full" id="panel-capacity-bar" style="width: 0%"></div>
+</div>
+</div>
+<div class="border border-outline-variant/20 rounded-xl p-md flex flex-col items-center justify-center bg-surface-container-lowest">
+<span class="font-label-md text-label-md text-on-surface mb-md">QR Code de la Table</span>
+<!-- Mock QR Code Box -->
+<div class="w-32 h-32 bg-surface-variant/30 border border-outline-variant/50 rounded-lg flex items-center justify-center mb-md relative overflow-hidden group cursor-pointer">
+<span class="material-symbols-outlined text-4xl text-outline opacity-50 group-hover:scale-110 transition-transform">qr_code_2</span>
+<div class="absolute inset-0 bg-primary/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm">
+<span class="font-label-sm text-label-sm font-bold text-primary">Imprimer</span>
+</div>
+</div>
+<button class="w-full py-2 border border-outline-variant text-on-surface font-label-sm text-label-sm rounded-lg hover:bg-surface-container-high transition-colors">
+                    Télécharger QR
+                </button>
+</div>
+<div class="mt-lg flex flex-col gap-sm" id="panel-actions">
+<!-- Actions will be injected based on status -->
+<button class="w-full py-sm bg-primary text-on-primary font-label-md text-label-md rounded-lg shadow-sm hover:bg-surface-tint transition-colors">Nouvelle Commande</button>
+</div>
+</div>
+</aside>
+<!-- Overlay for mobile/sidebar -->
+<div class="fixed inset-0 bg-on-background/20 backdrop-blur-sm z-40 hidden transition-opacity" id="overlay" onclick="closeDetails()"></div>
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface/90 backdrop-blur-xl border-t border-outline-variant/20 rounded-t-xl shadow-[0_-4px_12px_rgba(48,109,41,0.04)]">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high rounded-lg p-xs transition-colors" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm mt-xs">Accueil</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high rounded-lg p-xs transition-colors" href="#">
+<span class="material-symbols-outlined">list_alt</span>
+<span class="font-label-sm text-label-sm mt-xs">Commandes</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">restaurant</span>
+<span class="font-label-sm text-label-sm mt-xs">Tables</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high rounded-lg p-xs transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm mt-xs">Profil</span>
+</a>
+</nav>
+<script>
+        function openDetails(tableName, status, capacity) {
+            const panel = document.getElementById('details-panel');
+            const overlay = document.getElementById('overlay');
+            const title = document.getElementById('panel-title');
+            const statusText = document.getElementById('panel-status-text');
+            const statusIndicator = document.getElementById('panel-status-indicator');
+            const capText = document.getElementById('panel-capacity');
+            const capBar = document.getElementById('panel-capacity-bar');
+            const actions = document.getElementById('panel-actions');
+
+            title.innerText = tableName;
+            statusText.innerText = status;
+            capText.innerText = capacity;
+
+            // Parse capacity for bar
+            let [current, max] = capacity.split('/').map(Number);
+            if(max === 0) max = 1; // avoid div by 0
+            let percent = (current / max) * 100;
+            if(status === 'Libre') percent = 0;
+            capBar.style.width = `${percent}%`;
+
+            // Reset classes
+            statusIndicator.className = 'w-4 h-4 rounded-full border';
+            actions.innerHTML = '';
+
+            if (status === 'Libre') {
+                statusIndicator.classList.add('bg-surface-variant', 'border-outline-variant');
+                actions.innerHTML = `<button class="w-full py-sm bg-primary text-on-primary font-label-md text-label-md rounded-lg shadow-sm hover:bg-surface-tint transition-colors">Installer les Clients</button>`;
+            } else if (status === 'Occupée') {
+                statusIndicator.classList.add('bg-primary-container', 'border-primary');
+                actions.innerHTML = `
+                    <button class="w-full py-sm border border-primary text-primary font-label-md text-label-md rounded-lg hover:bg-primary/5 transition-colors">Voir la Commande</button>
+                    <button class="w-full py-sm border border-error text-error font-label-md text-label-md rounded-lg hover:bg-error/5 transition-colors mt-2">Libérer la Table</button>
+                `;
+            } else if (status === 'Réservée') {
+                statusIndicator.classList.add('bg-tertiary-container', 'border-tertiary');
+                actions.innerHTML = `<button class="w-full py-sm bg-tertiary text-on-tertiary font-label-md text-label-md rounded-lg shadow-sm hover:bg-tertiary/90 transition-colors">Confirmer la Réservation</button>`;
+            }
+
+            panel.classList.remove('translate-x-full');
+            overlay.classList.remove('hidden');
+        }
+
+        function closeDetails() {
+            document.getElementById('details-panel').classList.add('translate-x-full');
+            document.getElementById('overlay').classList.add('hidden');
+        }
+    </script>
+</body></html>

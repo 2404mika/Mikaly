@@ -1,0 +1,268 @@
+CAHIER DES CHARGES
+Projet : Système de Gestion Digitale de Restaurant avec Commande QR Code, Commande en Ligne et Module de Caisse
+
+1. Présentation du projet
+Le présent projet vise à développer une plateforme web complète de gestion de restaurant permettant la digitalisation des commandes sur place via QR Code et des commandes en ligne.
+Le système remplace la prise de commande traditionnelle par serveur par un processus entièrement numérique, incluant la gestion de la cuisine, des livraisons, des paiements via caisse, ainsi qu’un tableau de bord administrateur.
+Le restaurant fonctionne avec plusieurs interfaces spécialisées selon les rôles : client, cuisinier, livreur, caissier et administrateur.
+
+2. Objectifs du projet
+Les objectifs principaux sont :
+    • Digitaliser la prise de commande en restaurant.
+    • Réduire les erreurs humaines dans les commandes.
+    • Améliorer la rapidité du service.
+    • Centraliser la gestion des commandes.
+    • Faciliter les paiements via un module de caisse.
+    • Permettre les commandes en ligne avec livraison ou retrait.
+    • Fournir une vision globale de l’activité du restaurant.
+
+3. Acteurs du système
+Le système comprend cinq types d’utilisateurs :
+3.1 Client
+Le client peut :
+    • Commander sur place via QR Code.
+    • Commander en ligne.
+    • Réserver une table.
+    • Consulter son historique de commandes.
+    • Effectuer un paiement (via interface caisse sur place ou en ligne).
+    • Noter et commenter le service (optionnel).
+
+3.2 Administrateur
+L’administrateur possède un accès complet au système.
+Il peut :
+    • Gérer les utilisateurs (clients, cuisiniers, livreurs, caissiers).
+    • Gérer les repas.
+    • Gérer les catégories.
+    • Gérer les tables et QR Codes.
+    • Superviser les commandes.
+    • Superviser les paiements.
+    • Gérer les réservations.
+    • Consulter les statistiques globales.
+    • Visualiser toute l’activité du système en temps réel.
+
+3.3 Cuisinier
+Le cuisinier peut :
+    • Consulter les commandes reçues.
+    • Mettre à jour le statut des commandes :
+        ◦ Commande reçue
+        ◦ En préparation
+        ◦ Prête
+
+3.4 Livreur
+Le livreur peut :
+    • Consulter les commandes à livrer.
+    • Accepter une livraison.
+    • Suivre l’état de livraison.
+    • Marquer une commande comme livrée.
+
+3.5 Caissier
+Le caissier est responsable des paiements sur place.
+Il peut :
+    • Consulter les commandes par table.
+    • Rechercher une table via numéro.
+    • Vérifier les commandes associées.
+    • Encaisser les paiements.
+    • Calculer automatiquement le rendu monnaie.
+    • Valider les paiements.
+
+4. Gestion des commandes sur place (QR Code)
+4.1 Accès
+Chaque table possède un QR Code unique.
+Le client :
+    • Scanne le QR Code.
+    • Le système identifie automatiquement la table.
+    • Le client saisit son nom.
+    • Une session de commande est créée.
+Le client peut commander plusieurs fois sans rescanner tant que la session est active.
+
+4.2 Menu
+Le client peut :
+    • Consulter les plats disponibles.
+    • Rechercher un plat.
+    • Filtrer par catégorie.
+    • Voir image, description et prix.
+
+4.3 Panier
+Le client peut :
+    • Ajouter des plats au panier.
+    • Modifier les quantités.
+    • Supprimer des articles.
+Le total est recalculé automatiquement après chaque modification.
+
+4.4 Suivi des commandes
+États possibles :
+    • Commande reçue
+    • En préparation
+    • Prête
+    • Servie
+
+4.5 Fin de commande
+À la fin du repas :
+    • Le client clique sur “Quitter la table”.
+    • Un reçu de consommation est généré :
+        ◦ Nom du client
+        ◦ Table
+        ◦ Liste des commandes
+        ◦ Total
+Le client se dirige ensuite vers le caissier pour paiement.
+
+5. Gestion des commandes en ligne
+5.1 Fonctionnalités client
+    • Création de compte
+    • Connexion
+    • Consultation du menu
+    • Ajout au panier
+
+5.2 Livraison
+    • Frais de livraison fixe : 4 000 Ar
+    • A recuperer sur le point de vente
+
+5.3 Validation de commande
+Avant validation :
+    • Détail des articles
+    • Sous-total
+    • Frais de livraison (sans frais de livraison si a recuperer sur le point de vente) mais toujours paiement via en ligne
+    • Total final
+
+5.4 Historique
+    • Commandes passées
+    • Paiements effectués
+
+6. Gestion des repas
+Les repas sont déjà prêts à être commandés.
+Chaque repas contient :
+    • Nom
+    • Description
+    • Prix
+    • Image
+    • Catégorie
+    • Disponibilité
+Statut :
+    • Disponible
+    • Indisponible
+
+7. Gestion des catégories
+    • Entrées
+    • Plats principaux
+    • Desserts
+    • Boissons
+CRUD complet par l’administrateur.
+
+8. Gestion des tables
+Chaque table est définie par :
+    • Numéro de table (auto-incrémenté)
+    • QR Code généré automatiquement
+    • Nombre de places
+    • Statut :
+        ◦ Libre
+        ◦ Occupée
+Le QR Code permet d’identifier directement la table lors de la commande.
+
+9. Gestion de la cuisine
+Interface dédiée au cuisinier.
+Le cuisinier peut :
+    • Voir les commandes reçues
+    • Mettre à jour les statuts :
+        ◦ Commande reçue
+        ◦ En préparation
+        ◦ Prête
+Les mises à jour sont visibles en temps réel côté client.
+
+10. Gestion des livraisons
+Le livreur peut :
+    • Voir les commandes à livrer
+    • Accepter une livraison
+    • Voir les informations client
+    • Marquer une commande comme livrée
+
+11. Module de caisse (paiement sur place)
+11.1 Fonctionnement
+Le caissier utilise une interface dédiée permettant :
+    • Consultation des tables
+    • Recherche par numéro de table
+    • Visualisation des commandes associées
+
+11.2 Processus de paiement
+    1. Le client présente son ticket ou numéro de table
+    2. Le caissier sélectionne la table
+    3. Le système affiche les commandes
+    4. Le caissier calcule le total
+    5. Le client paie
+
+11.3 Calcul du paiement
+Le caissier saisit :
+    • Montant total
+    • Montant payé
+    • Montant rendu (calcul automatique)
+
+11.4 Modes de paiement
+    • Espèces
+    • Mobile Money
+
+11.5 Validation
+Après paiement :
+    • Commande marquée comme payée
+    • Table devient libre
+    • Reçu généré
+
+12. Réservation de table
+Le client peut réserver :
+    • Nom
+    • Téléphone
+    • Date
+    • Heure
+    • Nombre de personnes
+L’administrateur valide ou refuse la réservation.
+
+13. Gestion des avis (OPTIONNEL)
+Le client peut :
+    • Donner une note (1 à 5 étoiles)
+    • Laisser un commentaire
+Les avis sont optionnels.
+L’administrateur peut :
+    • Consulter les avis
+    • Supprimer les avis inappropriés
+
+14. Tableau de bord administrateur
+Le dashboard permet une supervision globale du système avec graphiques dynamiques.
+Indicateurs :
+    • Chiffre d’affaires journalier et mensuel
+    • Nombre total de commandes
+    • Commandes sur place / en ligne
+    • Plats les plus vendus
+    • Revenus par catégorie
+    • Activité des utilisateurs
+    • Statistiques de satisfaction (si avis activés)
+
+15. Architecture technique
+15.1 Frontend
+    • React
+    • TypeScript
+    • Tailwind CSS
+    • Axios
+    • React Router
+15.2 Backend
+    • Node.js
+    • node-oracledb
+15.3 Authentification
+    • JWT (Json Web Token)
+15.4 Base de données
+    • Oracle Database
+
+16. Fonctionnement global du système
+    1. Client commande via QR Code ou en ligne
+    2. Commande transmise à la cuisine
+    3. Cuisine prépare et met à jour le statut
+    4. Commande servie
+    5. Paiement effectué via caissier (sur place) ou en ligne
+    6. Commande finalisée
+    7. (Optionnel) Avis client
+
+17. Résultat attendu
+Le système final doit permettre :
+    • Une gestion complète des commandes de restaurant
+    • Une séparation claire des rôles utilisateurs
+    • Une expérience fluide pour le client
+    • Une gestion efficace des commandes côté restaurant
+    • Une centralisation des paiements via caisse ou en ligne
+    • Une supervision globale via dashboard administrateur

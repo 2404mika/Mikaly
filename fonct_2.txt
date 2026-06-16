@@ -1,0 +1,39 @@
+COMMANDE SUR LA TABLE : 
+arriver sur la table -> scanner code qr -> affichage interface -> Entrer nom
+-> affichage menu -> client choisie le menu -> ajouter panier -> confirmer commande -> voir dans le panier sa commande avec status recu (ctd le repas est recu par le cuisinier)
+Interface Cuisiner : le cuisinier voit la nouvelle commande sur la table -> change le status de la commande en "En preparation" -> Le cuisinier change le status de la commande en "Prete"
+Le status de la commande dans le panier du client sur la table se change en "Prete" <== CTD que la commande du client est arrivee sur la table
+Le client peut faire d'autre commande sur la table
+Le client veut maintenant quitter la table : le client quitte sur le bouton "Quitter la table" -> Un recu s'affiche -> Le client telecharge le recu -> Le client se dirige vers le caissier pour le paiement
+
+
+COMMANDE EN LIGNE : 
+Le client vas sur le site -> Se connecte s'il n'est pas encore connecte -> Va dans la page "Menu" pour voir les menu -> Le client ajoute dans le panier les repas a commander -> Le client confirme la commande et procede au menu de paiement -> Le client choisi le type "A livrer" ou "A recuperer" : 
+	Si "A livrer" : Le client insere le lieu de livraison -> Et aussi l'heure de la livraison -> Le client choisie le mode paiement -> Le client valide le paiement -> Affichage du stats de sa commande : Recu, en preparation, Livreur en route, commande Recu
+	Si "A recuperer" : Le client choisie le mode de paiement -> Le client valide le paiement -> Affichage de status de sa commande
+Interface cuisinier : Lorsque le client a valide son paiement -> Dans l'interface Cuisiner : Il y a section commande en ligne et commande Sur place.
+Le cuisinier entre dans la section commande en ligne -> Le cuisinier change le status de la commande en ligne en "En preparation". Le status de la commande dans l'interface client change aussi en "En preparation". Le cuisinier change le status de la commande en ligne en "Prete".
+Dans l'interface Livreur : Lorsque le cuisinier a change le status de la commande en ligne en "Prete" : La commande est maintenant afficher dans l'interface Livreur. Le livreur voit la commande en ligne du client -> Le livreur peut voir les details de la commande a livrer -> Le livreur peut maintenant accepter la livraison -> Le status de la commande en ligne dans l'interface client se change en "Livreur en route" -> Le livreur est arriver sur le lieu de livraison -> Le livreur change le status de la commande en ligne en "Commande livree" -> Le livreur imprime le recu de la commande en ligne du client -> Tous les commande livres sont deplace dans une section "Commande livrees" dans l'interface Livreur.
+Les clients peuvent voir toutes ses commandes dans "Mes reservations"
+
+
+RESERVATION DE TABLE DANS LE SITE : 
+Le client vas sur le site -> Se connecte s'il n'est pas encore connecte -> Va dans la page "Reservation" -> Le client voit toutes les tables -> Le client choisie la table a reserver -> Affichage de formulaire sur les informations : Date, heure pour la reservation,... -> Le client confirme la reservation
+
+
+INTERFACE CAISSIER : Uniquement pour les menus sur table.
+Toutes les commandes sur table avec status "Prete" sont afficher dans l'interface Caissier avec leurs num tables correpodant.
+Le client quitte sur le bouton "Quitter la table" -> Affiche de recu -> Le client montre le recu au caissier -> Le Caissier regarde le recu et le numero de table -> Le Caissier clique sur la table de la client -> Affichage des repas que le client a commande sur table -> Le Caissier procede sur le paiement -> Le caissier valide le paiement et Telecharge le Recu. Les tables payer sont deplacees dans la section Historique dans l'interface client.
+
+INTERFACE ADMINISTRATEUR : 
+L'admin voit tous les actions que ce soit fait le client, cuisinier, livreur, caissier
+Il peut voir tous les commandes sur places, toutes les commandes en ligne
+Tous les historiques de paiement sur place et les commandes en ligne
+Il peut gerer les  categories, les repas et les tableau du Restaurant ==> CRUD
+==> C'est l'admin qui entre si il y a u nouveau caissier ou nouveau livreur ou nouveau cuisiner. 
+Il peut aussi gerer les utilisateurs (Livreur, Caissier, Livreur), il ne peut pas ajouter de client mais peut voir, modifier et supprimer les client inscrit dans le site.
+
+
+** Le login des clients se font par la creation de compte et la page de connexion dans le site web du restaurant.
+** Le Livreur, Caissier et Cuisinier se fait par un seul page de login
+** L'Admin a son propre interface login.

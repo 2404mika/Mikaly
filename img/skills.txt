@@ -1,0 +1,5 @@
+npx skills add https://github.com/jakubkrehel/make-interfaces-feel-better --skill make-interfaces-feel-better;
+npx skills add https://github.com/brianlovin/claude-config --skill simplify;
+npx skills add https://github.com/anthropics/skills --skill frontend-design;
+npx skills add https://github.com/nextlevelbuilder/ui-ux-pro-max-skill --skill ui-ux-pro-max;
+npx skills add https://github.com/shadcn/ui --skill shadcn;

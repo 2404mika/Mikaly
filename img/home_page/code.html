@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SmartRestaurant - Elevate Your Dining Experience</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;600;700&amp;family=Work+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-container": "#a9ed99",
+                    "on-secondary-fixed-variant": "#0c530e",
+                    "inverse-on-surface": "#eff2e8",
+                    "on-secondary-fixed": "#002201",
+                    "on-primary": "#ffffff",
+                    "outline": "#717a6c",
+                    "inverse-surface": "#2d322b",
+                    "primary-container": "#306d29",
+                    "background": "#f7fbf1",
+                    "surface-dim": "#d8dbd2",
+                    "on-tertiary-container": "#ffcedd",
+                    "on-background": "#191d17",
+                    "on-primary-fixed-variant": "#135211",
+                    "on-primary-fixed": "#002201",
+                    "on-error-container": "#93000a",
+                    "secondary": "#2a6c25",
+                    "surface-container-highest": "#e0e4da",
+                    "surface-tint": "#2e6b27",
+                    "surface-container-low": "#f2f5eb",
+                    "surface-container-high": "#e6e9e0",
+                    "outline-variant": "#c1c9ba",
+                    "primary-fixed-dim": "#94d786",
+                    "error-container": "#ffdad6",
+                    "on-surface": "#191d17",
+                    "secondary-fixed-dim": "#91d883",
+                    "tertiary-fixed-dim": "#ffb0cc",
+                    "secondary-fixed": "#acf59d",
+                    "on-tertiary-fixed": "#3e0020",
+                    "on-error": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "primary-fixed": "#b0f49f",
+                    "inverse-primary": "#94d786",
+                    "tertiary-container": "#994267",
+                    "on-tertiary-fixed-variant": "#7a294d",
+                    "surface-bright": "#f7fbf1",
+                    "error": "#ba1a1a",
+                    "on-secondary": "#ffffff",
+                    "secondary-container": "#acf59d",
+                    "surface-container": "#ecefe5",
+                    "on-surface-variant": "#41493d",
+                    "surface-variant": "#e0e4da",
+                    "tertiary-fixed": "#ffd9e4",
+                    "tertiary": "#7c2a4f",
+                    "primary": "#165413",
+                    "surface": "#f7fbf1",
+                    "on-secondary-container": "#30722a",
+                    "surface-container-lowest": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "lg": "24px",
+                    "2xl": "48px",
+                    "gutter": "24px",
+                    "margin-desktop": "40px",
+                    "3xl": "64px",
+                    "xl": "32px",
+                    "margin-mobile": "16px",
+                    "xs": "4px",
+                    "base": "4px",
+                    "sm": "8px",
+                    "md": "16px"
+            },
+            "fontFamily": {
+                    "headline-sm": ["Source Serif 4"],
+                    "headline-md": ["Source Serif 4"],
+                    "body-sm": ["Work Sans"],
+                    "headline-lg-mobile": ["Source Serif 4"],
+                    "body-lg": ["Work Sans"],
+                    "display-lg": ["Source Serif 4"],
+                    "body-md": ["Work Sans"],
+                    "label-sm": ["Work Sans"],
+                    "headline-lg": ["Source Serif 4"],
+                    "label-md": ["Work Sans"]
+            },
+            "fontSize": {
+                    "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                    "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                    "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                    "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+                    "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                    "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                    "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                    "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "600" }],
+                    "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                    "label-md": ["14px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .ambient-shadow-sm { box-shadow: 0 4px 12px rgba(48, 109, 41, 0.04); }
+        .ambient-shadow-md { box-shadow: 0 12px 24px rgba(48, 109, 41, 0.08); }
+        .glass-panel { background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<nav class="hidden md:flex sticky top-0 z-50 justify-between items-center w-full px-margin-desktop h-16 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-md shadow-sm border-b border-outline-variant/30">
+<div class="flex items-center gap-lg">
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim">SmartRestaurant</span>
+<div class="flex gap-md">
+<a class="text-primary dark:text-primary-fixed-dim font-bold border-b-2 border-primary font-label-md text-label-md py-4 hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors" href="#">Home</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant font-label-md text-label-md py-4 hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors" href="#">Menu</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant font-label-md text-label-md py-4 hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors" href="#">Reservations</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant font-label-md text-label-md py-4 hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors" href="#">About Us</a>
+</div>
+</div>
+<div class="flex items-center gap-sm">
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors active:scale-[0.98] duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">search</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors active:scale-[0.98] duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors active:scale-[0.98] duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden ml-sm cursor-pointer border border-outline-variant/30">
+<img alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMQFGEC0NKPHhaxlEglyhc1mRVohOyIwsqwFzu_7lmg9oxDxKEreRSf18I4oDkjCb2l7s5_dxmCk5ddIcwrPPbde2nA9oXZxCffZ9-EMWbSvCmLIkvg5jUnprwjKUK7DItqJRfvSfFzv3Vq1DhgFziYTuB9E_NEnAqRHrzsd_KGqj_gPL6_QeXdGr_MhY81AtrSgfjKeTBl74ht7UXYK6Mvb87uH3S_8DHeGTi1bQQPrYVEVLFAf6GW6jwCtNKOZ9T8IXq42T9CR8u"/>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col">
+<!-- Hero Section -->
+<section class="relative w-full h-[819px] min-h-[600px] flex items-center justify-center overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img alt="Elegant restaurant interior" class="w-full h-full object-cover" data-alt="A sophisticated fine dining restaurant interior captured during evening golden hour. The space features elegant, modern architecture with high ceilings, soft warm ambient lighting from sculptural chandeliers, and pristine white tablecloths. The overall aesthetic is high-end, contemporary corporate with a welcoming, refined atmosphere highlighted by deep green accents and natural textures." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSRG4MyReYqPzDsjnxWk9lSz4_a8D6iCED4mNDSECHT-2feO8ikcL2m99e17ZZGah458GJclg49x3b17s2oeW0Sw-YkuPvGG1dvOYuNI_mzS86k13cVJCJrhWCRUrChODeDRRaI6VRNCCQX56Yq9QjMIn7WKetlIYNc3-XiuVEbfbOJznd-ILaZXNkWYG7IuGN6BuamUIf35P3tGt1q1hz4GtAoIHGk7Q0EaU9_l-mm_CllAN_odHMkkPJBPlJvLPTSl1yiZTWIZoF"/>
+<div class="absolute inset-0 bg-gradient-to-r from-surface-bright/90 to-surface-bright/40 backdrop-blur-[2px]"></div>
+</div>
+<div class="relative z-10 w-full max-w-7xl px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<div class="md:col-span-8 lg:col-span-6 flex flex-col gap-lg">
+<span class="font-label-md text-label-md text-primary tracking-widest uppercase">Welcome to Culinary Excellence</span>
+<h1 class="font-display-lg text-display-lg text-on-surface">Elevate Your Dining Experience</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-md">Discover a harmony of flavors crafted with passion. Join us for an unforgettable journey through modern gastronomy, where every detail is designed to delight.</p>
+<div class="flex flex-col sm:flex-row gap-md mt-md">
+<button class="bg-tertiary-container text-on-tertiary px-lg py-sm rounded-lg font-label-md text-label-md shadow-md hover:opacity-90 transition-opacity flex items-center justify-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">calendar_month</span>
+                            Reserve a Table
+                        </button>
+<button class="bg-primary-container text-on-primary px-lg py-sm rounded-lg font-label-md text-label-md shadow-md hover:bg-surface-tint transition-colors flex items-center justify-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">local_mall</span>
+                            Order Online
+                        </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Featured Meals (Bento Grid Style) -->
+<section class="w-full max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-3xl">
+<div class="flex justify-between items-end mb-xl">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-xs">Signature Dishes</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Curated selections from our executive chef.</p>
+</div>
+<button class="text-primary font-label-md text-label-md hover:underline hidden md:block">View Full Menu</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter auto-rows-[250px]">
+<!-- Large Feature Card -->
+<div class="md:col-span-8 row-span-2 rounded-[16px] overflow-hidden relative group ambient-shadow-sm border border-outline-variant/30">
+<img alt="Featured Dish" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A meticulously plated seared scallop dish on a matte black ceramic plate. The scallops are arranged asymmetrically with vibrant green herb oil drops, delicate microgreens, and a smear of bright orange puree. The lighting is dramatic, side-lit to emphasize textures, fitting a modern, high-end fine dining presentation with soft background blur." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqK8z3QpEyeZsqD1w7d8y9pLjvvTXsf_lATNL026OvCGXFV3FTROlnumscAynaeobdbP-06VLtY_ehwMUeea_xjIkl3Vi6jtm82L11f5GmarIDlGQOmFkuGaWXGazuoz-llweiYEmRj-ZpOfGlvGc1I4NgY9q580_FfUnH-ecFBlXDzTYe4CKFJAFpasZcyNR3-TKLu1BMgb3YKemO-rNNkok5VxDy4qJhKMuJMSnGT8F14letVMK_D_rlvo4znpMsqLbpJxGtNp69"/>
+<div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/90 via-inverse-surface/40 to-transparent"></div>
+<div class="absolute bottom-0 left-0 w-full p-lg flex justify-between items-end">
+<div class="text-inverse-on-surface">
+<div class="bg-secondary/20 text-inverse-on-surface font-label-sm text-label-sm px-2 py-1 rounded backdrop-blur-sm inline-block mb-sm">Chef's Special</div>
+<h3 class="font-headline-md text-headline-md mb-xs">Pan-Seared Hokkaido Scallops</h3>
+<p class="font-body-sm text-body-sm opacity-90 max-w-sm">Served with sunchoke purée, pickled shimeji mushrooms, and a vibrant herb emulsion.</p>
+</div>
+<span class="font-headline-sm text-headline-sm text-primary-fixed bg-inverse-surface/80 px-md py-sm rounded-lg backdrop-blur-md">$38</span>
+</div>
+</div>
+<!-- Small Card 1 -->
+<div class="md:col-span-4 row-span-1 rounded-[16px] overflow-hidden relative group ambient-shadow-sm border border-outline-variant/30 bg-surface">
+<div class="absolute top-0 right-0 m-sm z-10 bg-surface/90 backdrop-blur-sm rounded-full p-1 cursor-pointer hover:bg-surface transition-colors">
+<span class="material-symbols-outlined text-outline text-[20px]">favorite</span>
+</div>
+<img alt="Salad" class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A beautifully crafted artisanal salad featuring heirloom tomatoes, burrata cheese, and fresh basil leaves on an off-white textured plate. Drizzled with dark balsamic glaze and extra virgin olive oil. The lighting is bright and airy, reflecting a fresh, modern culinary aesthetic appropriate for a premium restaurant." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiu17rd6KkEZjHBo7V3Bt31zTuv9iO9WuF4CxnlB7cn5ZIVNh080C1hi7TsplRysHFn1vHDzr7TLLmL1_vcoizDliugoz-pZBcgTU8ap7R7qEkaN9qbn4y5h9VcuHZd9oURu_PYWxLE_EhDOe8GvhJkNAXt8KgaKQr57e5fMoSDgdtKLSjMtYRpJpr4cUdFdnD_XzstcrEzMBXfmufRSKJ5HkZ6CXsrJRbcRc-26xJkB01lIUEcOSb0Tt-hRxQcqsh_PhVJtQnoseV"/>
+<div class="p-md">
+<div class="flex justify-between items-start mb-xs">
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Heirloom Tomato Burrata</h4>
+<span class="font-label-md text-label-md text-primary font-semibold">$22</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Aged balsamic, basil oil, smoked sea salt.</p>
+</div>
+</div>
+<!-- Small Card 2 -->
+<div class="md:col-span-4 row-span-1 rounded-[16px] overflow-hidden relative group ambient-shadow-sm border border-outline-variant/30 bg-surface">
+<div class="absolute top-0 right-0 m-sm z-10 bg-surface/90 backdrop-blur-sm rounded-full p-1 cursor-pointer hover:bg-surface transition-colors">
+<span class="material-symbols-outlined text-outline text-[20px]">favorite</span>
+</div>
+<img alt="Dessert" class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A decadent dark chocolate tart with a shiny ganache finish, resting on a crisp pastry shell. Garnished with edible gold leaf and a single fresh raspberry, plated on a matte grey slate board. The mood is rich and luxurious, with soft directional lighting enhancing the glossiness of the chocolate." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPE2NvuX2veleTONFALeSCVJuQeTEZbehxg1sUq2u6mtmvJ-1oKE4_JbRtkiLAWux7xfmChuX7MLWw0H30MI5xyR4fz6rl4v2cywsJO9p88wdYzcSUdg9no_xu0EeZgDRy4fhVm_lqoRpa4-JAJTgF-6okoYNP7TgjdQ-rVxOJzS94WVqXtACFs11rBQKkn6iuP7GCi7GVE1qHdBg2d1TmHnmsv1FUTFyic4Hof2kJWbyle8BgI4UsQ1SDEK3MM5aFpu4JlJrnbkoA"/>
+<div class="p-md">
+<div class="flex justify-between items-start mb-xs">
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Valrhona Chocolate Tart</h4>
+<span class="font-label-md text-label-md text-primary font-semibold">$16</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Salted caramel core, gold leaf, raspberry dust.</p>
+</div>
+</div>
+</div>
+<div class="mt-md text-center md:hidden">
+<button class="text-primary font-label-md text-label-md hover:underline">View Full Menu</button>
+</div>
+</section>
+<!-- Experience / Testimonials -->
+<section class="bg-surface-container-low py-3xl px-margin-mobile md:px-margin-desktop border-y border-outline-variant/20">
+<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-2xl items-center">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-md">An Atmosphere of Understated Elegance</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-lg">Beyond the plate, we orchestrate an environment that anticipates your needs. From the lighting to the acoustics, every element is designed to foster connection and celebration.</p>
+<div class="flex gap-lg border-l-2 border-primary-container pl-md py-xs mt-xl">
+<div class="flex flex-col">
+<div class="flex text-tertiary-container mb-xs">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="font-headline-sm text-headline-sm text-on-surface italic mb-sm">"A masterclass in hospitality. The attention to detail is unparalleled, and the flavors are simply sublime."</p>
+<span class="font-label-md text-label-md text-on-surface-variant">— The Culinary Review</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-md h-[500px]">
+<div class="rounded-xl overflow-hidden mt-xl ambient-shadow-md">
+<img alt="Table setting" class="w-full h-full object-cover" data-alt="A close-up shot of an elegant table setting in a softly lit restaurant. Showing fine crystal wine glasses, polished silver cutlery, and a neatly folded linen napkin on a textured wooden table. The lighting is warm and inviting, suggesting a premium dining experience with a modern aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxbFnOhxQeSBwUtIDCxhzDGG7xwy50z7BJBk-fW2giWub1KRzDyqLpiWQJyv26QgBQ_q6Sa3X3WzYpy1Z9hvMA4UmF4w-TOg5DSc7fC5fM2ZtcPS7zJrbcI7adaiGBAdcHMUkue3Xuo3dPrYj2hRltnUv6joR432pocBVMYSjZ0j-HS_Pj6QLzZ6Bm-18Cq215x3PVNf7eI-00tsGbGMQEr3Lbmw43HsjBlDYucNB4KCLCVPHnBd5PY_PlO30lwvlqhHF-Q0PrEfIS"/>
+</div>
+<div class="rounded-xl overflow-hidden mb-xl ambient-shadow-md">
+<img alt="Chef plating" class="w-full h-full object-cover" data-alt="A professional chef in a pristine white coat carefully plating a dish using tweezers in a modern, stainless steel commercial kitchen. The focus is tight on the chef's hands and the dish, with the background softly blurred. The mood conveys precision, dedication, and high-end culinary artistry." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSQ4oQqYOXNi_eMjbBGKhQQAtKJXIKkunaftB2U2Qkadvc9V-8Ko1xcH51lKtB-xosz183w4oihstWNQEMbWL2HHtC04F5Q--tCdt1qWYaF3SpeEVpBU7e4ZVdESUV9SJXpMXvpx-Eof04ZH59HAU5p8m6RI1xeYww2aaz4tvlzkQmAdtduZ6XWf_8dIo3oDXoWN0VWM_UlexMhJG_yUj7ieAsNL9wPIxhY8AldMqI1W3XKdnkJhdZ__b1HhkCEnp5R2T7i0vWoFxk"/>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-xl px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-md bg-surface-container-lowest dark:bg-surface-container-low border-t border-outline-variant/20 mt-auto">
+<div class="font-headline-sm text-headline-sm font-bold text-on-surface">SmartRestaurant</div>
+<div class="flex flex-wrap justify-center gap-lg">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Product</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Pricing</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Contact Support</a>
+</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">© 2024 SmartRestaurant SaaS. All rights reserved.</div>
+</footer>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface/90 dark:bg-surface-dim/90 backdrop-blur-xl border-t border-outline-variant/20 shadow-[0_-4px_12px_rgba(48,109,41,0.04)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-sm text-label-sm mt-xs">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high rounded-lg p-2 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">list_alt</span>
+<span class="font-label-sm text-label-sm mt-xs">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high rounded-lg p-2 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">shopping_cart</span>
+<span class="font-label-sm text-label-sm mt-xs">Cart</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high rounded-lg p-2 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">person</span>
+<span class="font-label-sm text-label-sm mt-xs">Profile</span>
+</a>
+</nav>
+</body></html>
