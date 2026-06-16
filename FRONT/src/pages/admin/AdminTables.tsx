@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import api from '../../services/api';
 import AnimatedSection from '../../components/ui/AnimatedSection';
 import ConfirmDialog from '../../components/ui/ConfirmDialog';
+import type { Reservation } from '../../services/reservations';
 
 interface Table { id: number; table_number: string; capacity: number; status: string; location: string; qr_code: string; }
 
@@ -11,9 +12,18 @@ const statusConfig: Record<string, { label: string; dot: string; bg: string; bor
   reserved: { label: 'Réservée', dot: 'bg-rose-500 border-2 border-rose-300', bg: 'bg-rose-50', border: 'border-rose-200' },
 };
 
+const reservationStatusConfig: Record<string, { label: string; dot: string; bg: string; border: string; text: string }> = {
+  pending: { label: 'En attente', dot: 'bg-amber-400 border-2 border-amber-300', bg: 'bg-amber-50', border: 'border-amber-200', text: 'text-amber-700' },
+  confirmed: { label: 'Confirmée', dot: 'bg-green-600 border-2 border-green-400', bg: 'bg-green-50', border: 'border-green-200', text: 'text-green-700' },
+  cancelled: { label: 'Annulée', dot: 'bg-red-500 border-2 border-red-300', bg: 'bg-red-50', border: 'border-red-200', text: 'text-red-700' },
+  completed: { label: 'Terminée', dot: 'bg-gray-500 border-2 border-gray-400', bg: 'bg-gray-100', border: 'border-gray-300', text: 'text-gray-700' },
+};
+
 const AdminTables = () => {
   const [tables, setTables] = useState<Table[]>([]);
+  const [reservations, setReservations] = useState<Reservation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<'tables' | 'reservations'>('tables');
   const [networkIP, setNetworkIP] = useState('localhost');
   const [selectedTable, setSelectedTable] = useState<Table | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -27,6 +37,10 @@ const AdminTables = () => {
   const [editNumber, setEditNumber] = useState('');
   const [editCapacity, setEditCapacity] = useState('');
   const [editCapacityError, setEditCapacityError] = useState('');
+  const [confirmReservation, setConfirmReservation] = useState(false);
+  const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
+  const [selectedTableForReservation, setSelectedTableForReservation] = useState<number | null>(null);
+  const [availableTables, setAvailableTables] = useState<Table[]>([]);
 
   const getNetworkUrl = () => {
     return `http://${networkIP}:3000/table-menu?tableId=`;
@@ -37,9 +51,23 @@ const AdminTables = () => {
     catch {} finally { setIsLoading(false); }
   };
 
+  const fetchReservations = async () => {
+    try {
+      const res = await api.get('/reservations/');
+      setReservations(res.data.data || []);
+    } catch {}
+  };
+
+  const fetchAvailableTablesForDate = async (date: string, time: string) => {
+    try {
+      const res = await api.get('/tables/available', { params: { date, time } });
+      setAvailableTables(res.data.data || []);
+    } catch {}
+  };
+
   useEffect(() => {
     fetchTables();
-    // Récupérer l'IP réseau du serveur
+    fetchReservations();
     api.get('/network').then((res) => {
       setNetworkIP(res.data.ip);
     }).catch(() => {});
@@ -130,19 +158,66 @@ const AdminTables = () => {
     printWindow.document.close();
   };
 
+  const openConfirmReservation = (reservation: Reservation) => {
+    setSelectedReservation(reservation);
+    fetchAvailableTablesForDate(reservation.reservation_date, reservation.reservation_time.split('T')[0]);
+    setConfirmReservation(true);
+  };
+
+  const handleConfirmReservation = async () => {
+    if (!selectedReservation || !selectedTableForReservation) return;
+    setIsSaving(true);
+    try {
+      await api.patch(`/reservations/${selectedReservation.id}/status`, {
+        status: 'confirmed',
+        table_id: selectedTableForReservation
+      });
+      await api.patch(`/tables/${selectedTableForReservation}/status`, { status: 'reserved' });
+      fetchTables();
+      fetchReservations();
+      setConfirmReservation(false);
+      setSelectedReservation(null);
+      setSelectedTableForReservation(null);
+    } catch (err: any) { alert(err.response?.data?.message || 'Erreur'); }
+    finally { setIsSaving(false); }
+  };
+
+  const handleCancelReservation = async (reservationId: number) => {
+    try {
+      await api.patch(`/reservations/${reservationId}/status`, { status: 'cancelled', table_id: null });
+      fetchReservations();
+    } catch (err: any) { alert(err.response?.data?.message || 'Erreur'); }
+  };
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <header className="bg-surface/80 backdrop-blur-md border-b border-outline-variant/30 px-8 h-16 flex items-center sticky top-0 z-20">
-        <div>
-          <h1 className="font-headline text-2xl text-on-surface font-bold">Gestion des Tables</h1>
-          <p className="font-body-sm text-body-sm text-on-surface-variant">Salle Principale</p>
+        <div className="flex items-center gap-8">
+          <div>
+            <h1 className="font-headline text-2xl text-on-surface font-bold">Gestion des Tables</h1>
+            <p className="font-body-sm text-body-sm text-on-surface-variant">Salle Principale</p>
+          </div>
+          <div className="flex gap-1 bg-surface-container rounded-lg p-1">
+            <button onClick={() => setActiveTab('tables')} className={`px-4 py-1.5 rounded-md font-label-md text-label-md transition-all ${activeTab === 'tables' ? 'bg-primary text-on-primary shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-high'}`}>
+              Tables
+            </button>
+            <button onClick={() => setActiveTab('reservations')} className={`px-4 py-1.5 rounded-md font-label-md text-label-md transition-all flex items-center gap-2 ${activeTab === 'reservations' ? 'bg-primary text-on-primary shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-high'}`}>
+              Réservations
+              {reservations.filter(r => r.status === 'pending').length > 0 && (
+                <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${activeTab === 'reservations' ? 'bg-white/25' : 'bg-amber-500 text-white'}`}>
+                  {reservations.filter(r => r.status === 'pending').length}
+                </span>
+              )}
+            </button>
+          </div>
         </div>
       </header>
 
       <div className="flex-1 overflow-y-auto p-6 md:p-8 max-w-[1400px] mx-auto w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Add Table Form */}
-          <AnimatedSection animation="fadeLeft">
+        {activeTab === 'tables' && (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Add Table Form */}
+            <AnimatedSection animation="fadeLeft">
             <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/20 shadow-sm p-6">
               <h3 className="font-headline text-headline-md text-on-surface mb-4">Ajouter une Table</h3>
               <div className="space-y-4">
@@ -199,6 +274,119 @@ const AdminTables = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Reservations Tab */}
+      {activeTab === 'reservations' && (
+        <div className="grid grid-cols-1 gap-6">
+          <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/20 shadow-sm p-6">
+            <div className="flex justify-between items-center mb-4 pb-3 border-b border-outline-variant/20">
+              <h3 className="font-headline text-headline-md text-on-surface">Réservations en attente</h3>
+              <span className="bg-amber-50 border border-amber-200 text-amber-700 px-3 py-1 rounded-full font-label-sm text-label-sm">
+                {reservations.filter(r => r.status === 'pending').length} en attente
+              </span>
+            </div>
+            {isLoading ? (
+              <div className="space-y-4">{[...Array(3)].map((_, i) => <div key={i} className="bg-surface-container rounded-lg h-20 animate-pulse" />)}</div>
+            ) : reservations.filter(r => r.status === 'pending').length === 0 ? (
+              <div className="text-center py-12">
+                <span className="material-symbols-outlined text-5xl text-outline-variant mb-3 block">event_available</span>
+                <p className="font-body-md text-body-md text-on-surface-variant">Aucune réservation en attente</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {reservations.filter(r => r.status === 'pending').sort((a, b) => new Date(a.reservation_date).getTime() - new Date(b.reservation_date).getTime()).map((reservation) => (
+                  <div key={reservation.id} className="bg-surface rounded-xl border border-outline-variant/20 p-4 hover:shadow-md transition-all">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center">
+                          <span className="material-symbols-outlined text-amber-600 text-xl">event</span>
+                        </div>
+                        <div>
+                          <p className="font-label-md text-label-md text-on-surface font-medium">{reservation.client_name}</p>
+                          <p className="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+                            <span className="material-symbols-outlined text-[12px]">phone</span>
+                            {reservation.client_phone}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-end gap-1">
+                        <span className="bg-amber-100 border border-amber-300 text-amber-700 px-2 py-0.5 rounded-full font-label-xs text-label-xs">
+                          En attente
+                        </span>
+                        <span className="font-label-xs text-label-xs text-on-surface-variant">
+                          #{reservation.id}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap gap-4 mb-4 pl-15">
+                      <div className="flex items-center gap-1.5">
+                        <span className="material-symbols-outlined text-[16px] text-on-surface-variant">calendar_today</span>
+                        <span className="font-label-sm text-label-sm text-on-surface">{new Date(reservation.reservation_date).toLocaleDateString('fr-FR')}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="material-symbols-outlined text-[16px] text-on-surface-variant">schedule</span>
+                        <span className="font-label-sm text-label-sm text-on-surface">{reservation.reservation_time}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="material-symbols-outlined text-[16px] text-on-surface-variant">person</span>
+                        <span className="font-label-sm text-label-sm text-on-surface">{reservation.number_of_guests} personnes</span>
+                      </div>
+                    </div>
+                    {reservation.notes && (
+                      <p className="font-label-sm text-label-sm text-on-surface-variant bg-surface-container rounded-lg p-2 mb-4 italic">"{reservation.notes}"</p>
+                    )}
+                    <div className="flex gap-2">
+                      <button onClick={() => openConfirmReservation(reservation)} className="flex-1 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-label-md text-label-md transition-colors flex items-center justify-center gap-1">
+                        <span className="material-symbols-outlined text-[18px]">check_circle</span>
+                        Confirmer
+                      </button>
+                      <button onClick={() => handleCancelReservation(reservation.id)} className="py-2 px-4 border border-error/30 text-error hover:bg-red-50 rounded-lg font-label-md text-label-md transition-colors flex items-center justify-center gap-1">
+                        <span className="material-symbols-outlined text-[18px]">cancel</span>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Confirmed Reservations */}
+            {reservations.filter(r => r.status === 'confirmed').length > 0 && (
+              <div className="mt-8">
+                <div className="flex justify-between items-center mb-4 pb-3 border-b border-outline-variant/20">
+                  <h3 className="font-headline text-headline-md text-on-surface">Réservations confirmées</h3>
+                  <span className="bg-green-50 border border-green-200 text-green-700 px-3 py-1 rounded-full font-label-sm text-label-sm">
+                    {reservations.filter(r => r.status === 'confirmed').length} confirmées
+                  </span>
+                </div>
+                <div className="space-y-3">
+                  {reservations.filter(r => r.status === 'confirmed').sort((a, b) => new Date(a.reservation_date).getTime() - new Date(b.reservation_date).getTime()).map((reservation) => (
+                    <div key={reservation.id} className="bg-green-50/50 rounded-lg border border-green-100 p-3 flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
+                          <span className="material-symbols-outlined text-green-600 text-lg">check_circle</span>
+                        </div>
+                        <div>
+                          <p className="font-label-md text-label-md text-on-surface font-medium">{reservation.client_name}</p>
+                          <p className="font-label-xs text-label-xs text-on-surface-variant">
+                            {new Date(reservation.reservation_date).toLocaleDateString('fr-FR')} · {reservation.reservation_time} · Table {reservation.table_number || 'Non assignée'}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-label-xs text-label-xs text-on-surface-variant bg-surface px-2 py-1 rounded">{reservation.number_of_guests} pers.</span>
+                        <button onClick={() => handleCancelReservation(reservation.id)} className="p-1.5 text-error/60 hover:text-error hover:bg-red-50 rounded-lg transition-colors">
+                          <span className="material-symbols-outlined text-[18px]">cancel</span>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
       </div>
 
       {/* Detail Panel */}
@@ -283,6 +471,68 @@ const AdminTables = () => {
       )}
 
       <ConfirmDialog open={confirmDelete} title="Supprimer la table" message="Cette action est irréversible. Voulez-vous vraiment supprimer cette table ?" confirmText="Supprimer" onConfirm={handleDelete} onCancel={() => { setConfirmDelete(false); setDeleteId(null); }} danger />
+
+      {/* Confirm Reservation Modal */}
+      {confirmReservation && selectedReservation && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-on-background/40 backdrop-blur-sm" onClick={() => setConfirmReservation(false)} />
+          <div className="relative bg-surface-container-lowest rounded-2xl p-6 w-full max-w-md shadow-2xl animate-[scaleIn_0.2s_ease_both]">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-headline text-headline-md text-on-surface">Confirmer la réservation</h2>
+              <button onClick={() => setConfirmReservation(false)} className="p-1 rounded-full hover:bg-surface-container transition-colors">
+                <span className="material-symbols-outlined text-on-surface-variant">close</span>
+              </button>
+            </div>
+            <div className="bg-surface-container rounded-xl p-4 mb-4 space-y-2">
+              <div className="flex justify-between">
+                <span className="font-label-sm text-label-sm text-on-surface-variant">Client</span>
+                <span className="font-label-sm text-label-sm text-on-surface font-medium">{selectedReservation.client_name}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-label-sm text-label-sm text-on-surface-variant">Téléphone</span>
+                <span className="font-label-sm text-label-sm text-on-surface">{selectedReservation.client_phone}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-label-sm text-label-sm text-on-surface-variant">Date</span>
+                <span className="font-label-sm text-label-sm text-on-surface">{new Date(selectedReservation.reservation_date).toLocaleDateString('fr-FR')}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-label-sm text-label-sm text-on-surface-variant">Heure</span>
+                <span className="font-label-sm text-label-sm text-on-surface">{selectedReservation.reservation_time}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-label-sm text-label-sm text-on-surface-variant">Personnes</span>
+                <span className="font-label-sm text-label-sm text-on-surface">{selectedReservation.number_of_guests}</span>
+              </div>
+            </div>
+            <div className="mb-4">
+              <label className="font-label-md text-label-md text-on-surface-variant mb-2 block">Assigner une table</label>
+              <div className="grid grid-cols-3 gap-2 max-h-40 overflow-y-auto">
+                {availableTables.filter(t => t.status === 'free').map((table) => (
+                  <button
+                    key={table.id}
+                    onClick={() => setSelectedTableForReservation(table.id)}
+                    className={`p-3 rounded-lg border text-center transition-all ${selectedTableForReservation === table.id ? 'bg-primary text-on-primary border-primary' : 'bg-surface border-outline-variant hover:border-primary'}`}
+                  >
+                    <span className="font-headline text-headline-sm">{table.table_number}</span>
+                    <span className="font-label-xs text-label-xs block opacity-70">{table.capacity} pers.</span>
+                  </button>
+                ))}
+                {availableTables.filter(t => t.status === 'free').length === 0 && (
+                  <p className="col-span-3 text-center py-4 font-label-sm text-label-sm text-on-surface-variant">Aucune table disponible</p>
+                )}
+              </div>
+            </div>
+            <div className="flex justify-end gap-3">
+              <button onClick={() => setConfirmReservation(false)} className="px-4 py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container transition-colors">Annuler</button>
+              <button onClick={handleConfirmReservation} disabled={isSaving || !selectedTableForReservation} className="px-4 py-2 bg-green-600 text-white rounded-lg font-label-md text-label-md hover:bg-green-700 transition-colors disabled:opacity-50 flex items-center gap-1">
+                <span className="material-symbols-outlined text-[18px]">check_circle</span>
+                Confirmer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

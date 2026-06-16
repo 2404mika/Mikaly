@@ -46,3 +46,12 @@ export const getMyReservations = async (): Promise<Reservation[]> => {
   const response = await api.get('/reservations/my-reservations');
   return response.data.data || [];
 };
+
+export const getAllReservations = async (): Promise<Reservation[]> => {
+  const response = await api.get('/reservations/');
+  return response.data.data || [];
+};
+
+export const updateReservationStatus = async (id: number, status: string, tableId?: number): Promise<void> => {
+  await api.patch(`/reservations/${id}/status`, { status, table_id: tableId });
+};
