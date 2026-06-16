@@ -358,53 +358,63 @@ const TableMenu = () => {
       {/* Menu */}
       <div className="px-4 py-4">
         {isLoading ? (
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {[...Array(4)].map((_, i) => (
-              <div key={i} className="bg-surface-container-lowest rounded-xl overflow-hidden animate-pulse flex">
-                <div className="w-24 h-24 bg-surface-container" />
-                <div className="flex-1 p-3 space-y-2"><div className="h-4 bg-surface-container rounded w-2/3" /><div className="h-3 bg-surface-container rounded w-1/2" /><div className="h-8 bg-surface-container rounded-lg w-20" /></div>
+              <div key={i} className="bg-surface-container-lowest rounded-xl overflow-hidden animate-pulse">
+                <div className="h-40 bg-surface-container" />
+                <div className="p-4 space-y-2"><div className="h-5 bg-surface-container rounded w-2/3" /><div className="h-4 bg-surface-container rounded w-1/2" /><div className="h-10 bg-surface-container rounded-lg w-full" /></div>
               </div>
             ))}
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {Object.entries(groupedMeals).map(([categoryName, categoryMeals]) => (
-              <div key={categoryName}>
-                <h2 className="font-headline text-headline-sm text-on-surface mb-3 sticky top-[88px] bg-background/95 backdrop-blur-sm py-1 z-20">{categoryName}</h2>
-                <div className="space-y-3">
-                  {categoryMeals.map((meal) => {
-                    const inCart = items.find((i) => i.meal.id === meal.id);
-                    return (
-                      <div key={meal.id} className="bg-surface-container-lowest rounded-xl overflow-hidden ambient-shadow-sm flex">
-                        <div className="w-24 h-24 flex-shrink-0 bg-surface-container">
-                          <img alt={meal.name} className="w-full h-full object-cover" src={getImage(meal)} onError={(e) => { (e.target as HTMLImageElement).src = '/images/home/scallops-menu.jpg'; }} />
-                        </div>
-                        <div className="flex-1 p-3 flex flex-col justify-between min-w-0">
-                          <div>
-                            <div className="flex justify-between items-start gap-2">
-                              <h3 className="font-headline text-headline-sm text-on-surface truncate">{meal.name}</h3>
-                              <span className="font-label-md text-label-md text-primary font-semibold whitespace-nowrap tabular-nums">{Number(meal.price).toLocaleString()} Ar</span>
+              <div key={categoryName} className="contents">
+                <AnimatedSection animation="fadeUp" className="col-span-full mt-2 mb-1">
+                  <h2 className="font-headline text-headline-sm text-on-surface border-b border-outline-variant/30 pb-2">
+                    {categoryName}
+                  </h2>
+                </AnimatedSection>
+                {categoryMeals.map((meal) => {
+                  const inCart = items.find((i) => i.meal.id === meal.id);
+                  return (
+                    <AnimatedSection key={meal.id} animation="scaleIn">
+                      <div className="bg-surface-container-lowest rounded-xl overflow-hidden ambient-shadow-sm flex flex-col transition-all duration-200 hover:shadow-lg group">
+                        <div className="relative h-40 w-full bg-surface-container overflow-hidden">
+                          <img alt={meal.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src={getImage(meal)} onError={(e) => { (e.target as HTMLImageElement).src = '/images/home/scallops-menu.jpg'; }} />
+                          {Number(meal.is_featured) === 1 && (
+                            <div className="absolute top-2 right-2 bg-tertiary-container/90 text-on-tertiary-container font-label-sm text-label-sm px-2 py-1 rounded backdrop-blur-sm">
+                              Chef's Pick
                             </div>
-                            <p className="font-body-sm text-body-sm text-on-surface-variant line-clamp-1 mt-0.5">{meal.description}</p>
+                          )}
+                        </div>
+                        <div className="p-4 flex flex-col flex-1">
+                          <div className="flex justify-between items-start mb-2">
+                            <h3 className="font-headline text-headline-sm text-on-surface font-bold">{meal.name}</h3>
+                            <span className="font-label-md text-label-md text-primary font-semibold whitespace-nowrap tabular-nums ml-2">{Number(meal.price).toLocaleString()} Ar</span>
                           </div>
-                          <div className="flex items-center gap-2 mt-1">
-                            {inCart ? (
-                              <div className="flex items-center gap-2">
-                                <button onClick={() => updateQuantity(meal.id, inCart.quantity - 1)} className="w-7 h-7 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center active:scale-90 transition-transform duration-150"><span className="material-symbols-outlined text-[16px]">remove</span></button>
-                                <span className="font-label-md text-label-md tabular-nums min-w-[20px] text-center">{inCart.quantity}</span>
-                                <button onClick={() => addToCart(meal)} className="w-7 h-7 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center active:scale-90 transition-transform duration-150"><span className="material-symbols-outlined text-[16px]">add</span></button>
-                              </div>
-                            ) : (
-                              <button onClick={() => addToCart(meal)} className="flex items-center gap-1 bg-primary/10 text-primary px-3 py-1.5 rounded-lg font-label-sm text-label-sm font-medium active:scale-95 transition-all duration-150">
-                                <span className="material-symbols-outlined text-[16px]">add</span>Ajouter
+                          <p className="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 mb-3 flex-1">{meal.description}</p>
+                          {inCart ? (
+                            <div className="flex items-center justify-center gap-3 bg-primary/10 rounded-lg py-2">
+                              <button onClick={() => updateQuantity(meal.id, inCart.quantity - 1)} className="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center active:scale-90 transition-transform duration-150">
+                                <span className="material-symbols-outlined text-[18px]">remove</span>
                               </button>
-                            )}
-                          </div>
+                              <span className="font-label-lg text-label-lg tabular-nums min-w-[24px] text-center font-bold">{inCart.quantity}</span>
+                              <button onClick={() => addToCart(meal)} className="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center active:scale-90 transition-transform duration-150">
+                                <span className="material-symbols-outlined text-[18px]">add</span>
+                              </button>
+                            </div>
+                          ) : (
+                            <button onClick={() => addToCart(meal)} className="w-full py-2.5 bg-surface-container hover:bg-primary hover:text-on-primary text-primary rounded-lg font-label-md text-label-md transition-all duration-150 active:scale-[0.96] flex items-center justify-center gap-2">
+                              <span className="material-symbols-outlined text-[20px]">add_shopping_cart</span>
+                              Ajouter
+                            </button>
+                          )}
                         </div>
                       </div>
-                    );
-                  })}
-                </div>
+                    </AnimatedSection>
+                  );
+                })}
               </div>
             ))}
           </div>
