@@ -319,6 +319,24 @@ const Reservations = () => {
         </div>
       </section>
 
+      {/* Opening Hours Badge - Glassmorphism Fixed */}
+      <div className="fixed top-20 right-4 z-50 backdrop-blur-md bg-white/30 border border-white/40 rounded-2xl shadow-2xl">
+        <div className="p-4 space-y-2">
+          <div className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-primary text-lg">schedule</span>
+            <span className="font-label-sm text-label-sm text-on-surface font-bold">Horaires</span>
+          </div>
+          <div className="font-label-xs text-label-xs text-on-surface-variant space-y-1">
+            <p>Lun - Ven: 11h00 - 22h00</p>
+            <p>Sam - Dim: 10h00 - 23h00</p>
+          </div>
+          <div className="border-t border-white/20 pt-2 flex items-start gap-2">
+            <span className="material-symbols-outlined text-primary text-lg">location_on</span>
+            <span className="font-label-xs text-label-xs text-on-surface-variant">Zoda, Anstenakely, Antsirabe</span>
+          </div>
+        </div>
+      </div>
+
       {/* Tables Grid */}
       <div className="w-full max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-12">
         <AnimatedSection animation="fadeUp">
@@ -379,33 +397,6 @@ const Reservations = () => {
             ))}
           </div>
         )}
-
-        {/* Opening Hours */}
-        <AnimatedSection animation="fadeUp" delay={200}>
-          <div className="mt-12 bg-surface-container rounded-xl p-6 border border-outline-variant/30 max-w-md">
-            <h4 className="font-headline text-headline-sm text-on-surface mb-4">Horaires d'ouverture</h4>
-            <div className="space-y-3">
-              <div className="flex justify-between items-center text-body-sm">
-                <span className="text-on-surface-variant">Lun - Ven</span>
-                <span className="font-medium text-on-surface">11:30 - 14:30, 18:30 - 22:30</span>
-              </div>
-              <div className="flex justify-between items-center text-body-sm">
-                <span className="text-on-surface-variant">Samedi</span>
-                <span className="font-medium text-primary">12:00 - 23:00</span>
-              </div>
-              <div className="flex justify-between items-center text-body-sm">
-                <span className="text-on-surface-variant">Dimanche</span>
-                <span className="font-medium text-on-surface">Fermé</span>
-              </div>
-            </div>
-            <div className="mt-4 pt-4 border-t border-outline-variant/30">
-              <div className="flex items-center gap-3 text-on-surface-variant">
-                <span className="material-symbols-outlined text-primary">location_on</span>
-                <p className="text-body-sm font-body-sm">Rue de l'Indépendance, Antananarivo</p>
-              </div>
-            </div>
-          </div>
-        </AnimatedSection>
       </div>
     </main>
   );

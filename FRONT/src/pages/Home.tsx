@@ -53,24 +53,6 @@ const Home = () => {
 
   return (
     <main className="flex-grow flex flex-col">
-      {/* Opening Hours Badge - Glassmorphism */}
-      <div className="fixed top-4 right-4 z-50 backdrop-blur-md bg-white/30 border border-white/40 rounded-2xl shadow-2xl">
-        <div className="p-4 space-y-2">
-          <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-primary text-lg">schedule</span>
-            <span className="font-label-sm text-label-sm text-on-surface font-bold">Horaires</span>
-          </div>
-          <div className="font-label-xs text-label-xs text-on-surface-variant space-y-1">
-            <p>Lun - Ven: 11h00 - 22h00</p>
-            <p>Sam - Dim: 10h00 - 23h00</p>
-          </div>
-          <div className="border-t border-white/20 pt-2 flex items-start gap-2">
-            <span className="material-symbols-outlined text-primary text-lg">location_on</span>
-            <span className="font-label-xs text-label-xs text-on-surface-variant">Zoda, Anstenakely, Antsirabe</span>
-          </div>
-        </div>
-      </div>
-
       {/* Hero Section */}
       <section className="relative w-full h-[819px] min-h-[600px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
