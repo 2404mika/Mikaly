@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { useAdminAuth } from '../../context/AdminAuthContext';
 import Button from '../../components/ui/Button';
 
 const AdminLogin = () => {
@@ -9,7 +9,7 @@ const AdminLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const { adminLogin } = useAdminAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -17,7 +17,7 @@ const AdminLogin = () => {
     setError('');
     setIsLoading(true);
     try {
-      await login({ email, password });
+      await adminLogin({ email, password });
       navigate('/admin');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Erreur de connexion');

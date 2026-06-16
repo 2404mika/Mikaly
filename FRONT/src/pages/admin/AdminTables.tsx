@@ -12,13 +12,6 @@ const statusConfig: Record<string, { label: string; dot: string; bg: string; bor
   reserved: { label: 'Réservée', dot: 'bg-rose-500 border-2 border-rose-300', bg: 'bg-rose-50', border: 'border-rose-200' },
 };
 
-const reservationStatusConfig: Record<string, { label: string; dot: string; bg: string; border: string; text: string }> = {
-  pending: { label: 'En attente', dot: 'bg-amber-400 border-2 border-amber-300', bg: 'bg-amber-50', border: 'border-amber-200', text: 'text-amber-700' },
-  confirmed: { label: 'Confirmée', dot: 'bg-green-600 border-2 border-green-400', bg: 'bg-green-50', border: 'border-green-200', text: 'text-green-700' },
-  cancelled: { label: 'Annulée', dot: 'bg-red-500 border-2 border-red-300', bg: 'bg-red-50', border: 'border-red-200', text: 'text-red-700' },
-  completed: { label: 'Terminée', dot: 'bg-gray-500 border-2 border-gray-400', bg: 'bg-gray-100', border: 'border-gray-300', text: 'text-gray-700' },
-};
-
 const AdminTables = () => {
   const [tables, setTables] = useState<Table[]>([]);
   const [reservations, setReservations] = useState<Reservation[]>([]);
@@ -26,7 +19,6 @@ const AdminTables = () => {
   const [activeTab, setActiveTab] = useState<'tables' | 'reservations'>('tables');
   const [networkIP, setNetworkIP] = useState('localhost');
   const [selectedTable, setSelectedTable] = useState<Table | null>(null);
-  const [showAddForm, setShowAddForm] = useState(false);
   const [newNumber, setNewNumber] = useState('');
   const [newCapacity, setNewCapacity] = useState('');
   const [capacityError, setCapacityError] = useState('');
@@ -39,8 +31,6 @@ const AdminTables = () => {
   const [editCapacityError, setEditCapacityError] = useState('');
   const [confirmReservation, setConfirmReservation] = useState(false);
   const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
-  const [selectedTableForReservation, setSelectedTableForReservation] = useState<number | null>(null);
-  const [availableTables, setAvailableTables] = useState<Table[]>([]);
 
   const getNetworkUrl = () => {
     return `http://${networkIP}:3000/table-menu?tableId=`;
@@ -55,13 +45,6 @@ const AdminTables = () => {
     try {
       const res = await api.get('/reservations/');
       setReservations(res.data.data || []);
-    } catch {}
-  };
-
-  const fetchAvailableTablesForDate = async (date: string, time: string) => {
-    try {
-      const res = await api.get('/tables/available', { params: { date, time } });
-      setAvailableTables(res.data.data || []);
     } catch {}
   };
 
@@ -86,7 +69,7 @@ const AdminTables = () => {
     setIsSaving(true);
     try {
       await api.post('/tables', { table_number: newNumber, capacity: Number(newCapacity), location: 'Salle Principale' });
-      setNewNumber(''); setNewCapacity(''); setCapacityError(''); setShowAddForm(false);
+      setNewNumber(''); setNewCapacity(''); setCapacityError('');
       fetchTables();
     } catch (err: any) { alert(err.response?.data?.message || 'Erreur'); }
     finally { setIsSaving(false); }
@@ -160,7 +143,6 @@ const AdminTables = () => {
 
   const openConfirmReservation = (reservation: Reservation) => {
     setSelectedReservation(reservation);
-    setAvailableTables(tables.filter(t => t.status === 'free'));
     setConfirmReservation(true);
   };
 

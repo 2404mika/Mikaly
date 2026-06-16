@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { AuthProvider } from './context/AuthContext';
+import { AdminAuthProvider } from './context/AdminAuthContext';
 import { CartProvider } from './context/CartContext';
 import { TableCartProvider } from './context/TableCartContext';
 import TopNavBar from './components/layout/TopNavBar';
@@ -49,10 +50,10 @@ function App() {
             <Route path="/table-menu" element={<TableCartProvider><TableMenu /></TableCartProvider>} />
 
             {/* Admin Login */}
-            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin/login" element={<AdminAuthProvider><AdminLogin /></AdminAuthProvider>} />
 
             {/* Admin */}
-            <Route path="/admin" element={<AdminGuard><AdminLayout /></AdminGuard>}>
+            <Route path="/admin" element={<AdminAuthProvider><AdminGuard><AdminLayout /></AdminGuard></AdminAuthProvider>}>
               <Route index element={<AdminDashboard />} />
               <Route path="dashboard" element={<AdminDashboard />} />
               <Route path="categories" element={<AdminCategories />} />

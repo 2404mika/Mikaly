@@ -1,16 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { useAdminAuth } from '../../context/AdminAuthContext';
 
 const AdminGuard = ({ children }: { children: React.ReactNode }) => {
-  const { user, isLoading } = useAuth();
+  const { admin, isLoading } = useAdminAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isLoading && (!user || user.role !== 'admin')) {
-      navigate('/login');
+    if (!isLoading && (!admin || admin.role !== 'admin')) {
+      navigate('/admin/login');
     }
-  }, [user, isLoading, navigate]);
+  }, [admin, isLoading, navigate]);
 
   if (isLoading) {
     return (
@@ -23,7 +23,7 @@ const AdminGuard = ({ children }: { children: React.ReactNode }) => {
     );
   }
 
-  if (!user || user.role !== 'admin') return null;
+  if (!admin || admin.role !== 'admin') return null;
 
   return <>{children}</>;
 };
