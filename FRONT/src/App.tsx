@@ -35,7 +35,7 @@ const ScrollToTop = () => {
 
 const PageTransition = ({ children }: { children: React.ReactNode }) => {
   const { pathname } = useLocation();
-  return <div key={pathname} className="animate-[fadeIn_0.3s_ease_both]">{children}</div>;
+  return <div key={pathname} className="flex-1 animate-[fadeIn_0.3s_ease_both]">{children}</div>;
 };
 
 function App() {
@@ -70,7 +70,7 @@ function App() {
 
             {/* Public pages */}
             <Route path="*" element={
-              <div className="min-h-screen flex flex-col bg-background text-on-background pb-20 md:pb-0">
+              <div className="min-h-screen flex flex-col bg-background text-on-background pb-24 md:pb-0">
                 <TopNavBar />
                 <PageTransition>
                   <Routes>
