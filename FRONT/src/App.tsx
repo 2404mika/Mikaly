@@ -70,7 +70,7 @@ function App() {
 
             {/* Public pages */}
             <Route path="*" element={
-              <div className="min-h-screen flex flex-col bg-background text-on-background">
+              <div className="min-h-screen flex flex-col bg-background text-on-background pb-20 md:pb-0">
                 <TopNavBar />
                 <PageTransition>
                   <Routes>

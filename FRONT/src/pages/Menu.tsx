@@ -49,7 +49,7 @@ const Menu = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen relative pb-24 md:pb-0">
+    <div className="flex flex-col md:flex-row min-h-screen relative">
       {/* Main Canvas */}
       <main className="flex-1 pb-24 md:pb-8 px-margin-mobile md:px-margin-desktop pt-6 md:pt-8 md:mr-[360px]">
         <AnimatedSection animation="fadeUp">

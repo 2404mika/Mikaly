@@ -81,7 +81,7 @@ const Login = () => {
   };
 
   return (
-    <main className="flex w-full min-h-screen pb-20 md:pb-0">
+    <main className="flex w-full min-h-screen">
       {/* Left Side: Visual */}
       <section className="hidden lg:flex lg:w-5/12 relative overflow-hidden bg-surface-container-high">
         <div

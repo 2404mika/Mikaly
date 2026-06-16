@@ -67,7 +67,7 @@ const MyOrders = () => {
 
   return (
     <main className="min-h-screen bg-background">
-      <div className="w-full max-w-4xl mx-auto px-margin-mobile md:px-margin-desktop py-8 pb-24 md:pb-8">
+      <div className="w-full max-w-4xl mx-auto px-margin-mobile md:px-margin-desktop py-8">
         <AnimatedSection animation="fadeUp">
           <h1 className="font-headline text-headline-lg-mobile md:text-headline-lg text-on-surface mb-6">
             Mon historique

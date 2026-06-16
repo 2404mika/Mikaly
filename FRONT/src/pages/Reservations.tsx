@@ -117,7 +117,7 @@ const Reservations = () => {
   if (selectedTable) {
     return (
       <main className="min-h-screen bg-background">
-        <div className="w-full max-w-2xl mx-auto px-margin-mobile md:px-margin-desktop py-8 pb-24 md:pb-8">
+        <div className="w-full max-w-2xl mx-auto px-margin-mobile md:px-margin-desktop py-8">
           <AnimatedSection animation="fadeUp">
             {/* Back Button */}
             <button
