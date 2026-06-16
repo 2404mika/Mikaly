@@ -104,17 +104,16 @@ const Delivery = () => {
     if (!dateStr) return null;
     try {
       const date = new Date(dateStr);
-      if (isNaN(date.getTime())) {
-        const parts = dateStr.split(/[T:]/);
-        if (parts.length >= 4) {
-          const [year, month, day, hour, minute] = parts;
-          return `${hour}:${minute}`;
-        }
-        return null;
+      if (!isNaN(date.getTime())) {
+        return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
       }
-      return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+      const parts = dateStr.match(/(\d{2}):(\d{2})/);
+      if (parts) return `${parts[1]}:${parts[2]}`;
+      const timeMatch = dateStr.match(/T(\d{2}):(\d{2})/);
+      if (timeMatch) return `${timeMatch[1]}:${timeMatch[2]}`;
+      return dateStr;
     } catch {
-      return null;
+      return dateStr;
     }
   };
 
