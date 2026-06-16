@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import Button from '../../components/ui/Button';
@@ -9,8 +9,14 @@ const AdminLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { adminLogin } = useAdminAuth();
+  const { admin, adminLogin } = useAdminAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (admin && admin.role === 'admin') {
+      navigate('/admin');
+    }
+  }, [admin, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
