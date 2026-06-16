@@ -46,7 +46,7 @@ function App() {
         <CartProvider>
           <Routes>
             {/* QR Code Menu */}
-            <Route path="/table-menu" element={<TableCartProvider><TableMenu /><BottomNavBar /></TableCartProvider>} />
+            <Route path="/table-menu" element={<TableCartProvider><TableMenu /></TableCartProvider>} />
 
             {/* Admin Login */}
             <Route path="/admin/login" element={<AdminLogin />} />
