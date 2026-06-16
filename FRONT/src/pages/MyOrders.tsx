@@ -148,7 +148,7 @@ const MyOrders = () => {
             </AnimatedSection>
           ) : (
             <div className="space-y-4">
-              {reservations.map((res, index) => {
+              {[...reservations].sort((a, b) => new Date(b.reservation_date).getTime() - new Date(a.reservation_date).getTime()).map((res, index) => {
                 const status = reservationStatusConfig[res.status] || { label: res.status, color: 'text-gray-700', bg: 'bg-gray-50', icon: 'help' };
                 const formatDate = (dateStr: string) => {
                   const date = new Date(dateStr);
