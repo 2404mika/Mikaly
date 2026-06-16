@@ -21,15 +21,15 @@ const getAll = async (req, res, next) => {
 // Création d'une nouvelle réservation
 const create = async (req, res, next) => {
   try {
-    const { client_name, client_phone, client_email, reservation_date, reservation_time, number_of_guests, notes } = req.body;
+    const { client_name, client_phone, client_email, reservation_date, reservation_time, number_of_guests, notes, table_id } = req.body;
     const user_id = req.user ? req.user.id : null;
     
     // Insertion de la réservation avec conversion de la date
     const result = await db.execute(
-      `INSERT INTO reservations (client_name, client_phone, client_email, reservation_date, reservation_time, number_of_guests, notes, user_id) 
-       VALUES (:client_name, :client_phone, :client_email, TO_DATE(:reservation_date, 'YYYY-MM-DD'), :reservation_time, :number_of_guests, :notes, :user_id) 
+      `INSERT INTO reservations (client_name, client_phone, client_email, reservation_date, reservation_time, number_of_guests, notes, user_id, table_id, status) 
+       VALUES (:client_name, :client_phone, :client_email, TO_DATE(:reservation_date, 'YYYY-MM-DD'), :reservation_time, :number_of_guests, :notes, :user_id, :table_id, 'pending') 
        RETURNING id INTO :id`,
-      { client_name, client_phone, client_email, reservation_date, reservation_time, number_of_guests, notes, user_id, id: { type: db.oracledb.NUMBER, dir: db.oracledb.BIND_OUT } }
+      { client_name, client_phone, client_email, reservation_date, reservation_time, number_of_guests, notes, user_id, table_id, id: { type: db.oracledb.NUMBER, dir: db.oracledb.BIND_OUT } }
     );
     
     // Notification Socket.io à l'admin
