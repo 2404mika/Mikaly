@@ -64,15 +64,17 @@ const AdminDashboard = () => {
         const allOrders = ordersRes.data.data || [];
         setOrders(allOrders);
 
-        const last7Days: DailyStats[] = [];
-        for (let i = 6; i >= 0; i--) {
-          const d = new Date();
-          d.setDate(d.getDate() - i);
+        const dayNames = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
+        const monthDays: DailyStats[] = [];
+        const now = new Date();
+        const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+
+        for (let i = 1; i <= daysInMonth; i++) {
+          const d = new Date(now.getFullYear(), now.getMonth(), i);
           const dateStr = d.toISOString().split('T')[0];
-          const dayNames = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
-          last7Days.push({
+          monthDays.push({
             date: dateStr,
-            dayLabel: dayNames[d.getDay()],
+            dayLabel: `${i}`,
             revenue: 0,
             orders: 0
           });
@@ -83,15 +85,15 @@ const AdminDashboard = () => {
           const orderDate = new Date(o.created_at);
           if (isNaN(orderDate.getTime())) return;
           const dateStr = orderDate.toISOString().split('T')[0];
-          const dayEntry = last7Days.find(d => d.date === dateStr);
+          const dayEntry = monthDays.find(d => d.date === dateStr);
           if (dayEntry) {
             dayEntry.revenue += Number(o.total || 0);
             dayEntry.orders += 1;
           }
         });
 
-        const maxRevenue = Math.max(...last7Days.map(d => d.revenue), 1);
-        setDailyData(last7Days.map(d => ({ ...d, height: (d.revenue / maxRevenue) * 100 })));
+        const maxRevenue = Math.max(...monthDays.map(d => d.revenue), 1);
+        setDailyData(monthDays.map(d => ({ ...d, height: (d.revenue / maxRevenue) * 100 })));
       } catch {} finally { setIsLoading(false); }
     };
     fetchData();
@@ -192,7 +194,7 @@ const AdminDashboard = () => {
           <div className="lg:col-span-8 bg-surface rounded-xl border border-outline-variant/30 p-6 shadow-[0_4px_12px_rgba(48,109,41,0.04)]">
             <div className="flex justify-between items-center mb-4">
               <div>
-                <h3 className="font-headline text-headline-sm text-on-surface">Revenus quotidiens (7 derniers jours)</h3>
+                <h3 className="font-headline text-headline-sm text-on-surface">Revenus quotidiens ({new Date().toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })})</h3>
               </div>
               <span className="font-label-md text-label-md text-primary font-bold">{dailyData.reduce((sum, d) => sum + d.revenue, 0).toLocaleString()} Ar</span>
             </div>
