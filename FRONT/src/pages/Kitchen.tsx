@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import api from '../services/api';
+import { useStaffAuth } from '../context/StaffAuthContext';
+import apiStaff from '../services/apiStaff';
 import AnimatedSection from '../components/ui/AnimatedSection';
 
 interface KitchenOrder {
@@ -18,7 +18,7 @@ interface KitchenOrder {
 }
 
 const Kitchen = () => {
-  const { logout, user } = useAuth();
+  const { staffLogout, staff } = useStaffAuth();
   const navigate = useNavigate();
   const [orders, setOrders] = useState<KitchenOrder[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -32,7 +32,7 @@ const Kitchen = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await api.get('/orders/kitchen');
+      const response = await apiStaff.get('/orders/kitchen');
       setOrders(response.data.data || []);
     } catch {
       console.error('Erreur lors du chargement des commandes');
@@ -49,7 +49,7 @@ const Kitchen = () => {
 
   const handleStatusUpdate = async (orderId: number, newStatus: string) => {
     try {
-      await api.patch(`/orders/${orderId}/status`, { status: newStatus });
+      await apiStaff.patch(`/orders/${orderId}/status`, { status: newStatus });
       fetchOrders();
     } catch {
       console.error('Erreur lors de la mise à jour du statut');
@@ -74,7 +74,7 @@ const Kitchen = () => {
   }).length;
 
   const handleLogout = () => {
-    logout();
+    staffLogout();
     navigate('/login');
   };
 
@@ -95,7 +95,7 @@ const Kitchen = () => {
             <div>
               <h1 className="font-headline text-headline-sm font-bold text-on-surface">Mikaly Cuisine</h1>
               <p className="font-label-xs text-label-xs text-on-surface-variant">
-                {user?.name || 'Cuisinier'}
+                {staff?.name || 'Cuisinier'}
               </p>
             </div>
           </div>

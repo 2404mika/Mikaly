@@ -43,10 +43,13 @@ const Login = () => {
       await login({ email, password });
       const userData = JSON.parse(localStorage.getItem('user') || '{}');
       if (userData.role === 'admin') navigate('/admin');
-      else if (userData.role === 'cook') navigate('/kitchen');
-      else if (userData.role === 'delivery') navigate('/delivery');
-      else if (userData.role === 'cashier') navigate('/cashier');
-      else navigate('/');
+      else if (userData.role === 'cook' || userData.role === 'delivery' || userData.role === 'cashier') {
+        localStorage.setItem('staff_token', localStorage.getItem('token') || '');
+        localStorage.setItem('staff_user', localStorage.getItem('user') || '');
+        if (userData.role === 'cook') navigate('/kitchen');
+        else if (userData.role === 'delivery') navigate('/delivery');
+        else navigate('/cashier');
+      } else navigate('/');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Erreur de connexion');
     } finally {
@@ -184,19 +187,6 @@ const Login = () => {
                       </span>
                     </button>
                   </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="remember"
-                    checked={remember}
-                    onChange={(e) => setRemember(e.target.checked)}
-                    className="w-4 h-4 rounded text-primary border-outline-variant focus:ring-primary focus:ring-offset-surface-container-lowest transition-all duration-200"
-                  />
-                  <label htmlFor="remember" className="font-body-sm text-body-sm text-on-surface-variant cursor-pointer">
-                    Se souvenir de moi
-                  </label>
                 </div>
 
                 <Button type="submit" className="w-full mt-2" disabled={isLoading}>

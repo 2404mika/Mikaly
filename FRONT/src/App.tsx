@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { AuthProvider } from './context/AuthContext';
 import { AdminAuthProvider } from './context/AdminAuthContext';
+import { StaffAuthProvider } from './context/StaffAuthContext';
 import { CartProvider } from './context/CartContext';
 import { TableCartProvider } from './context/TableCartContext';
 import TopNavBar from './components/layout/TopNavBar';
@@ -46,50 +47,51 @@ function App() {
       <ScrollToTop />
       <AuthProvider>
         <CartProvider>
-          <Routes>
-            {/* QR Code Menu */}
-            <Route path="/table-menu" element={<TableCartProvider><TableMenu /></TableCartProvider>} />
+          <StaffAuthProvider>
+            <Routes>
+              {/* QR Code Menu */}
+              <Route path="/table-menu" element={<TableCartProvider><TableMenu /></TableCartProvider>} />
 
-            {/* Admin Login */}
-            <Route path="/admin/login" element={<AdminAuthProvider><AdminLogin /></AdminAuthProvider>} />
+              {/* Admin Login */}
+              <Route path="/admin/login" element={<AdminAuthProvider><AdminLogin /></AdminAuthProvider>} />
 
-            {/* Admin */}
-            <Route path="/admin" element={<AdminAuthProvider><AdminGuard><AdminLayout /></AdminGuard></AdminAuthProvider>}>
-              <Route index element={<AdminDashboard />} />
-              <Route path="dashboard" element={<AdminDashboard />} />
-              <Route path="categories" element={<AdminCategories />} />
-              <Route path="meals" element={<AdminMeals />} />
-              <Route path="users" element={<AdminUsers />} />
-              <Route path="tables" element={<AdminTables />} />
-              <Route path="orders" element={<AdminOrders />} />
-              <Route path="kitchen" element={<Kitchen />} />
-            </Route>
+              {/* Admin */}
+              <Route path="/admin" element={<AdminAuthProvider><AdminGuard><AdminLayout /></AdminGuard></AdminAuthProvider>}>
+                <Route index element={<AdminDashboard />} />
+                <Route path="dashboard" element={<AdminDashboard />} />
+                <Route path="categories" element={<AdminCategories />} />
+                <Route path="meals" element={<AdminMeals />} />
+                <Route path="users" element={<AdminUsers />} />
+                <Route path="tables" element={<AdminTables />} />
+                <Route path="orders" element={<AdminOrders />} />
+              </Route>
 
-            {/* Staff pages without nav header */}
-            <Route path="/kitchen" element={<Kitchen />} />
-            <Route path="/delivery" element={<Delivery />} />
-            <Route path="/cashier" element={<Cashier />} />
+              {/* Staff pages without nav header */}
+              <Route path="/kitchen" element={<Kitchen />} />
+              <Route path="/delivery" element={<Delivery />} />
+              <Route path="/cashier" element={<Cashier />} />
 
-            {/* Public pages */}
-            <Route path="*" element={
-              <div className="min-h-screen flex flex-col bg-background text-on-background pb-24 md:pb-0">
-                <TopNavBar />
-                <PageTransition>
-                  <Routes>
-                    <Route path="/" element={<><Home /><Footer /></>} />
-                    <Route path="/menu" element={<Menu />} />
-                    <Route path="/checkout" element={<Checkout />} />
-                    <Route path="/order-tracking/:id" element={<OrderTracking />} />
-                    <Route path="/my-orders" element={<MyOrders />} />
-                    <Route path="/reservations" element={<><Reservations /><Footer /></>} />
-                    <Route path="/about" element={<><About /><Footer /></>} />
-                    <Route path="/login" element={<Login />} />
-                  </Routes>
-                </PageTransition>
-                <BottomNavBar />
-              </div>
-            } />
-          </Routes>
+              {/* Public pages */}
+              <Route path="*" element={
+                <div className="min-h-screen flex flex-col bg-background text-on-background pb-24 md:pb-0">
+                  <TopNavBar />
+                  <PageTransition>
+                    <Routes>
+                      <Route path="/" element={<><Home /><Footer /></>} />
+                      <Route path="/menu" element={<Menu />} />
+                      <Route path="/checkout" element={<Checkout />} />
+                      <Route path="/order-tracking/:id" element={<OrderTracking />} />
+                      <Route path="/my-orders" element={<MyOrders />} />
+                      <Route path="/reservations" element={<><Reservations /><Footer /></>} />
+                      <Route path="/about" element={<><About /><Footer /></>} />
+                      <Route path="/login" element={<Login />} />
+                    </Routes>
+                  </PageTransition>
+                  <BottomNavBar />
+                </div>
+              } />
+            </Routes>
+          </StaffAuthProvider>
         </CartProvider>
       </AuthProvider>
     </BrowserRouter>

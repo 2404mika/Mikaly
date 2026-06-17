@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useStaffAuth } from '../context/StaffAuthContext';
+import apiStaff from '../services/apiStaff';
 import api from '../services/api';
 import AnimatedSection from '../components/ui/AnimatedSection';
 
@@ -22,7 +23,7 @@ interface DeliveryOrder {
 }
 
 const Delivery = () => {
-  const { user, logout } = useAuth();
+  const { staff, staffLogout } = useStaffAuth();
   const navigate = useNavigate();
   const [orders, setOrders] = useState<DeliveryOrder[]>([]);
   const [myActiveOrders, setMyActiveOrders] = useState<DeliveryOrder[]>([]);
@@ -38,7 +39,7 @@ const Delivery = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await api.get('/orders/delivery');
+      const response = await apiStaff.get('/orders/delivery');
       const data = response.data.data || [];
       setOrders(data.sort((a: DeliveryOrder, b: DeliveryOrder) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()));
     } catch {
@@ -50,7 +51,7 @@ const Delivery = () => {
 
   const fetchMyActiveOrders = async () => {
     try {
-      const response = await api.get('/orders/my-active-deliveries');
+      const response = await apiStaff.get('/orders/my-active-deliveries');
       const data = response.data.data || [];
       setMyActiveOrders(data.sort((a: DeliveryOrder, b: DeliveryOrder) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()));
     } catch {
@@ -60,7 +61,7 @@ const Delivery = () => {
 
   const fetchDeliveredOrders = async () => {
     try {
-      const response = await api.get('/orders/my-deliveries');
+      const response = await apiStaff.get('/orders/my-deliveries');
       const data = response.data.data || [];
       setDeliveredOrders(data.sort((a: DeliveryOrder, b: DeliveryOrder) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()));
     } catch {
@@ -81,7 +82,7 @@ const Delivery = () => {
 
   const handleAccept = async (orderId: number) => {
     try {
-      await api.post(`/orders/${orderId}/accept-delivery`);
+      await apiStaff.post(`/orders/${orderId}/accept-delivery`);
       fetchOrders();
       fetchMyActiveOrders();
       fetchDeliveredOrders();
@@ -92,7 +93,7 @@ const Delivery = () => {
 
   const handleDelivered = async (orderId: number) => {
     try {
-      await api.patch(`/orders/${orderId}/delivered`);
+      await apiStaff.patch(`/orders/${orderId}/delivered`);
       fetchOrders();
       fetchMyActiveOrders();
       fetchDeliveredOrders();
@@ -127,7 +128,7 @@ const Delivery = () => {
   };
 
   const handleLogout = () => {
-    logout();
+    staffLogout();
     navigate('/login');
   };
 
@@ -143,7 +144,7 @@ const Delivery = () => {
             <div>
               <h1 className="font-headline text-headline-sm font-bold text-on-surface">Mikaly Delivery</h1>
               <p className="font-label-xs text-label-xs text-on-surface-variant">
-                {user?.name || 'Livreur'}
+                {staff?.name || 'Livreur'}
               </p>
             </div>
           </div>

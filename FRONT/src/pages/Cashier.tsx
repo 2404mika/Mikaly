@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import api from '../services/api';
+import { useStaffAuth } from '../context/StaffAuthContext';
+import apiStaff from '../services/apiStaff';
 
 interface TableData { id: number; table_number: string; capacity: number; status: string; location: string; }
 interface OrderItem { quantity: number; meal_name: string; unit_price: number; total_price: number; notes: string; }
 interface OrderData { id: number; order_type: string; status: string; created_at: string; table_id: number; client_name: string; total: number; items: OrderItem[]; }
 
 const Cashier = () => {
-  const { logout } = useAuth();
+  const { staffLogout } = useStaffAuth();
   const navigate = useNavigate();
   const [tables, setTables] = useState<TableData[]>([]);
   const [allOrders, setAllOrders] = useState<OrderData[]>([]);
@@ -28,8 +28,8 @@ const Cashier = () => {
   const fetchData = async () => {
     try {
       const [tablesRes, ordersRes] = await Promise.all([
-        api.get('/tables'),
-        api.get('/orders'),
+        apiStaff.get('/tables'),
+        apiStaff.get('/orders'),
       ]);
       setTables(tablesRes.data.data || []);
       setAllOrders(ordersRes.data.data || []);
@@ -72,14 +72,14 @@ const Cashier = () => {
     setIsProcessing(true);
     try {
       for (const order of selectedOrders) {
-        await api.post('/payments', {
+        await apiStaff.post('/payments', {
           order_id: order.id,
           amount: order.total,
           payment_method: 'cash',
           amount_received: received,
         });
       }
-      await api.patch(`/tables/${selectedTable.id}/status`, { status: 'free' });
+      await apiStaff.patch(`/tables/${selectedTable.id}/status`, { status: 'free' });
       setPaymentSuccess(true);
       setTimeout(() => {
         setSelectedTable(null);
@@ -92,7 +92,7 @@ const Cashier = () => {
     } finally { setIsProcessing(false); }
   };
 
-  const handleLogout = () => { logout(); navigate('/login'); };
+  const handleLogout = () => { staffLogout(); navigate('/login'); };
 
   return (
     <div className="bg-background h-screen overflow-hidden flex flex-col font-body">
