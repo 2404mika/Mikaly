@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useStaffAuth } from '../../context/StaffAuthContext';
-import Button from '../../components/ui/Button';
+import { useStaffAuth } from '../context/StaffAuthContext';
+import Button from '../components/ui/Button';
 
 const roleConfig: Record<string, { label: string; icon: string }> = {
   cook: { label: 'Cuisinier', icon: 'restaurant' },
