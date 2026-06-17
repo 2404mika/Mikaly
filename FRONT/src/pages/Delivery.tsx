@@ -421,7 +421,7 @@ const Delivery = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {deliveredOrders.map((order, index) => (
                 <AnimatedSection key={order.id} animation="fadeUp" delay={index * 40}>
-                  <div className="bg-surface rounded-2xl overflow-hidden shadow-lg">
+                  <div className="bg-white rounded-2xl overflow-hidden shadow-lg border border-outline-variant/20">
                     <div className="p-4 border-b border-outline-variant/10">
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center gap-3">
@@ -458,7 +458,7 @@ const Delivery = () => {
                       ))}
                     </div>
                     <div className="px-4 pb-4">
-                      <div className="bg-surface-container rounded-xl px-3 py-2 flex items-center justify-between">
+                      <div className="bg-gray-50 rounded-xl px-3 py-2 flex items-center justify-between">
                         <span className="font-label-sm text-label-sm text-on-surface-variant">Total</span>
                         <span className="font-headline text-headline-sm text-green-600 font-bold tabular-nums">
                           {Number(order.total).toLocaleString()} Ar
