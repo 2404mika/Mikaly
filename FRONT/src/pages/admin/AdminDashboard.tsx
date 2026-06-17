@@ -64,36 +64,29 @@ const AdminDashboard = () => {
         const allOrders = ordersRes.data.data || [];
         setOrders(allOrders);
 
-        const dayNames = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
-        const monthDays: DailyStats[] = [];
-        const now = new Date();
-        const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-
-        for (let i = 1; i <= daysInMonth; i++) {
-          const d = new Date(now.getFullYear(), now.getMonth(), i);
-          const dateStr = d.toISOString().split('T')[0];
-          monthDays.push({
-            date: dateStr,
-            dayLabel: `${i}`,
-            revenue: 0,
-            orders: 0
-          });
-        }
-
-        allOrders.forEach((o: Order) => {
-          if (!o.created_at) return;
+        const todayStr = new Date().toISOString().split('T')[0];
+        const todayOrders = allOrders.filter((o: Order) => {
+          if (!o.created_at) return false;
           const orderDate = new Date(o.created_at);
-          if (isNaN(orderDate.getTime())) return;
-          const dateStr = orderDate.toISOString().split('T')[0];
-          const dayEntry = monthDays.find(d => d.date === dateStr);
-          if (dayEntry) {
-            dayEntry.revenue += Number(o.total || 0);
-            dayEntry.orders += 1;
-          }
+          return !isNaN(orderDate.getTime()) && orderDate.toISOString().split('T')[0] === todayStr;
         });
 
-        const maxRevenue = Math.max(...monthDays.map(d => d.revenue), 1);
-        setDailyData(monthDays.map(d => ({ ...d, height: (d.revenue / maxRevenue) * 100 })));
+        const hourly: Record<number, DailyStats> = {};
+        for (let h = 0; h < 24; h++) {
+          hourly[h] = { date: '', dayLabel: `${h}h`, revenue: 0, orders: 0 };
+        }
+        todayOrders.forEach((o: Order) => {
+          const orderDate = new Date(o.created_at);
+          if (isNaN(orderDate.getTime())) return;
+          const h = orderDate.getHours();
+          if (hourly[h] !== undefined) {
+            hourly[h].revenue += Number(o.total || 0);
+            hourly[h].orders += 1;
+          }
+        });
+        const hourlyArray = Object.values(hourly);
+        const maxRevenue = Math.max(...hourlyArray.map(h => h.revenue), 1);
+        setDailyData(hourlyArray.map(h => ({ ...h, height: (h.revenue / maxRevenue) * 100 })));
       } catch {} finally { setIsLoading(false); }
     };
     fetchData();
@@ -194,7 +187,7 @@ const AdminDashboard = () => {
           <div className="lg:col-span-8 bg-surface rounded-xl border border-outline-variant/30 p-6 shadow-[0_4px_12px_rgba(48,109,41,0.04)]">
             <div className="flex justify-between items-center mb-4">
               <div>
-                <h3 className="font-headline text-headline-sm text-on-surface">Revenus quotidiens ({new Date().toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })})</h3>
+                <h3 className="font-headline text-headline-sm text-on-surface">Revenus horaires (aujourd'hui)</h3>
               </div>
               <span className="font-label-md text-label-md text-primary font-bold">{dailyData.reduce((sum, d) => sum + d.revenue, 0).toLocaleString()} Ar</span>
             </div>
