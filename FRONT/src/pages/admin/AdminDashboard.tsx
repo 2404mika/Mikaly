@@ -68,7 +68,7 @@ const AdminDashboard = () => {
         const todayStr = today.toLocaleDateString('sv'); // YYYY-MM-DD en heure locale
 
         const hourly: Record<number, DailyStats> = {};
-        for (let h = 0; h < 24; h++) {
+        for (let h = 0; h < 24; h += 2) {
           hourly[h] = { date: '', dayLabel: `${h}h`, revenue: 0, orders: 0 };
         }
 
@@ -83,7 +83,7 @@ const AdminDashboard = () => {
           if (isNaN(orderDate.getTime())) return;
           const orderDateStr = orderDate.toLocaleDateString('sv');
           if (orderDateStr !== todayStr) return;
-          const h = orderDate.getHours();
+          const h = Math.floor(orderDate.getHours() / 2) * 2;
           if (hourly[h] !== undefined) {
             hourly[h].revenue += Number(o.total || 0);
             hourly[h].orders += 1;
@@ -212,7 +212,7 @@ const AdminDashboard = () => {
               <div className="flex-1 flex items-end justify-between gap-2 pl-10">
                 {dailyData.map((d, i) => {
                   const currentHour = new Date().getHours();
-                  const isCurrentHour = d.dayLabel === `${currentHour}h`;
+                  const isCurrentHour = (currentHour >= i * 2 && currentHour < i * 2 + 4);
                   const hasOrders = d.orders > 0;
                   return (
                     <div key={i} className="flex-1 flex flex-col items-center gap-1">
@@ -221,7 +221,7 @@ const AdminDashboard = () => {
                         style={{ height: `${Math.max((d.orders / Math.max(...dailyData.map(d => d.orders), 1)) * 100, hasOrders ? 8 : 2)}%` }}
                         title={`${d.dayLabel}: ${d.orders} commande(s)`}
                       />
-                      {i % 4 === 0 && <span className="font-label-xs text-label-xs text-on-surface-variant font-medium">{d.dayLabel}</span>}
+                      {i % 2 === 0 && <span className="font-label-xs text-label-xs text-on-surface-variant font-medium">{d.dayLabel}</span>}
                     </div>
                   );
                 })}
