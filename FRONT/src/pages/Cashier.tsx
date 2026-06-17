@@ -92,7 +92,7 @@ const Cashier = () => {
     } finally { setIsProcessing(false); }
   };
 
-  const handleLogout = () => { staffLogout(); navigate('/login'); };
+  const handleLogout = () => { staffLogout(); navigate('/staff-login'); };
 
   return (
     <div className="bg-background h-screen overflow-hidden flex flex-col font-body">

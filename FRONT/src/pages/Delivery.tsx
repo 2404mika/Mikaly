@@ -129,7 +129,7 @@ const Delivery = () => {
 
   const handleLogout = () => {
     staffLogout();
-    navigate('/login');
+    navigate('/staff-login');
   };
 
   return (

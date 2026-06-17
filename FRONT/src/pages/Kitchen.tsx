@@ -75,7 +75,7 @@ const Kitchen = () => {
 
   const handleLogout = () => {
     staffLogout();
-    navigate('/login');
+    navigate('/staff-login');
   };
 
   const getMealImage = (mealImage: string | null, mealId: number) => {
