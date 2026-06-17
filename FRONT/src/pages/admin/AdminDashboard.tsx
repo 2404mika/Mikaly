@@ -25,8 +25,9 @@ interface Order {
   items: OrderItem[];
 }
 
-interface HourlyStats {
-  hour: number;
+interface DailyStats {
+  date: string;
+  dayLabel: string;
   revenue: number;
   orders: number;
   height?: number;
@@ -43,7 +44,7 @@ interface DashboardStats {
 const AdminDashboard = () => {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [orders, setOrders] = useState<Order[]>([]);
-  const [hourlyData, setHourlyData] = useState<HourlyStats[]>([]);
+  const [dailyData, setDailyData] = useState<DailyStats[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -63,28 +64,34 @@ const AdminDashboard = () => {
         const allOrders = ordersRes.data.data || [];
         setOrders(allOrders);
 
-        const todayStr = new Date().toISOString().split('T')[0];
-        const todayOrders = allOrders.filter((o: Order) => {
-          if (!o.created_at) return false;
-          const orderDate = new Date(o.created_at);
-          return !isNaN(orderDate.getTime()) && orderDate.toISOString().split('T')[0] === todayStr;
-        });
-
-        const hourly: Record<number, HourlyStats> = {};
-        for (let h = 0; h < 24; h++) {
-          hourly[h] = { hour: h, revenue: 0, orders: 0 };
+        const last7Days: DailyStats[] = [];
+        for (let i = 6; i >= 0; i--) {
+          const d = new Date();
+          d.setDate(d.getDate() - i);
+          const dateStr = d.toISOString().split('T')[0];
+          const dayNames = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
+          last7Days.push({
+            date: dateStr,
+            dayLabel: dayNames[d.getDay()],
+            revenue: 0,
+            orders: 0
+          });
         }
-        todayOrders.forEach((o: Order) => {
+
+        allOrders.forEach((o: Order) => {
+          if (!o.created_at) return;
           const orderDate = new Date(o.created_at);
-          const h = orderDate.getHours();
-          if (hourly[h] && !isNaN(h)) {
-            hourly[h].revenue += Number(o.total || 0);
-            hourly[h].orders += 1;
+          if (isNaN(orderDate.getTime())) return;
+          const dateStr = orderDate.toISOString().split('T')[0];
+          const dayEntry = last7Days.find(d => d.date === dateStr);
+          if (dayEntry) {
+            dayEntry.revenue += Number(o.total || 0);
+            dayEntry.orders += 1;
           }
         });
-        const hourlyArray = Object.values(hourly);
-        const maxRevenue = Math.max(...hourlyArray.map(h => h.revenue), 1);
-        setHourlyData(hourlyArray.map(h => ({ ...h, height: (h.revenue / maxRevenue) * 100 })));
+
+        const maxRevenue = Math.max(...last7Days.map(d => d.revenue), 1);
+        setDailyData(last7Days.map(d => ({ ...d, height: (d.revenue / maxRevenue) * 100 })));
       } catch {} finally { setIsLoading(false); }
     };
     fetchData();
@@ -185,29 +192,29 @@ const AdminDashboard = () => {
           <div className="lg:col-span-8 bg-surface rounded-xl border border-outline-variant/30 p-6 shadow-[0_4px_12px_rgba(48,109,41,0.04)]">
             <div className="flex justify-between items-center mb-4">
               <div>
-                <h3 className="font-headline text-headline-sm text-on-surface">Revenus horaires (aujourd'hui)</h3>
+                <h3 className="font-headline text-headline-sm text-on-surface">Revenus quotidiens (7 derniers jours)</h3>
               </div>
-              <span className="font-label-md text-label-md text-primary font-bold">{todayRevenue.toLocaleString()} Ar</span>
+              <span className="font-label-md text-label-md text-primary font-bold">{dailyData.reduce((sum, d) => sum + d.revenue, 0).toLocaleString()} Ar</span>
             </div>
-            <div className="relative min-h-[180px] flex items-end justify-between gap-1">
+            <div className="relative min-h-[180px] flex items-end justify-between gap-2">
               <div className="absolute left-0 top-0 bottom-0 flex flex-col justify-between text-right pr-2 pointer-events-none">
-                <span className="font-label-xs text-label-xs text-on-surface-variant">{Math.max(...hourlyData.map(h => h.revenue), 1).toLocaleString()}</span>
-                <span className="font-label-xs text-label-xs text-on-surface-variant">{Math.round(Math.max(...hourlyData.map(h => h.revenue), 1) / 2).toLocaleString()}</span>
+                <span className="font-label-xs text-label-xs text-on-surface-variant">{Math.max(...dailyData.map(d => d.revenue), 1).toLocaleString()}</span>
+                <span className="font-label-xs text-label-xs text-on-surface-variant">{Math.round(Math.max(...dailyData.map(d => d.revenue), 1) / 2).toLocaleString()}</span>
                 <span className="font-label-xs text-label-xs text-on-surface-variant">0</span>
               </div>
-              <div className="flex-1 flex items-end justify-between gap-1 pl-10">
-                {hourlyData.map((h, i) => {
-                  const currentHour = new Date().getHours();
-                  const isCurrentHour = h.hour === currentHour;
-                  const hasOrders = h.orders > 0;
+              <div className="flex-1 flex items-end justify-between gap-2 pl-10">
+                {dailyData.map((d, i) => {
+                  const today = new Date().toISOString().split('T')[0];
+                  const isToday = d.date === today;
+                  const hasOrders = d.orders > 0;
                   return (
                     <div key={i} className="flex-1 flex flex-col items-center gap-1">
                       <div
-                        className={`w-full rounded-t-sm transition-all duration-500 ${hasOrders ? (isCurrentHour ? 'bg-primary' : 'bg-primary/50 hover:bg-primary/70') : 'bg-surface-container'}`}
-                        style={{ height: `${Math.max(h.height || 0, h.orders > 0 ? 8 : 2)}%` }}
-                        title={`${h.hour}h: ${h.revenue.toLocaleString()} Ar (${h.orders} cmd)`}
+                        className={`w-full rounded-t-md transition-all duration-500 ${hasOrders ? (isToday ? 'bg-primary' : 'bg-primary/50 hover:bg-primary/70') : 'bg-surface-container'}`}
+                        style={{ height: `${Math.max(d.height || 0, d.orders > 0 ? 8 : 2)}%` }}
+                        title={`${d.dayLabel}: ${d.revenue.toLocaleString()} Ar (${d.orders} cmd)`}
                       />
-                      {i % 3 === 0 && <span className="font-label-xs text-label-xs text-on-surface-variant">{h.hour}h</span>}
+                      <span className="font-label-xs text-label-xs text-on-surface-variant font-medium">{d.dayLabel}</span>
                     </div>
                   );
                 })}
