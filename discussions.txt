@@ -6,3 +6,5 @@ opencode -s ses_15825c54cffei9ISKk956t0kaw <==== VAOVAOOO <=== Io Ampesaina
 [ ] Dashboard Admin - stats, graphiques
 [ ] Gestion Admin - catégories, users, repas, tables
 
+
+opencode -s ses_12f602984ffeOMAc1TqJuCN30l <===== ito indray izao

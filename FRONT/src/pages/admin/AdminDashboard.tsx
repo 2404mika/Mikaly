@@ -63,16 +63,21 @@ const AdminDashboard = () => {
         const allOrders = ordersRes.data.data || [];
         setOrders(allOrders);
 
-        const today = new Date().toISOString().split('T')[0];
-        const todayOrders = allOrders.filter((o: Order) => o.created_at?.startsWith(today));
+        const todayStr = new Date().toISOString().split('T')[0];
+        const todayOrders = allOrders.filter((o: Order) => {
+          if (!o.created_at) return false;
+          const orderDate = new Date(o.created_at);
+          return !isNaN(orderDate.getTime()) && orderDate.toISOString().split('T')[0] === todayStr;
+        });
 
         const hourly: Record<number, HourlyStats> = {};
         for (let h = 0; h < 24; h++) {
           hourly[h] = { hour: h, revenue: 0, orders: 0 };
         }
         todayOrders.forEach((o: Order) => {
-          const h = new Date(o.created_at).getHours();
-          if (hourly[h]) {
+          const orderDate = new Date(o.created_at);
+          const h = orderDate.getHours();
+          if (hourly[h] && !isNaN(h)) {
             hourly[h].revenue += Number(o.total || 0);
             hourly[h].orders += 1;
           }
@@ -95,8 +100,12 @@ const AdminDashboard = () => {
     return `il y a ${Math.floor(diffMin / 60)}h${diffMin % 60}`;
   };
 
-  const today = new Date().toISOString().split('T')[0];
-  const todayOrders = orders.filter(o => o.created_at?.startsWith(today));
+  const todayStr = new Date().toISOString().split('T')[0];
+  const todayOrders = orders.filter((o: Order) => {
+    if (!o.created_at) return false;
+    const orderDate = new Date(o.created_at);
+    return !isNaN(orderDate.getTime()) && orderDate.toISOString().split('T')[0] === todayStr;
+  });
   const todayRevenue = todayOrders.reduce((sum, o) => sum + Number(o.total || 0), 0);
   const todayDineIn = todayOrders.filter(o => o.order_type === 'dine_in').length;
   const todayOnline = todayOrders.filter(o => o.order_type === 'online').length;
