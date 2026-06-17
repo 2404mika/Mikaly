@@ -46,6 +46,12 @@ const AdminOrders = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'dine_in' | 'online' | 'takeaway'>('all');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const fetchOrders = async () => {
     try {
@@ -81,6 +87,10 @@ const AdminOrders = () => {
         <div>
           <h1 className="font-headline text-2xl text-on-surface font-bold">Commandes</h1>
           <p className="font-body-sm text-body-sm text-on-surface-variant">Toutes les commandes du restaurant</p>
+        </div>
+        <div className="flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-xl">
+          <span className="material-symbols-outlined text-xl">schedule</span>
+          <span className="font-label-lg text-label-lg font-bold tabular-nums">{currentTime.toLocaleTimeString('fr-FR')}</span>
         </div>
       </header>
 

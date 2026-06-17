@@ -24,6 +24,12 @@ const AdminCategories = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const fetchCategories = async () => {
     try { const res = await api.get('/categories/admin/all'); setCategories(res.data.data || []); }
@@ -60,6 +66,10 @@ const AdminCategories = () => {
     <div className="min-h-screen bg-background">
       <header className="bg-surface/80 backdrop-blur-md border-b border-outline-variant/30 px-8 h-16 flex items-center justify-between sticky top-0 z-20">
         <h1 className="font-headline text-headline-lg text-on-surface">Gestion des Catégories</h1>
+        <div className="flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-xl">
+          <span className="material-symbols-outlined text-xl">schedule</span>
+          <span className="font-label-lg text-label-lg font-bold tabular-nums">{currentTime.toLocaleTimeString('fr-FR')}</span>
+        </div>
       </header>
 
       <div className="p-6 md:p-8 max-w-[1400px] mx-auto">

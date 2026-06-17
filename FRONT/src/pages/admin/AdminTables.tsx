@@ -31,6 +31,12 @@ const AdminTables = () => {
   const [editCapacityError, setEditCapacityError] = useState('');
   const [confirmReservation, setConfirmReservation] = useState(false);
   const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const getNetworkUrl = () => {
     return `http://${networkIP}:3000/table-menu?tableId=`;
@@ -174,7 +180,7 @@ const AdminTables = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <header className="bg-surface/80 backdrop-blur-md border-b border-outline-variant/30 px-8 h-16 flex items-center sticky top-0 z-20">
+      <header className="bg-surface/80 backdrop-blur-md border-b border-outline-variant/30 px-8 h-16 flex items-center justify-between sticky top-0 z-20">
         <div className="flex items-center gap-8">
           <div>
             <h1 className="font-headline text-2xl text-on-surface font-bold">Gestion des Tables</h1>
@@ -193,6 +199,10 @@ const AdminTables = () => {
               )}
             </button>
           </div>
+        </div>
+        <div className="flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-xl">
+          <span className="material-symbols-outlined text-xl">schedule</span>
+          <span className="font-label-lg text-label-lg font-bold tabular-nums">{currentTime.toLocaleTimeString('fr-FR')}</span>
         </div>
       </header>
 
