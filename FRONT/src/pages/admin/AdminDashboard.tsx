@@ -64,26 +64,32 @@ const AdminDashboard = () => {
         const allOrders = ordersRes.data.data || [];
         setOrders(allOrders);
 
-        const todayStr = new Date().toISOString().split('T')[0];
-        const todayOrders = allOrders.filter((o: Order) => {
-          if (!o.created_at) return false;
-          const orderDate = new Date(o.created_at);
-          return !isNaN(orderDate.getTime()) && orderDate.toISOString().split('T')[0] === todayStr;
-        });
+        const today = new Date();
+        const todayStr = today.toLocaleDateString('sv'); // YYYY-MM-DD en heure locale
 
         const hourly: Record<number, DailyStats> = {};
         for (let h = 0; h < 24; h++) {
           hourly[h] = { date: '', dayLabel: `${h}h`, revenue: 0, orders: 0 };
         }
-        todayOrders.forEach((o: Order) => {
-          const orderDate = new Date(o.created_at);
+
+        allOrders.forEach((o: Order) => {
+          if (!o.created_at) return;
+          let orderDate: Date;
+          if (o.created_at instanceof Date) {
+            orderDate = o.created_at;
+          } else {
+            orderDate = new Date(o.created_at);
+          }
           if (isNaN(orderDate.getTime())) return;
+          const orderDateStr = orderDate.toLocaleDateString('sv');
+          if (orderDateStr !== todayStr) return;
           const h = orderDate.getHours();
           if (hourly[h] !== undefined) {
             hourly[h].revenue += Number(o.total || 0);
             hourly[h].orders += 1;
           }
         });
+
         const hourlyArray = Object.values(hourly);
         const maxRevenue = Math.max(...hourlyArray.map(h => h.revenue), 1);
         setDailyData(hourlyArray.map(h => ({ ...h, height: (h.revenue / maxRevenue) * 100 })));
@@ -102,11 +108,17 @@ const AdminDashboard = () => {
     return `il y a ${Math.floor(diffMin / 60)}h${diffMin % 60}`;
   };
 
-  const todayStr = new Date().toISOString().split('T')[0];
+  const todayStr = new Date().toLocaleDateString('sv');
   const todayOrders = orders.filter((o: Order) => {
     if (!o.created_at) return false;
-    const orderDate = new Date(o.created_at);
-    return !isNaN(orderDate.getTime()) && orderDate.toISOString().split('T')[0] === todayStr;
+    let orderDate: Date;
+    if (o.created_at instanceof Date) {
+      orderDate = o.created_at;
+    } else {
+      orderDate = new Date(o.created_at);
+    }
+    if (isNaN(orderDate.getTime())) return false;
+    return orderDate.toLocaleDateString('sv') === todayStr;
   });
   const todayRevenue = todayOrders.reduce((sum, o) => sum + Number(o.total || 0), 0);
   const todayDineIn = todayOrders.filter(o => o.order_type === 'dine_in').length;
@@ -187,29 +199,29 @@ const AdminDashboard = () => {
           <div className="lg:col-span-8 bg-surface rounded-xl border border-outline-variant/30 p-6 shadow-[0_4px_12px_rgba(48,109,41,0.04)]">
             <div className="flex justify-between items-center mb-4">
               <div>
-                <h3 className="font-headline text-headline-sm text-on-surface">Revenus horaires (aujourd'hui)</h3>
+                <h3 className="font-headline text-headline-sm text-on-surface">Commandes par heure (aujourd'hui)</h3>
               </div>
-              <span className="font-label-md text-label-md text-primary font-bold">{dailyData.reduce((sum, d) => sum + d.revenue, 0).toLocaleString()} Ar</span>
+              <span className="font-label-md text-label-md text-primary font-bold">{dailyData.reduce((sum, d) => sum + d.orders, 0)} commandes</span>
             </div>
             <div className="relative min-h-[180px] flex items-end justify-between gap-2">
               <div className="absolute left-0 top-0 bottom-0 flex flex-col justify-between text-right pr-2 pointer-events-none">
-                <span className="font-label-xs text-label-xs text-on-surface-variant">{Math.max(...dailyData.map(d => d.revenue), 1).toLocaleString()}</span>
-                <span className="font-label-xs text-label-xs text-on-surface-variant">{Math.round(Math.max(...dailyData.map(d => d.revenue), 1) / 2).toLocaleString()}</span>
+                <span className="font-label-xs text-label-xs text-on-surface-variant">{Math.max(...dailyData.map(d => d.orders), 1)}</span>
+                <span className="font-label-xs text-label-xs text-on-surface-variant">{Math.round(Math.max(...dailyData.map(d => d.orders), 1) / 2)}</span>
                 <span className="font-label-xs text-label-xs text-on-surface-variant">0</span>
               </div>
               <div className="flex-1 flex items-end justify-between gap-2 pl-10">
                 {dailyData.map((d, i) => {
-                  const today = new Date().toISOString().split('T')[0];
-                  const isToday = d.date === today;
+                  const currentHour = new Date().getHours();
+                  const isCurrentHour = d.dayLabel === `${currentHour}h`;
                   const hasOrders = d.orders > 0;
                   return (
                     <div key={i} className="flex-1 flex flex-col items-center gap-1">
                       <div
-                        className={`w-full rounded-t-md transition-all duration-500 ${hasOrders ? (isToday ? 'bg-primary' : 'bg-primary/50 hover:bg-primary/70') : 'bg-surface-container'}`}
-                        style={{ height: `${Math.max(d.height || 0, d.orders > 0 ? 8 : 2)}%` }}
-                        title={`${d.dayLabel}: ${d.revenue.toLocaleString()} Ar (${d.orders} cmd)`}
+                        className={`w-full rounded-t-md transition-all duration-500 ${hasOrders ? (isCurrentHour ? 'bg-primary' : 'bg-primary/50 hover:bg-primary/70') : 'bg-surface-container'}`}
+                        style={{ height: `${Math.max((d.orders / Math.max(...dailyData.map(d => d.orders), 1)) * 100, hasOrders ? 8 : 2)}%` }}
+                        title={`${d.dayLabel}: ${d.orders} commande(s)`}
                       />
-                      <span className="font-label-xs text-label-xs text-on-surface-variant font-medium">{d.dayLabel}</span>
+                      {i % 4 === 0 && <span className="font-label-xs text-label-xs text-on-surface-variant font-medium">{d.dayLabel}</span>}
                     </div>
                   );
                 })}
