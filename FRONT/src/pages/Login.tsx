@@ -42,13 +42,9 @@ const Login = () => {
     try {
       await login({ email, password });
       const userData = JSON.parse(localStorage.getItem('user') || '{}');
-      if (userData.role === 'admin') navigate('/admin');
+      if (userData.role === 'admin') navigate('/admin/login');
       else if (userData.role === 'cook' || userData.role === 'delivery' || userData.role === 'cashier') {
-        localStorage.setItem('staff_token', localStorage.getItem('token') || '');
-        localStorage.setItem('staff_user', localStorage.getItem('user') || '');
-        if (userData.role === 'cook') navigate('/kitchen');
-        else if (userData.role === 'delivery') navigate('/delivery');
-        else navigate('/cashier');
+        navigate('/staff-login');
       } else navigate('/');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Erreur de connexion');
@@ -275,6 +271,9 @@ const Login = () => {
               {isLogin ? 'En vous connectant' : 'En créant un compte'}, vous acceptez nos{' '}
               <a href="#" className="text-primary hover:underline transition-colors">Conditions d'utilisation</a> et notre{' '}
               <a href="#" className="text-primary hover:underline transition-colors">Politique de confidentialité</a>.
+            </p>
+            <p className="font-body-sm text-body-sm text-on-surface-variant mt-4">
+              Staff ? <a href="/staff-login" className="text-secondary hover:underline transition-colors">Connectez-vous ici</a>
             </p>
           </div>
         </div>

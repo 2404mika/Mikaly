@@ -21,7 +21,7 @@ apiStaff.interceptors.response.use(
       if (!cachedStaff) {
         localStorage.removeItem('staff_token');
         localStorage.removeItem('staff_user');
-        window.location.href = '/login';
+        window.location.href = '/staff-login';
       }
     }
     return Promise.reject(error);
